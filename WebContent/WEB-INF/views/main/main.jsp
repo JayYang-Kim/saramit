@@ -42,8 +42,9 @@
     <!-- Wrap -->
     <div id="wrap">
         <!-- Header -->
-        <jsp:include page="header.jsp"></jsp:include>
+        <jsp:include page="header.jsp"/>
         <!-- //Header -->
+        
         <!-- container -->
         <div id="container">
             <div style="height:61px"></div>

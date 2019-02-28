@@ -26,7 +26,7 @@
 <header>
             <div class="header">
                 <h1 class="title">
-                    <a href="main.html">SARAMIT</a>
+                    <a href="<%=cp%>/main.do">SARAMIT</a>
                 </h1>
                 <!-- gnb : 회사 -->
                 <!-- <div class="gnb">
@@ -42,7 +42,7 @@
                 <!-- gnb : 유저 -->
                 <div class="gnb">
                     <ul>
-                        <li><a href="#">회사검색</a></li>
+                        <li><a href="<%=cp%>/companies/list.do">회사검색</a></li>
                         <li><a href="#">회사평가</a></li>
                         <li><a href="#">피드백 게시판</a></li>
                         <li><a href="#">자유게시판</a></li>

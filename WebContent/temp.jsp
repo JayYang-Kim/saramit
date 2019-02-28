@@ -8,8 +8,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body>qweqweqqweqwewq
-qweqweqwewqe
-qweqweqw
+<body>
 </body>
 </html>

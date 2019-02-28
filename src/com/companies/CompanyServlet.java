@@ -19,12 +19,12 @@ public class CompanyServlet extends MyServlet{
 		// TODO Auto-generated method stub
 		req.setCharacterEncoding("utf-8");
 		String uri = req.getRequestURI();
-		HttpSession session = req.getSession();
+		/*HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 			return;
-		}
+		}*/
 		
 		if(uri.indexOf("list.do") != -1) {
 			list(req, resp);
@@ -36,7 +36,8 @@ public class CompanyServlet extends MyServlet{
 	}
 	
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//회사 리스트
+		//회사 리스트(검색)
+		forward(req, resp, "/WEB-INF/views/companies/list.jsp");
 	}
 	protected void review(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//회사 평가
