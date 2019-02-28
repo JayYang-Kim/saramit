@@ -8,41 +8,14 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-    
-    <title>SARAMIT - 너도 취업할 수 있어</title>
-    
-    <!-- Favicon - 파비콘 (주소창 영역 아이콘) -->
-    <link rel="Shortcut Icon" href="./resources/images/common/saramit.ico"/>
-    
-    <!-- Css -->
-    <link rel="stylesheet" href="./resources/css/common.css" media="all" />
-	<link rel="stylesheet" href="./resources/css/style.css" media="all" />
-
-    <!-- Javascript -->
-    <script src="./resources/js/lib/jquery-1.12.4.min.js"></script>
-	<script src="./resources/js/lib/jquery-migrate-1.4.1.min.js"></script>
-    <script src="./resources/js/lib/jquery-ui-1.12.1.min.js"></script>
-    
-    <script src="./resources/js/plugins.js"></script>
-    <script src="./resources/js/basic.js"></script>
-
-    <!-- Carousel -->
-    <script type="text/javascript" src="./resources/js/carousel.js"></script>
-   
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="resources/js/lib/html5shiv.js"></script>
-    <![endif]-->
+    <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
 </head>
 
 <body>
     <!-- Wrap -->
     <div id="wrap">
         <!-- Header -->
-        <jsp:include page="header.jsp"></jsp:include>
+        <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
         <div id="container">
@@ -454,7 +427,7 @@
         <!-- //container -->
         
         <!-- Footer -->
-       	<jsp:include page="footer.jsp"></jsp:include>
+       	<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
         <!-- //Footer -->
     </div>
     <!-- //Wrap -->
