@@ -42,61 +42,8 @@
     <!-- Wrap -->
     <div id="wrap">
         <!-- Header -->
-        <header>
-            <div class="header">
-                <h1 class="title">
-                    <a href="main.html">SARAMIT</a>
-                </h1>
-                <!-- gnb : 회사 -->
-                <!-- <div class="gnb">
-                    <ul>
-                        <li><a href="#">회사검색</a></li>
-                        <li><a href="#">지원확인</a></li>
-                        <li><a href="#">피드백 게시판</a></li>
-                        <li><a href="#">자유게시판</a></li>
-                        <li><a href="#">사람잇과 소통</a></li>
-                    </ul>
-                </div> -->
-                <!-- //gnb -->
-                <!-- gnb : 유저 -->
-                <div class="gnb">
-                    <ul>
-                        <li><a href="#">회사검색</a></li>
-                        <li><a href="#">회사평가</a></li>
-                        <li><a href="#">피드백 게시판</a></li>
-                        <li><a href="#">자유게시판</a></li>
-                        <li><a href="#">자소서 관리</a></li>
-                    </ul>
-                </div>
-                <!-- //gnb -->
-                <!-- 회원 : 비로그인 -->
-                <c:if test="${sessionScope.member.email == null}">
-                <div class="userInfo">
-                    <ul>
-                        <li><a href="<%=cp%>/member/login.do">로그인</a></li>
-                        <li><span>|</span></li>
-                        <li><a href="<%=cp%>/member/join.do">회원가입</a></li>
-                    </ul>
-                </div>
-                </c:if>
-                <!-- //회원 -->
-                <!-- 회원 : 로그인 -->
-                <c:if test="${sessionScope.member.email != null}">
-	                <div class="userInfo_login">
-	                    <ul>
-	                        <li><span>${sessionScope.member.name}</span></li>
-	                        <li><span>|</span></li>
-	                        <li><a href="<%=cp%>/member/myPage.do">마이페이지</a></li>
-	                        <li><span>|</span></li>
-	                        <li><a href="<%=cp%>/member/logout.do">로그아웃</a></li>
-	                    </ul>
-	                </div> -->
-                </c:if>
-                <!-- 회원 : 로그인 -->
-            </div>
-        </header>
+        <jsp:include page="header.jsp"></jsp:include>
         <!-- //Header -->
-        
         <!-- container -->
         <div id="container">
             <div style="height:61px"></div>
@@ -507,26 +454,7 @@
         <!-- //container -->
         
         <!-- Footer -->
-        <footer class="clear">
-            <div class="box_footer">
-                <div class="links">
-                    <ul>
-                        <li><a href="#" target="_blank" title="회사소개 새창열기">회사소개</a></li>
-                        <li><a href="#" target="_blank" title="찾아오시는길 새창열기">찾아오시는길</a></li>
-                        <li><a href="#" title="회원약관 바로가기">회원약관</a></li>
-                        <li><a href="#" title="개인정보처리방침 바로가기">개인정보처리방침</a></li>
-                        <li><a href="#" title="이메일무단수집거부 바로가기">이메일무단수집거부</a></li>
-                        <li><a href="#" title="고객센터 바로가기">고객센터</a></li>
-                    </ul>
-                </div>
-                <div class="copyright">
-                    <p>(주)SARAMIT | 주소 : 서울특별시 마포구 월드컵북로 21 풍성빌딩 2-4층 쌍용강북교육센터<br/>
-                    대표 : 이민영, 김진양, 임상근, 홍재승, 김소민 | 사업자등록 : 123-45-67890<br/>
-                    Copyright (c) (주)SARAMIT. All rights reserved.</p>
-                    <span class="b_logo">SARAMIT</span>
-                </div>
-            </div>
-        </footer>
+       	<jsp:include page="footer.jsp"></jsp:include>
         <!-- //Footer -->
     </div>
     <!-- //Wrap -->
