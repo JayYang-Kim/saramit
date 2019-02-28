@@ -13,98 +13,112 @@ public class CompaniesDTO {
 	private int salary;
 	private String introduction;
 	private String homepage;
-	private String logo; //logo 어떻게 할 것인가.
 	private int statusCode; //회원 상태
 	private int levelCode; //개인,기업 종류
-	public final String getCompanyEmail() {
+	private String saveFilename; //로고용
+	private String originalFilename;
+	private int filesize;
+	
+	public String getCompanyEmail() {
 		return companyEmail;
 	}
-	public final void setCompanyEmail(String companyEmail) {
+	public void setCompanyEmail(String companyEmail) {
 		this.companyEmail = companyEmail;
 	}
-	public final String getCompanyPwd() {
+	public String getCompanyPwd() {
 		return companyPwd;
 	}
-	public final void setCompanyPwd(String companyPwd) {
+	public void setCompanyPwd(String companyPwd) {
 		this.companyPwd = companyPwd;
 	}
-	public final String getBusinessLicenseNum() {
+	public String getBusinessLicenseNum() {
 		return businessLicenseNum;
 	}
-	public final void setBusinessLicenseNum(String businessLicenseNum) {
+	public void setBusinessLicenseNum(String businessLicenseNum) {
 		this.businessLicenseNum = businessLicenseNum;
 	}
-	public final String getCompanyName() {
+	public String getCompanyName() {
 		return companyName;
 	}
-	public final void setCompanyName(String companyName) {
+	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	public final String getOwner() {
+	public String getOwner() {
 		return owner;
 	}
-	public final void setOwner(String owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	public final String getEstablishmentDate() {
+	public String getEstablishmentDate() {
 		return establishmentDate;
 	}
-	public final void setEstablishmentDate(String establishmentDate) {
+	public void setEstablishmentDate(String establishmentDate) {
 		this.establishmentDate = establishmentDate;
 	}
-	public final int getEmployees() {
+	public int getEmployees() {
 		return employees;
 	}
-	public final void setEmployees(int employees) {
+	public void setEmployees(int employees) {
 		this.employees = employees;
 	}
-	public final int getSale() {
+	public int getSale() {
 		return sale;
 	}
-	public final void setSale(int sale) {
+	public void setSale(int sale) {
 		this.sale = sale;
 	}
-	public final String getLocation() {
+	public String getLocation() {
 		return location;
 	}
-	public final void setLocation(String location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}
-	public final int getSalary() {
+	public int getSalary() {
 		return salary;
 	}
-	public final void setSalary(int salary) {
+	public void setSalary(int salary) {
 		this.salary = salary;
 	}
-	public final String getIntroduction() {
+	public String getIntroduction() {
 		return introduction;
 	}
-	public final void setIntroduction(String introduction) {
+	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
-	public final String getHomepage() {
+	public String getHomepage() {
 		return homepage;
 	}
-	public final void setHomepage(String homepage) {
+	public void setHomepage(String homepage) {
 		this.homepage = homepage;
 	}
-	public final String getLogo() {
-		return logo;
-	}
-	public final void setLogo(String logo) {
-		this.logo = logo;
-	}
-	public final int getStatusCode() {
+	public int getStatusCode() {
 		return statusCode;
 	}
-	public final void setStatusCode(int statusCode) {
+	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
-	public final int getLevelCode() {
+	public int getLevelCode() {
 		return levelCode;
 	}
-	public final void setLevelCode(int levelCode) {
+	public void setLevelCode(int levelCode) {
 		this.levelCode = levelCode;
 	}
-
+	public String getSaveFilename() {
+		return saveFilename;
+	}
+	public void setSaveFilename(String saveFilename) {
+		this.saveFilename = saveFilename;
+	}
+	public String getOriginalFilename() {
+		return originalFilename;
+	}
+	public void setOriginalFilename(String originalFilename) {
+		this.originalFilename = originalFilename;
+	}
+	public int getFilesize() {
+		return filesize;
+	}
+	public void setFilesize(int filesize) {
+		this.filesize = filesize;
+	}
 }
