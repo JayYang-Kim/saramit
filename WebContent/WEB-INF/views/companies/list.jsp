@@ -41,6 +41,20 @@
 			<div class="contents" align="center">
 				<div style="margin:30px">
 					<form>
+						<ul>
+							<li style>서울</li>
+							<li>서울</li>
+							<li>서울</li>
+							<li>서울</li>
+							<li>서울</li>
+							<li>서울</li>
+							<li>서울</li>
+							<li>서울</li>
+							<li>서울</li>
+						</ul>
+					</form>
+					
+					<form>
 						<select name="searchKey" style="text-align: center;">
 							<option value="name">기업명</option>
 							<option value="owner">대표자명</option>
