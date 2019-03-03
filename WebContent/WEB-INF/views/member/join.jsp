@@ -39,13 +39,7 @@
     <!-- Wrap -->
     <div id="wrap" class="login_wrap">
         <!-- Header -->
-        <header>
-            <div class="login_header">
-                <h1 class="title">
-                    <a href="main.html">SARAMIT | 회원가입</a>
-                </h1>
-            </div>
-        </header>
+       	<jsp:include page="/WEB-INF/views/main/header.jsp"></jsp:include>
         <!-- //Header -->
         
         <!-- container -->

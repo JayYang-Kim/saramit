@@ -2,7 +2,11 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%String cp = request.getContextPath(); %>
+<%
+	String cp = request.getContextPath(); 
+	String uri = request.getRequestURI();
+	System.out.println(uri);
+%> 
    <!-- Css -->
     <link rel="stylesheet" href="./resources/css/common.css" media="all" />
 	<link rel="stylesheet" href="./resources/css/style.css" media="all" />
