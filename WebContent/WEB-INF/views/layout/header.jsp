@@ -5,23 +5,21 @@
 <%
 	String cp = request.getContextPath();
 	String uri = request.getRequestURI();
-	
-	System.out.print(uri);
 %>
 
 	<header>
 	    <div class="header">
 	    	<% if(uri.indexOf("login.jsp") != -1) { %>
 	    		<h1 class="title">
-		            <a href="main.jsp">SARAMIT | 로그인</a>
+		            <a href="<%=cp%>">SARAMIT | 로그인</a>
 		        </h1>
 	    	<% } else if(uri.indexOf("join.jsp") != -1) { %>
 	    		<h1 class="title">
-		            <a href="main.jsp">SARAMIT | 회원가입</a>
+		            <a href="<%=cp%>">SARAMIT | 회원가입</a>
 		        </h1>
 	    	<% } else {%>
 	    		<h1 class="title">
-		            <a href="main.jsp">SARAMIT</a>
+		            <a href="<%=cp%>">SARAMIT</a>
 		        </h1>
 		        <!-- gnb : 회사 -->
 		        <!-- <div class="gnb">

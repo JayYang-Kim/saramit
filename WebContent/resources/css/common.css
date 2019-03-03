@@ -993,3 +993,63 @@ overflow: hidden;clip: rect(0, 0, 0, 0);border: 0;}
 .carousel-caption .btn {
   text-shadow: none;
 }
+
+<!--상근-->
+.cp_info{
+	width:100%;
+	height:200px;
+}
+
+.cp_info .logoContainer{
+	display:table;
+	position : relative;
+	width:1040px;
+	height : 200px;
+	padding-left: 145px;
+	text-align: left;
+	margin : 0 auto;
+	box-sizing : border-box;
+	
+}
+.cp_info .logoContainer .info{
+	display : table-cell;
+	vertical-align: middle;
+}
+.cp_info .logoContainer .info .name{
+	font-size:32px;
+	color :#fff;
+}
+.cp_info .logoContainer .logo{
+	position : absolute;
+	left : 0px;
+	top : 50%;
+	width : 124px;
+	height : 114px;
+	margin-top: -57px;
+	background-color : #fff;
+	text-align: center;
+}
+
+.cp_info .logoContainer .logo img{
+	position : absolute;
+	top : 45px;
+	max-width: 106px;
+	max-height: 42px;
+	margin-left : 3px;
+}
+
+.cp_wrap{
+	position : relative;
+	width : 100%;
+}
+
+.cp_wrap .cp_body{
+	text-align: center;
+}
+
+.cp_wrap .cp_body .cp_body_info {
+	position : relative;
+	width: 1040px;
+	margin: 0 auto;
+	padding:42px 0 100px;
+}
