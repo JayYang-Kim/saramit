@@ -52,7 +52,7 @@
 		}
 		.cp_info_apply {
 			position: relative;
-			top:40%;
+			top:30%;
 			float:right;
 			width: 150px;
 			margin-right: 200px;
@@ -104,14 +104,16 @@
                 <div class="cp_info_bg">
                    	<div class="cp_info_logoBox">
                    		<div class="cp_info_logo">
-                   			<img src="<%=cp%>/resources/images/common/${company.originalfilename}" width="100%">
+                   			<img src="<%=cp%>/resources/images/common/${company.savefilename}" width="100%">
                    		</div>
                    		<div class="cp_info_title">
                    			${company.companyName}<br>
                    			<p style="font-size: 14px; padding-left: 3px;">게임/서버 개발 전문 기업</p>
                    		</div>
                    		<div class="cp_info_apply">
-                   			<button class="btn btn-black" onclick="location.href='${company.homepage}'">홈페이지</button>&nbsp;
+                   			<button class="btn btn-black" onclick="location.href='${company.homepage}'">홈페이지</button>
+							<p></p>
+							<br>
                    			<button class="btn btn-black" onclick="javascript:alert('지원하였습니다.')">지원하기</button>
                    		</div>
                     </div>
@@ -161,7 +163,7 @@
                 						<h2>사원수</h2> 
                 					</td>
                 					<td align="left">
-                						<h3>${company.employees}</h3>
+                						<h3><fmt:formatNumber type="number" maxFractionDigits="3" value="${n.employees}"/>(명)</h3>
                 					</td>
                 					<td>
                 						<h2>매출액</h2> 

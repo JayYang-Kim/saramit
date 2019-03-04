@@ -103,12 +103,12 @@
                                     <li class="item">
                                         <div class="bg">
                                             <div class="color">
-                                                <img src="./resources/images/common/${n.originalfilename}" alt="로고"/>
+                                                <img src="./resources/images/common/${n.savefilename}" alt="로고"/>
                                             </div>
                                             <span>${n.companyName}</span>
                                         </div>
                                         <ul>
-                                            <li><span>사원수 : ${n.employees}</span></li>
+                                            <li><span>사원수 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.employees}"/>(명)</span></li>
                                             <li><span>매출액 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.sale}"/>(만원)</span></li>
                                             <li><span>평균연봉 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.salary}"/>(만원)</span></li>
                                             <li><span>위치 : ${n.location}</span></li>

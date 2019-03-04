@@ -8,7 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.main.SessionInfo;
 import com.util.MyServlet;
 import com.util.MyUtil;
 @WebServlet("/companies/*")
@@ -20,12 +22,12 @@ public class CompanyServlet extends MyServlet{
 		// TODO Auto-generated method stub
 		req.setCharacterEncoding("utf-8");
 		String uri = req.getRequestURI();
-		/*HttpSession session = req.getSession();
+		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 			return;
-		}*/
+		}
 		
 		if(uri.indexOf("list.do") != -1) {
 			list(req, resp);

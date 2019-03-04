@@ -39,7 +39,7 @@
             <div style="height:61px"></div>
             <!-- contents -->
             <div class="contents">
-       			<div class="companyList list">
+       			<div class="companyList list" style="min-height: 740px;">
        				<div class="inner">
        					<div class="list">
        						<h3>| 기업 검색</h3>
@@ -63,14 +63,14 @@
 		       							<li class="item"> <!-- 하나 하나의 박스 -->
 		       								<div class="bg">
 		       									<div class="color">
-		       										<img src="<%=cp%>/resources/images/common/${n.originalfilename}" width="100%" alt="로고"/>
+		       										<img src="<%=cp%>/resources/images/common/${n.savefilename}" width="100%" alt="로고"/>
 		       									</div>
 		       									<span style="display:inline-block; font-size: 20px; width:90%;">${n.companyName}</span>
 		       								</div>
 		       								<ul>
-		       									<li><span>사원수 : ${n.employees}</span></li>
-		       									<li><span>매출액 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.sale}"/>(원)</span></li>
-		       									<li><span>평균연봉 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.salary}"/>(원)</span></li>
+		       									<li><span>사원수 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.employees}"/>(명)</span></li>
+		       									<li><span>매출액 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.sale}"/>(만원)</span></li>
+		       									<li><span>평균연봉 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.salary}"/>(만원)</span></li>
 		       									<li><span>위치 : ${n.location}</span></li>
 		       								</ul>
 		       								<div class="extra">
@@ -82,6 +82,7 @@
 		       							</li> 					
        						</c:forEach>
        						<c:out value="</ul>" escapeXml="false"/>
+       						<!-- 문제나면 여기야 확실해 -->
        						<div style="padding-top:10px;text-align: center;">${paging}</div> 
        					</div>
        				</div>
