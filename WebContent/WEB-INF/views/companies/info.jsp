@@ -52,7 +52,7 @@
 		}
 		.cp_info_apply {
 			position: relative;
-			top:30%;
+			top:20%;
 			float:right;
 			width: 150px;
 			margin-right: 200px;
@@ -115,6 +115,13 @@
 							<p></p>
 							<br>
                    			<button class="btn btn-black" onclick="javascript:alert('지원하였습니다.')">지원하기</button>
+                   			<p></p>
+                   			<br>
+                   			<form action="<%=cp%>/companies/review.do" method="post">
+                   				<input type="hidden" name="email" value="${company.companyEmail}">
+	                   			<button class="btn btn-black">평가하기</button>
+                   			</form>
+                   			
                    		</div>
                     </div>
                     
@@ -122,9 +129,11 @@
                 <div class="cp_info_body">
            			<div style="width:60%; margin:0 auto; background-color: #fff; height:1050px;">
                 			<ul class="tabmenu2 tabMotion" style="padding-left: 100px;">
-                				<li><a href="#">기업정보</a></li>
-                				<li><a href="#">기업리뷰</a></li>
+                				<li><a onclick="javascript:document.getElementById('info').style.display='';" style="cursor : pointer;">기업정보</a></li>
+                				<li><a onclick="javascript:document.getElementById('info').style.display='none';" style="cursor : pointer;">기업리뷰</a></li>
                 			</ul>
+                	<!-- change를 위한  div -->
+                	<div id="info">
                 		<div style="text-align: left; padding-top: 30px; padding-left:10px;">
                 			<h1>| 기업 소개</h1>
                 		</div>
@@ -163,7 +172,7 @@
                 						<h2>사원수</h2> 
                 					</td>
                 					<td align="left">
-                						<h3><fmt:formatNumber type="number" maxFractionDigits="3" value="${n.employees}"/>(명)</h3>
+                						<h3><fmt:formatNumber type="number" maxFractionDigits="3" value="${company.employees}"/>(명)</h3>
                 					</td>
                 					<td>
                 						<h2>매출액</h2> 
@@ -232,7 +241,11 @@
 						   	 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbw2AXKEI1KEvuwEQVCf3JmudVJQyWJpU&callback=initMap&sensor=false">
 						    </script>
 		                </div>
+		                <!-- //map -->
 			    	</div>
+			    	<!-- //body_info -->
+			    	</div>
+			    	<!-- change를 위한 div -->
 			    </div>
                 </div>
             </div>

@@ -32,7 +32,7 @@
                     <!-- carousel -->
                     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                         <!-- Indicators -->
-                        <ol class="carousel-indicators">
+                        <ol class="carousel-indicators"> <!-- 하단부 -->
                             <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                             <li data-target="#carousel-example-generic" data-slide-to="1"></li>
                             <li data-target="#carousel-example-generic" data-slide-to="2"></li>
@@ -43,35 +43,11 @@
                                 <img src="resources/images/common/web_title_img_1551145711.jpg" alt="img">
                             </div>
                             <div class="item">
-                                <img src="resources/images/common/web_title_img_1551145711.jpg" alt="img">
+                                <img src="resources/images/common/main2_img.jpg" alt="img">
                             </div>
                             <div class="item">
-                                <img src="resources/images/common/web_title_img_1551145711.jpg" alt="img">
+                                <img src="resources/images/common/banner03.png" alt="img">
                             </div>
-                            <!-- <div class="item active">
-                                <img src="resources/images/main_img/main_slide01.jpg" alt="...">
-                                <div class="main_slide_btn">
-                                    <img src="resources/images/main_img/main_slide_txt01.png" alt="">
-                                </div>
-                            </div>
-                            <div class="item">
-                                <img src="resources/images/main_img/main_slide02.jpg" alt="...">
-                                <div class="main_slide_btn">
-                                    <img src="resources/images/main_img/main_slide_txt02.png" alt="">
-                                    <p class="mt25">
-                                        <a href="#" class="button main">자세히 보기</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <img src="resources/images/main_img/main_slide03.jpg" alt="...">
-                                <div class="main_slide_btn">
-                                    <img src="resources/images/main_img/main_slide_txt03.png" alt="">
-                                    <p class="mt25">
-                                        <a href="#" class="button main">자세히 보기</a>
-                                    </p>
-                                </div>
-                            </div> -->
                         </div>
                     
                         <!-- Controls -->
@@ -84,6 +60,7 @@
                             <span class="sr-only">Next</span>
                         </a>
                     </div>
+                    
                     <!-- //carousel -->
                     <div class="newUser_info">
                         <div class="inner">

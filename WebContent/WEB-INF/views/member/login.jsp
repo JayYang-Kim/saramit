@@ -24,14 +24,6 @@
 <body>
     <!-- Wrap -->
     <div id="wrap" class="login_wrap">
-        <!-- Header -->
-        <%-- <header>
-            <div class="login_header">
-                <h1 class="title">
-                    <a href="<%=cp%>">SARAMIT | 로그인</a>
-                </h1>
-            </div>
-        </header> --%>
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         

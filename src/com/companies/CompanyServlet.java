@@ -94,6 +94,10 @@ public class CompanyServlet extends MyServlet{
 	}
 	protected void review(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//회사 평가
+		req.setCharacterEncoding("utf-8");
+		String email = req.getParameter("email");
+		req.setAttribute("email", email);
+		forward(req, resp, "/WEB-INF/views/companies/review.jsp");
 	}
 	protected void info(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//회사 소개

@@ -97,7 +97,6 @@ public class MemberServlet extends MyServlet {
 					return;
 				}
 			}
-
 		}
 		forward(req, resp, "/WEB-INF/views/member/login.jsp");
 	}
