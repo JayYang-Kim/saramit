@@ -21,7 +21,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = "select levelCode, memberPwd, userName "
+			sql = "select levelCode, memberPwd, userName, statudCode, birth, gender, levelCode "
 					+ "from member m1 join member_user m2 "
 					+ "on m1.memberEmail=m2.userEmail where memberEmail=?";
 			pstmt = conn.prepareStatement(sql);
@@ -35,6 +35,17 @@ public class MemberDAO {
 				dto.setUserPwd(rs.getString(2));
 				dto.setUserName(rs.getString(3));
 				dto.setStatusCode(rs.getInt(4));
+				/* dto.set */
+				
+				/*
+				 * dto.setUserEmail(rs.getString("memberEmail"));
+				 * dto.setUserPwd(rs.getString("memberPwd"));
+				 * dto.setUserName(rs.getString("userName"));
+				 * dto.setAddress(rs.getString("address"));
+				 * dto.setBirth(rs.getDate("birth").toString());
+				 * dto.setGender(rs.getString("gender"));
+				 * dto.setLevelCode(rs.getInt("levelCode"));
+				 */
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -60,7 +71,6 @@ public class MemberDAO {
 	}
 
 	public CompaniesDTO readCompany(String email) {
-		// TODO Auto-generated method stub
 		CompaniesDTO dto = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;

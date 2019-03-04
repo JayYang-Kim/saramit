@@ -23,32 +23,30 @@
             <!-- contents -->
             <div class="register">
 				<div>
-					<form name="joinUser_form" action="#" method="#">
-						<fieldset>
-							<div class="box_login">
-								<h3 class="title">회원정보 수정</h3>
-								<!-- 공통 -->
-								<div class="mt30">
-									<label for="txt_email">이메일</label>
-									<div>
-										<input type="text" name="userEmail" id="txt_email" class="boxTf" value="${dto.userEmail}" autocomplete="off" autofocus/>
+					<fieldset>
+						<div class="box_login">
+							<h3 class="title">회원정보 수정</h3>
+							<!-- 유저 -->
+							<c:if test="${sessionScope.member.level == 2}">
+								<form name="joinUser_form" action="#" method="#">
+									<div class="mt30">
+										<label for="txt_email">이메일</label>
+										<div>
+											<input type="text" name="userEmail" id="txt_email" class="boxTf" value="${dto.userEmail}" disabled="disabled" autocomplete="off" autofocus/>
+										</div>
 									</div>
-								</div>
-								<div class="mt30">
-									<label for="txt_pwd">비밀번호</label>
-									<div>
-										<input type="password" name="userPwd" id="txt_pwd" class="boxTf" autocomplete="off" autofocus/>
+									<div class="mt30">
+										<label for="txt_pwd">비밀번호</label>
+										<div>
+											<input type="password" name="userPwd" id="txt_pwd" class="boxTf" autocomplete="off" autofocus/>
+										</div>
 									</div>
-								</div>
-								<div class="mt30">
-									<label for="txt_pwd_ok">비밀번호 확인</label>
-									<div>
-										<input type="password" name="userPwd_ok" id="txt_pwd_ok" class="boxTf" autocomplete="off" autofocus/>
+									<div class="mt30">
+										<label for="txt_pwd_ok">비밀번호 확인</label>
+										<div>
+											<input type="password" name="userPwd_ok" id="txt_pwd_ok" class="boxTf" autocomplete="off" autofocus/>
+										</div>
 									</div>
-								</div>
-								<!-- //공통 -->
-								<!-- 유저 -->
-								<c:if test="${sessionScope.member.level == 2}">
 									<div class="mt30">
 										<label for="txt_name">이름</label>
 										<div>
@@ -92,10 +90,34 @@
 											<input type="text" name="address" id="txt_address" class="boxTf" value="${dto.address}" autocomplete="off" autofocus/>
 										</div>
 									</div>
-								</c:if>
-								<!-- //유저 -->
-								<!-- 회사 -->
-								<c:if test="${sessionScope.member.level == 1}">
+									<div class="box_joinBtn mt30">
+										<button type="button" class="button btn_join">수정완료</button>
+										<button type="button" class="button btn_join" onclick="location.href='<%=cp%>/member/myPage.do'">취소</button>
+									</div>
+								</form>
+							</c:if>
+							<!-- //유저 -->
+							<!-- 회사 -->
+							<c:if test="${sessionScope.member.level == 1}">
+								<form name="joinUser_form" action="#" method="#">
+									<div class="mt30">
+										<label for="txt_email">이메일</label>
+										<div>
+											<input type="text" name="userEmail" id="txt_email" class="boxTf" value="${dto.userEmail}" autocomplete="off" autofocus/>
+										</div>
+									</div>
+									<div class="mt30">
+										<label for="txt_pwd">비밀번호</label>
+										<div>
+											<input type="password" name="userPwd" id="txt_pwd" class="boxTf" autocomplete="off" autofocus/>
+										</div>
+									</div>
+									<div class="mt30">
+										<label for="txt_pwd_ok">비밀번호 확인</label>
+										<div>
+											<input type="password" name="userPwd_ok" id="txt_pwd_ok" class="boxTf" autocomplete="off" autofocus/>
+										</div>
+									</div>
 									<div class="mt30">
 										<label for="txt_businessNum">사업자 등록번호</label>
 										<div>
@@ -171,15 +193,15 @@
 											<textarea name="companyIntro" id="txt_companyIntro" placeholder="내용" title="내용"></textarea>
 										</div>
 									</div>
-								</c:if>
-								<!-- //회사 -->	
-								<div class="box_joinBtn mt30">
-									<button type="button" class="button btn_join">수정완료</button>
-									<button type="button" class="button btn_join">취소</button>
-								</div>
-							</div>
-						</fieldset>
-					</form>
+									<div class="box_joinBtn mt30">
+										<button type="button" class="button btn_join">수정완료</button>
+										<button type="button" class="button btn_join">취소</button>
+									</div>
+								</form>
+							</c:if>
+							<!-- //회사 -->	
+						</div>
+					</fieldset>
 				</div>
             </div>
             <!-- //contents -->

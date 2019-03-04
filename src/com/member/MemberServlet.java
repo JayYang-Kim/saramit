@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import com.companies.CompaniesDTO;
 import com.main.SessionInfo;
@@ -21,8 +20,15 @@ public class MemberServlet extends MyServlet {
 	
 	@Override
 	protected void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		req.setCharacterEncoding("utf-8");
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		if(info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
+		
 		String uri = req.getRequestURI();
 		if (uri.indexOf("login.do") != -1) {
 			loginForm(req, resp);
@@ -132,11 +138,16 @@ public class MemberServlet extends MyServlet {
 		
 		String email = info.getEmail();
 		int level = info.getLevel();
-		
+
 		// 게시물 가져오기
-		UserDTO dto = dao.readUpd_user(email);
-		
-		req.setAttribute("dto", dto);
+		if(level == 2) {
+			UserDTO dto = dao.readUser(email);
+			req.setAttribute("dto", dto);
+		} else {
+			/*
+			 * CompaniesDTO = dao.readCompany(email); req.setAttribute("dto", dto);
+			 */
+		}
 		
 		forward(req, resp, "/WEB-INF/views/member/update.jsp");
 	}
