@@ -67,7 +67,7 @@
 	                 <li><span>|</span></li>
 	                 <li><a href="<%=cp%>/member/logout.do">로그아웃</a></li>
 	             </ul>
-	         </div> -->
+	         </div>
 	        </c:if>
 	        <!-- 회원 : 로그인 -->
 	    </div>

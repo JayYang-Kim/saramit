@@ -16,7 +16,9 @@ import com.util.MyServlet;
 @WebServlet("/member/*")
 public class MemberServlet extends MyServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	private String pathname;
+	
 	@Override
 	protected void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -100,6 +102,7 @@ public class MemberServlet extends MyServlet {
 			}
 
 		}
+		
 		forward(req, resp, "/WEB-INF/views/member/login.jsp");
 	}
 
@@ -111,9 +114,31 @@ public class MemberServlet extends MyServlet {
 		String cp = req.getContextPath();
 		resp.sendRedirect(cp);
 	}
-
+	
+	/**
+	 * title : 수정 폼
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/member/join.jsp");
+		String cp = req.getContextPath();
+		
+		MemberDAO dao = new MemberDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		String email = info.getEmail();
+		int level = info.getLevel();
+		
+		// 게시물 가져오기
+		UserDTO dto = dao.readUpd_user(email);
+		
+		req.setAttribute("dto", dto);
+		
+		forward(req, resp, "/WEB-INF/views/member/update.jsp");
 	}
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

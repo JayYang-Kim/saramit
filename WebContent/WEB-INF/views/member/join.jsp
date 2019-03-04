@@ -57,9 +57,9 @@
 									</div>
 								</div>
 								<div class="mt30">
-									<label for="txt_phoneNum">핸드폰 번호</label>
+									<label for="txt_name">이름</label>
 									<div>
-										<input type="text" name="phoneNum" id="txt_phoneNum" class="boxTf" placeholder="000-0000-0000" autocomplete="off" autofocus/>
+										<input type="text" name="name" id="txt_name" class="boxTf" autocomplete="off" autofocus/>
 									</div>
 								</div>
 								<div class="mt30">
