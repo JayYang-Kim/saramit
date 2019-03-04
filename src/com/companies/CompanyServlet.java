@@ -69,10 +69,13 @@ public class CompanyServlet extends MyServlet{
 		}
 		
 		//페이징 작업 
-		int rows = 3;
+		int rows = 12;
 		int dataCount = dao.totData(searchKey, searchValue);
 		int total_page = util.pageCount(rows, dataCount);
 		
+		if(current_page>total_page) {
+			current_page=total_page;
+		} //여기 조심
 		int start = (current_page-1)*rows +1;
 		int end = current_page*rows;
 		
@@ -84,6 +87,7 @@ public class CompanyServlet extends MyServlet{
 		req.setAttribute("page", current_page);
 		req.setAttribute("companies", list);
 		req.setAttribute("paging", paging);
+		req.setAttribute("dataCount", dataCount);
 		forward(req, resp, "/WEB-INF/views/companies/list.jsp");
 	}
 	protected void review(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
