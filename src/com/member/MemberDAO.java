@@ -21,7 +21,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = "select levelCode, memberPwd, userName "
+			sql = "select levelCode, memberPwd, userName, statuscode "
 					+ "from member m1 join member_user m2 "
 					+ "on m1.memberEmail=m2.userEmail where memberEmail=?";
 			pstmt = conn.prepareStatement(sql);

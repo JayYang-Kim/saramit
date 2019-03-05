@@ -159,7 +159,7 @@ function topBtn(){
 function add_row() {
 	var my_tbody = document.getElementById('tbody');
 	// var row = my_tbody.insertRow(0); // 상단에 추가
-	var row = my_tbody.insertRow(my_tbody.rows.length ); // 하단에 추가
+	var row = my_tbody.insertRow(my_tbody.rows.length); // 하단에 추가
 	var cell1 = row.insertCell(0);
 	var cell2 = row.insertCell(1);
 	cell1.innerHTML = '<input type="text" placeholder="동전금액을 입력해주세요." title="동전금액">';

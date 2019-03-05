@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import com.main.SessionInfo;
 import com.util.MyServlet;
-@WebServlet("/board/*")
-public class BoardServlet extends MyServlet{
+@WebServlet("/board/free/*")
+public class FreeBoardServlet extends MyServlet{
 	private static final long serialVersionUID = 1L;
 	//자유게시판이나 피드백 게시판이나 내용이 똑같아서 하나로 비벼볼 수 있을 듯
 	@Override
@@ -49,11 +49,11 @@ public class BoardServlet extends MyServlet{
 	
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 리스트
-		forward(req, resp, "/WEB-INF/views/board/list.jsp");
+		forward(req, resp, "/WEB-INF/views/board/free/list.jsp");
 	}
 	protected void createdForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 생성폼
-		forward(req, resp, "/WEB-INF/views/board/created.jsp");
+		forward(req, resp, "/WEB-INF/views/board/free/created.jsp");
 	}
 	protected void createdSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 생성 완료
@@ -62,7 +62,7 @@ public class BoardServlet extends MyServlet{
 	}
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 수정폼
-		forward(req, resp, "/WEB-INF/views/board/created.jsp");
+		forward(req, resp, "/WEB-INF/views/board/free/created.jsp");
 	}
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 수정완료
@@ -71,7 +71,7 @@ public class BoardServlet extends MyServlet{
 	}
 	protected void replyForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//답글 폼
-		forward(req, resp, "/WEB-INF/views/board/created.jsp");
+		forward(req, resp, "/WEB-INF/views/board/free/created.jsp");
 	}
 	protected void replySubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 답글 완료

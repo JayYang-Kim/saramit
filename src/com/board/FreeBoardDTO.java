@@ -1,6 +1,6 @@
 package com.board;
 
-public class BoardDTO {
+public class FreeBoardDTO {
 	private String userEmail;
 	private String subject;
 	private String content;
