@@ -14,6 +14,102 @@ public class MemberDAO {
 		conn = DBConn.getConnection();
 	}
 	
+	public void insertUser(UserDTO dto) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "INSERT INTO member(memberEmail, statusCode, levelCode, memberPwd) VALUES(?, ?, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getUserEmail());
+			pstmt.setInt(2, dto.getStatusCode());
+			pstmt.setInt(3, dto.getLevelCode());
+			pstmt.setString(4, dto.getUserPwd());
+			
+			pstmt.executeUpdate();
+			
+			sql = null;
+			
+			pstmt.close();
+			
+			sql = "INSERT INTO member_user(userEmail, userName, address, birth, gender) VALUES(?, ?, ?, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getUserEmail());
+			pstmt.setString(2, dto.getUserName());
+			pstmt.setString(3, dto.getAddress());
+			pstmt.setString(4, dto.getBirth());
+			pstmt.setString(5, dto.getGender());
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
+	
+	public void insertCompany(CompaniesDTO dto) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "INSERT INTO member(memberEmail, statusCode, levelCode, memberPwd) VALUES(?, ?, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getCompanyEmail());
+			pstmt.setInt(2, dto.getStatusCode());
+			pstmt.setInt(3, dto.getLevelCode());
+			pstmt.setString(4, dto.getCompanyPwd());
+			
+			pstmt.executeUpdate();
+			
+			sql = null;
+			
+			pstmt.close();
+			
+			sql = "INSERT INTO company(companyEmail, businessLicenseNum, companyName, owner, establishmentDate, employees, sales, location, salary, introduction, homepage, saveFilename) "
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getCompanyEmail());
+			pstmt.setString(2, dto.getBusinessLicenseNum());
+			pstmt.setString(3, dto.getCompanyName());
+			pstmt.setString(4, dto.getOwner());
+			pstmt.setString(5, dto.getEstablishmentDate());
+			pstmt.setInt(6, dto.getEmployees());
+			pstmt.setInt(7, dto.getSale());
+			pstmt.setString(8, dto.getLocation());
+			pstmt.setInt(9, dto.getSalary());
+			pstmt.setString(10, dto.getIntroduction());
+			pstmt.setString(11, dto.getHomepage());
+			pstmt.setString(12, dto.getSaveFilename());
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
+	
 	public UserDTO readUser(String email){
 		UserDTO dto = null;
 		PreparedStatement pstmt = null;
@@ -69,7 +165,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = "select levelCode, memberPwd, companyName, statusCode, businessLicenseNum, companyName, owner, establishmentdate, employees, sales, location, salary, introduction, homepage, created "
+			sql = "select levelCode, memberPwd, companyName, statusCode, businessLicenseNum, companyName, owner, establishmentdate, employees, sales, location, salary, introduction, homepage, saveFileName, created "
 					+ "from member m1 join company c "
 					+ "on m1.memberEmail = c.companyEmail where memberEmail=?";
 			System.out.println(email);
@@ -94,6 +190,7 @@ public class MemberDAO {
 				dto.setSalary(rs.getInt(12));
 				dto.setIntroduction(rs.getString(13));
 				dto.setHomepage(rs.getString(14));
+				dto.setSaveFilename(rs.getString(15));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -207,11 +304,65 @@ public class MemberDAO {
 					
 				}
 			}
-		}
-				
+		}	
 	}
 	
 	public void updateCompanyInfo(CompaniesDTO dto) {
+		PreparedStatement pstmt = null;
+		String sql = null;
 		
+		try {
+			sql = "UPDATE member SET memberPwd = ? WHERE memberEmail = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getCompanyPwd());
+			pstmt.setString(2, dto.getCompanyEmail());
+			
+			pstmt.executeUpdate();
+			
+			sql = null;
+			
+			pstmt.close();
+			
+			sql = "UPDATE company SET "
+					+ "businesslicensenum = ?, "
+					+ "companyname = ?, "
+					+ "owner = ?, "
+					+ "employees = ?, "
+					+ "sales = ?, "
+					+ "location = ?, "
+					+ "salary = ?, "
+					+ "homepage = ?, "
+					+ "savefilename = ?, "
+					+ "introduction = ? "
+					+ "WHERE companyEmail = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getBusinessLicenseNum());
+			pstmt.setString(2, dto.getCompanyName());
+			pstmt.setString(3, dto.getOwner());
+			pstmt.setInt(4, dto.getEmployees());
+			pstmt.setInt(5, dto.getSale());
+			pstmt.setString(6, dto.getLocation());
+			pstmt.setInt(7, dto.getSalary());
+			pstmt.setString(8, dto.getHomepage());
+			pstmt.setString(9, dto.getSaveFilename());
+			pstmt.setString(10, dto.getIntroduction());
+			pstmt.setString(11, dto.getCompanyEmail());
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}	
 	}
 }

@@ -13,6 +13,18 @@
 	    function upd_myPage_user() {
 			var f = document.updUser_form;
 			
+			if(f.userPwd.value == "") {
+				alert("비밀번호를 입력해주세요.");
+				f.userPwd.focus();
+				return;
+			}
+			
+			if(f.userPwd.value != f.userPwd_ok.value) {
+				alert("비밀번호가 일치하지 않습니다.");
+				f.userPwd_ok.focus();
+				return;
+			}
+			
 			f.action = "<%=cp%>/member/update_ok.do";
     		f.submit();
 		}
@@ -20,10 +32,22 @@
     	function upd_myPage_company() {
     		var f = document.updCompany_form;
     		
+    		if(f.companyPwd.value == "") {
+				alert("비밀번호를 입력해주세요.");
+				f.companyPwd.focus();
+				return;
+			}
+			
+			if(f.companyPwd.value != f.companyPwd_ok.value) {
+				alert("비밀번호가 일치하지 않습니다.");
+				f.companyPwd_ok.focus();
+				return;
+			}
+    		
     		// 이미지 파일 체크 (이미지 파일이 있을 경우)
     		if(f.file.value != "") {
     			if(!/(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.file.value)) {
-        			alert('이미지 파일만 가능합니다. !!!');
+        			alert('이미지 파일만 저장 가능합니다.');
         			f.file.focus();
         			return;
         		}
@@ -45,7 +69,7 @@
         <!-- container -->
         <div id="container" class="login_container">
             <!-- contents -->
-            <div class="register">
+            <div class="register" style="padding:141px 0 60px">
 				<div>
 					<fieldset>
 						<div class="box_login">
@@ -56,25 +80,25 @@
 									<div class="mt30">
 										<label for="txt_email">이메일</label>
 										<div>
-											<input type="text" name="userEmail" id="txt_email" class="boxTf" value="${dto.userEmail}" disabled="disabled" autocomplete="off" autofocus/>
+											<input type="text" name="userEmail" id="txt_userEmail" class="boxTf" value="${dto.userEmail}" disabled="disabled" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
 										<label for="txt_pwd">비밀번호</label>
 										<div>
-											<input type="password" name="userPwd" id="txt_pwd" class="boxTf" autocomplete="off" autofocus/>
+											<input type="password" name="userPwd" id="txt_userPwd" class="boxTf" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
 										<label for="txt_pwd_ok">비밀번호 확인</label>
 										<div>
-											<input type="password" name="userPwd_ok" id="txt_pwd_ok" class="boxTf" autocomplete="off" autofocus/>
+											<input type="password" name="userPwd_ok" id="txt_userPwd_ok" class="boxTf" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
 										<label for="txt_name">이름</label>
 										<div>
-											<input type="text" name="userName" id="txt_name" class="boxTf" value="${dto.userName}" autocomplete="off" autofocus/>
+											<input type="text" name="userName" id="txt_userName" class="boxTf" value="${dto.userName}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
@@ -117,9 +141,6 @@
 									<div class="box_joinBtn mt30">
 										<input type="hidden" name="og_email" value="${dto.userEmail}"/>
 										<input type="hidden" name="og_pwd" value="${dto.userPwd}"/>
-										<input type="hidden" name="og_name" value="${dto.userName}"/>
-										<input type="hidden" name="og_birth" value="${dto.birth}"/>
-										<input type="hidden" name="og_address" value="${dto.address}"/>
 										<button type="button" class="button btn_join" onclick="upd_myPage_user()">수정완료</button>
 										<button type="button" class="button btn_join" onclick="location.href='<%=cp%>/member/myPage.do'">취소</button>
 									</div>
@@ -178,7 +199,7 @@
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_sale">매출액</label>
+										<label for="txt_sale">매출액 (단위 : 만원)</label>
 										<div>
 											<input type="text" name="sale" id="txt_sale" class="boxTf" placeholder="10000000000" value="${dto.sale}" autocomplete="off" autofocus/>
 										</div>
@@ -190,7 +211,7 @@
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_salary">평균연봉</label>
+										<label for="txt_salary">평균연봉 (단위 : 만원)</label>
 										<div>
 											<input type="text" name="salary" id="txt_salary" class="boxTf" placeholder="10000000" value="${dto.salary}" autocomplete="off" autofocus/>
 										</div>
@@ -211,7 +232,7 @@
 												<input type="text" placeholder="첨부파일을 선택해주세요." title="첨부파일 선택" readonly="readonly">
 												<span class="btn_file">
 													<a href="#" class="button btn-white">파일찾기</a>
-													<input type="file" name="file" placeholder="내용입력" title="파일첨부">
+													<input type="file" id="txt_img_logo" name="file" placeholder="내용입력" title="파일첨부">
 												</span>
 											</p>
 										</div>
@@ -224,20 +245,8 @@
 									</div>
 									<div class="box_joinBtn mt30">
 										<input type="hidden" name="og_email" value="${dto.companyEmail}"/>
-										<input type="hidden" name="og_email" value="${dto.companyPwd}"/>
-										<input type="hidden" name="og_email" value="${dto.businessLicenseNum}"/>
-										<input type="hidden" name="og_email" value="${dto.companyName}"/>
-										<input type="hidden" name="og_email" value="${dto.owner}"/>
-										<input type="hidden" name="og_email" value="${dto.establishmentDate}"/>
-										<input type="hidden" name="og_email" value="${dto.employees}"/>
-										<input type="hidden" name="og_email" value="${dto.sale}"/>
-										<input type="hidden" name="og_email" value="${dto.location}"/>
-										<input type="hidden" name="og_email" value="${dto.salary}"/>
-										<input type="hidden" name="og_email" value="${dto.introduction}"/>
-										<input type="hidden" name="og_email" value="${dto.homepage}"/>
-										<input type="hidden" name="og_email" value="${dto.saveFilename}"/>
-										<input type="hidden" name="og_email" value="${dto.originalFilename}"/>
-										
+										<input type="hidden" name="og_pwd" value="${dto.companyPwd}"/>
+										<input type="hidden" name="og_saveFilename" value="${dto.saveFilename}"/>			
 										<button type="button" class="button btn_join" onclick="upd_myPage_company()">수정완료</button>
 										<button type="button" class="button btn_join" onclick="javascript:location.href='<%=cp%>/member/myPage.do'">취소</button>
 									</div>
