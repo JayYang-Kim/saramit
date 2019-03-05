@@ -9,6 +9,30 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
+    <script type="text/javascript">
+	    function upd_myPage_user() {
+			var f = document.updUser_form;
+			
+			f.action = "<%=cp%>/member/update_ok.do";
+    		f.submit();
+		}
+	    
+    	function upd_myPage_company() {
+    		var f = document.updCompany_form;
+    		
+    		// 이미지 파일 체크 (이미지 파일이 있을 경우)
+    		if(f.file.value != "") {
+    			if(!/(\.gif|\.jpg|\.png|\.jpeg)$/i.test(f.file.value)) {
+        			alert('이미지 파일만 가능합니다. !!!');
+        			f.file.focus();
+        			return;
+        		}
+    		}
+    		
+    		f.action = "<%=cp%>/member/update_ok.do";
+    		f.submit();
+    	}
+    </script>
 </head>
 
 <body>
@@ -27,8 +51,8 @@
 						<div class="box_login">
 							<h3 class="title">회원정보 수정</h3>
 							<!-- 유저 -->
-							<c:if test="${sessionScope.member.level == 2}">
-								<form name="joinUser_form" action="#" method="#">
+							<c:if test="${sessionScope.member.level eq 2}">
+								<form name="updUser_form" method="post">
 									<div class="mt30">
 										<label for="txt_email">이메일</label>
 										<div>
@@ -50,7 +74,7 @@
 									<div class="mt30">
 										<label for="txt_name">이름</label>
 										<div>
-											<input type="text" name="userName" id="txt_name" class="boxTf" value="${dto.userName}" disabled="disabled" autocomplete="off" autofocus/>
+											<input type="text" name="userName" id="txt_name" class="boxTf" value="${dto.userName}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
@@ -91,85 +115,90 @@
 										</div>
 									</div>
 									<div class="box_joinBtn mt30">
-										<button type="button" class="button btn_join">수정완료</button>
+										<input type="hidden" name="og_email" value="${dto.userEmail}"/>
+										<input type="hidden" name="og_pwd" value="${dto.userPwd}"/>
+										<input type="hidden" name="og_name" value="${dto.userName}"/>
+										<input type="hidden" name="og_birth" value="${dto.birth}"/>
+										<input type="hidden" name="og_address" value="${dto.address}"/>
+										<button type="button" class="button btn_join" onclick="upd_myPage_user()">수정완료</button>
 										<button type="button" class="button btn_join" onclick="location.href='<%=cp%>/member/myPage.do'">취소</button>
 									</div>
 								</form>
 							</c:if>
 							<!-- //유저 -->
 							<!-- 회사 -->
-							<c:if test="${sessionScope.member.level == 1}">
-								<form name="joinUser_form" action="#" method="#">
+							<c:if test="${sessionScope.member.level eq 1}">
+								<form name="updCompany_form" method="post" enctype="multipart/form-data">
 									<div class="mt30">
-										<label for="txt_email">이메일</label>
+										<label for="txt_companyEmail">이메일</label>
 										<div>
-											<input type="text" name="userEmail" id="txt_email" class="boxTf" value="${dto.userEmail}" autocomplete="off" autofocus/>
+											<input type="text" name="companyEmail" id="txt_companyEmail" class="boxTf" value="${dto.companyEmail}" disabled="disabled" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_pwd">비밀번호</label>
+										<label for="txt_companyPwd">비밀번호</label>
 										<div>
-											<input type="password" name="userPwd" id="txt_pwd" class="boxTf" autocomplete="off" autofocus/>
+											<input type="password" name="companyPwd" id="txt_companyPwd" class="boxTf" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_pwd_ok">비밀번호 확인</label>
+										<label for="txt_companyPwd_ok">비밀번호 확인</label>
 										<div>
-											<input type="password" name="userPwd_ok" id="txt_pwd_ok" class="boxTf" autocomplete="off" autofocus/>
+											<input type="password" name="companyPwd_ok" id="txt_companyPwd_ok" class="boxTf" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_businessNum">사업자 등록번호</label>
+										<label for="txt_businessLicenseNum">사업자 등록번호</label>
 										<div>
-											<input type="text" name="businessNum" id="txt_businessNum" class="boxTf" placeholder="000-00-00000" autocomplete="off" autofocus/>
+											<input type="text" name="businessLicenseNum" id="txt_businessLicenseNum" class="boxTf" placeholder="000-00-00000" value="${dto.businessLicenseNum}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
 										<label for="txt_companyName">기업명</label>
 										<div>
-											<input type="text" name="companyName" id="txt_companyName" class="boxTf" placeholder="(주)SARAMIT" autocomplete="off" autofocus/>
+											<input type="text" name="companyName" id="txt_companyName" class="boxTf" placeholder="(주)SARAMIT" value="${dto.companyName}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_ceoName">대표자명</label>
+										<label for="txt_owner">대표자명</label>
 										<div>
-											<input type="text" name="ceoName" id="txt_ceoName" class="boxTf" placeholder="홍길동" autocomplete="off" autofocus/>
+											<input type="text" name="owner" id="txt_owner" class="boxTf" placeholder="홍길동" value="${dto.owner}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_fountDate">설립일</label>
+										<label for="txt_establishmentDate">설립일</label>
 										<div>
-											<input type="text" name="fountDate" id="txt_fountDate" class="boxTf" placeholder="YYYY-MM-DD" autocomplete="off" autofocus/>
+											<input type="text" name="establishmentDate" id="txt_establishmentDate" class="boxTf" placeholder="YYYY-MM-DD" value="${dto.establishmentDate}" disabled="disabled" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_employeesNum">사원수</label>
+										<label for="txt_employees">사원수</label>
 										<div>
-											<input type="text" name="employeesNum" id="txt_employeesNum" class="boxTf" placeholder="100" autocomplete="off" autofocus/>
+											<input type="text" name="employees" id="txt_employees" class="boxTf" placeholder="100" value="${dto.employees}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_salesNum">매출액</label>
+										<label for="txt_sale">매출액</label>
 										<div>
-											<input type="text" name="salesNum" id="txt_salesNum" class="boxTf" placeholder="10000000000" autocomplete="off" autofocus/>
+											<input type="text" name="sale" id="txt_sale" class="boxTf" placeholder="10000000000" value="${dto.sale}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_address">위치(주소)</label>
+										<label for="txt_location">위치(주소)</label>
 										<div>
-											<input type="text" name="address" id="txt_address" class="boxTf" autocomplete="off" autofocus/>
+											<input type="text" name="location" id="txt_location" class="boxTf" value="${dto.location }" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_averageSalary">평균연봉</label>
+										<label for="txt_salary">평균연봉</label>
 										<div>
-											<input type="text" name="averageSalary" id="txt_averageSalary" class="boxTf" placeholder="10000000" autocomplete="off" autofocus/>
+											<input type="text" name="salary" id="txt_salary" class="boxTf" placeholder="10000000" value="${dto.salary}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_siteUrl">사이트 주소</label>
+										<label for="txt_homepage">사이트 주소</label>
 										<div>
-											<input type="text" name="siteUrl" id="txt_siteUrl" class="boxTf" placeholder="ex)http://www.naver.com" autocomplete="off" autofocus/>
+											<input type="text" name="homepage" id="txt_homepage" class="boxTf" placeholder="ex)http://www.naver.com" value="${dto.homepage}" autocomplete="off" autofocus/>
 										</div>
 									</div>
 									<div class="mt30">
@@ -182,20 +211,35 @@
 												<input type="text" placeholder="첨부파일을 선택해주세요." title="첨부파일 선택" readonly="readonly">
 												<span class="btn_file">
 													<a href="#" class="button btn-white">파일찾기</a>
-													<input type="file" placeholder="내용입력" title="파일첨부">
+													<input type="file" name="file" placeholder="내용입력" title="파일첨부">
 												</span>
 											</p>
 										</div>
 									</div>
 									<div class="mt30">
-										<label for="txt_companyIntro">회사소개</label>
+										<label for="txt_introduction">회사소개</label>
 										<div class="mt10">
-											<textarea name="companyIntro" id="txt_companyIntro" placeholder="내용" title="내용"></textarea>
+											<textarea name="introduction" id="txt_introduction" placeholder="내용" title="내용">${dto.introduction}</textarea>
 										</div>
 									</div>
 									<div class="box_joinBtn mt30">
-										<button type="button" class="button btn_join">수정완료</button>
-										<button type="button" class="button btn_join">취소</button>
+										<input type="hidden" name="og_email" value="${dto.companyEmail}"/>
+										<input type="hidden" name="og_email" value="${dto.companyPwd}"/>
+										<input type="hidden" name="og_email" value="${dto.businessLicenseNum}"/>
+										<input type="hidden" name="og_email" value="${dto.companyName}"/>
+										<input type="hidden" name="og_email" value="${dto.owner}"/>
+										<input type="hidden" name="og_email" value="${dto.establishmentDate}"/>
+										<input type="hidden" name="og_email" value="${dto.employees}"/>
+										<input type="hidden" name="og_email" value="${dto.sale}"/>
+										<input type="hidden" name="og_email" value="${dto.location}"/>
+										<input type="hidden" name="og_email" value="${dto.salary}"/>
+										<input type="hidden" name="og_email" value="${dto.introduction}"/>
+										<input type="hidden" name="og_email" value="${dto.homepage}"/>
+										<input type="hidden" name="og_email" value="${dto.saveFilename}"/>
+										<input type="hidden" name="og_email" value="${dto.originalFilename}"/>
+										
+										<button type="button" class="button btn_join" onclick="upd_myPage_company()">수정완료</button>
+										<button type="button" class="button btn_join" onclick="javascript:location.href='<%=cp%>/member/myPage.do'">취소</button>
 									</div>
 								</form>
 							</c:if>

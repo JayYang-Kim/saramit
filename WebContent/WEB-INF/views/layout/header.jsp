@@ -5,8 +5,6 @@
 <%
 	String cp = request.getContextPath();
 	String uri = request.getRequestURI();
-	
-	System.out.print(uri);
 %>
 
 	<header>

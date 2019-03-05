@@ -11,11 +11,13 @@
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
     <script type="text/javascript">
     	function sendOk(){
-    		var f = login_form;
-    		if(!f.radioLevel.value){
+    		var f = document.login_form;
+    		
+    		if(!$("input[type=radio][name=radioLevel]:checked").val()){
     			alert("로그인 종류를 선택하세요!");
     			return;
     		}
+    		
     		f.submit();
     	}
     </script>

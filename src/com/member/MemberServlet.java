@@ -21,14 +21,6 @@ public class MemberServlet extends MyServlet {
 	@Override
 	protected void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
-		
-		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
-		if(info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
-			return;
-		}
-		
 		String uri = req.getRequestURI();
 		if (uri.indexOf("login.do") != -1) {
 			loginForm(req, resp);
@@ -69,6 +61,7 @@ public class MemberServlet extends MyServlet {
 		
 		String userLevel = req.getParameter("radioLevel");
 		String email = req.getParameter("email");
+		
 		String pwd = req.getParameter("pwd");
 
 		SessionInfo info = new SessionInfo(); // 이메일, 이름, 기업/개인 정보를 가지고 세션에 저장될 객체
@@ -109,7 +102,9 @@ public class MemberServlet extends MyServlet {
 
 		}
 		
-		forward(req, resp, "/WEB-INF/views/member/login.jsp");
+		//forward(req, resp, "/WEB-INF/views/member/login.jsp");
+		
+		resp.sendRedirect(cp + "/member/login.do");
 	}
 
 	protected void joinForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -135,18 +130,21 @@ public class MemberServlet extends MyServlet {
 		
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		if(info == null) {
+			//forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			resp.sendRedirect(cp + "/member/login.do");
+			return;
+		}
 		
 		String email = info.getEmail();
 		int level = info.getLevel();
-
-		// 게시물 가져오기
+		
 		if(level == 2) {
 			UserDTO dto = dao.readUser(email);
 			req.setAttribute("dto", dto);
 		} else {
-			/*
-			 * CompaniesDTO = dao.readCompany(email); req.setAttribute("dto", dto);
-			 */
+			CompaniesDTO dto = dao.readCompany(email);
+			req.setAttribute("dto", dto);
 		}
 		
 		forward(req, resp, "/WEB-INF/views/member/update.jsp");
@@ -154,7 +152,53 @@ public class MemberServlet extends MyServlet {
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		
+		// dao 객체 생성
+		MemberDAO dao = new MemberDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		if(info == null) {
+			//forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			resp.sendRedirect(cp + "/member/login.do");
+			return;
+		}
+		
+		int level = info.getLevel();
+		
+		if(level == 2) {
+			UserDTO dto = new UserDTO();
+			
+			String email = req.getParameter("og_email");
+			String pwd = req.getParameter("userPwd");
+			if(pwd.equals("")) {
+				pwd = req.getParameter("og_pwd");
+			}
+			String name = req.getParameter("userName");
+			if(name.equals("")) {
+				name = req.getParameter("og_name");
+			}
+			String address = req.getParameter("address");
+			if(address.equals("")) {
+				address = req.getParameter("og_address");
+			}
+			String birth = req.getParameter("birth");
+			if(birth.equals("")) {
+				birth = req.getParameter("og_birth");
+			}
+			
+			dto.setUserEmail(email);
+			dto.setUserPwd(pwd);
+			dto.setUserName(name);
+			dto.setAddress(address);
+			dto.setBirth(birth);
+			
+			dao.updateUserInfo(dto);
+		} else {
+			CompaniesDTO dto = new CompaniesDTO();		
+		}
+		
+		resp.sendRedirect(cp + "/member/myPage.do");
 	}
 
 	protected void myPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
