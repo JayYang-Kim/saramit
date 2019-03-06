@@ -11,15 +11,15 @@
 	    <div class="header">
 	    	<% if(uri.indexOf("login.jsp") != -1) { %>
 	    		<h1 class="title">
-		            <a href="main.html">SARAMIT | 로그인</a>
+		            <a href="<%=cp%>/main.do">SARAMIT | 로그인</a>
 		        </h1>
 	    	<% } else if(uri.indexOf("join.jsp") != -1) { %>
 	    		<h1 class="title">
-		            <a href="main.html">SARAMIT | 회원가입</a>
+		            <a href="<%=cp%>/main.do">SARAMIT | 회원가입</a>
 		        </h1>
 	    	<% } else {%>
 	    		<h1 class="title">
-		            <a href="main.html">SARAMIT</a>
+		            <a href="<%=cp%>/main.do">SARAMIT</a>
 		        </h1>
 		        <!-- gnb : 회사 -->
 		        <!-- <div class="gnb">
@@ -35,9 +35,9 @@
 		        <!-- gnb : 유저 -->
 		        <div class="gnb">
 		            <ul>
-		                <li><a href="#">회사검색</a></li>
+		                <li><a href="<%=cp%>/companies/list.do">회사검색</a></li>
 		                <li><a href="#">회사평가</a></li>
-		                <li><a href="#">피드백 게시판</a></li>
+		                <li><a href="<%=cp%>/board/list.do">피드백 게시판</a></li>
 		                <li><a href="#">자유게시판</a></li>
 		                <li><a href="#">자소서 관리</a></li>
 		            </ul>

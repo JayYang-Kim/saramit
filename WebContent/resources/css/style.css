@@ -38,6 +38,7 @@ html, body{height:100%;}
 .login_wrap .login_container{display:table-row;height:100%;}
 #wrap{min-width:1024px;}
 #wrap #container .contents .inner{width:1024px;margin:0 auto;}
+#wrap #container .contents_bg{background-color:#f3f7f8;}
 
 /* Header */
 #wrap header .header{position:fixed;left:0;top:0;z-index:50;width:100%;min-width:1024px;height:60px;border-bottom:1px solid #c4c4c4;background-color:#ffffff;}
