@@ -8,7 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.main.SessionInfo;
 import com.util.MyServlet;
 import com.util.MyUtil;
 @WebServlet("/companies/*")
@@ -20,12 +22,12 @@ public class CompanyServlet extends MyServlet{
 		// TODO Auto-generated method stub
 		req.setCharacterEncoding("utf-8");
 		String uri = req.getRequestURI();
-		/*HttpSession session = req.getSession();
+		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 			return;
-		}*/
+		}
 		
 		if(uri.indexOf("list.do") != -1) {
 			list(req, resp);
@@ -58,8 +60,6 @@ public class CompanyServlet extends MyServlet{
 		}
 		//앞으로 가져갈 uri
 		String url = cp+"/companies/list.do"; //다시 리스트로 가는 경우의 주소
-		String infoUrl = cp+"/companies/info.do";//더보기를 통해 회사 상세페이지로 가는 주소
-		
 		String searchKey = req.getParameter("searchKey");
 		String searchValue = req.getParameter("searchValue");
 		
@@ -68,14 +68,16 @@ public class CompanyServlet extends MyServlet{
 		if(searchKey != null && searchValue != null) {
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
 			url += "&searchKey="+searchKey+"&searchValue="+searchValue;
-			infoUrl += "&searchKey="+searchKey+"&searchValue="+searchValue;
 		}
 		
 		//페이징 작업 
-		int rows = 3;
+		int rows = 12;
 		int dataCount = dao.totData(searchKey, searchValue);
 		int total_page = util.pageCount(rows, dataCount);
 		
+		if(current_page>total_page) {
+			current_page=total_page;
+		} //여기 조심
 		int start = (current_page-1)*rows +1;
 		int end = current_page*rows;
 		
@@ -87,10 +89,15 @@ public class CompanyServlet extends MyServlet{
 		req.setAttribute("page", current_page);
 		req.setAttribute("companies", list);
 		req.setAttribute("paging", paging);
+		req.setAttribute("dataCount", dataCount);
 		forward(req, resp, "/WEB-INF/views/companies/list.jsp");
 	}
 	protected void review(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//회사 평가
+		req.setCharacterEncoding("utf-8");
+		String email = req.getParameter("email");
+		req.setAttribute("email", email);
+		forward(req, resp, "/WEB-INF/views/companies/review.jsp");
 	}
 	protected void info(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//회사 소개

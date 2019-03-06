@@ -72,7 +72,7 @@ public class MemberServlet extends MyServlet {
 					/*if (dto.getStatusCode() == 2) {
 						System.out.println("Å»ÅðÇÑ È¸¿ø");
 					}*/
-					session.setMaxInactiveInterval(60 * 30);
+					session.setMaxInactiveInterval(60);
 					info.setEmail(email);
 					info.setLevel(dto.getLevelCode());
 					info.setName(dto.getUserName());
@@ -88,7 +88,7 @@ public class MemberServlet extends MyServlet {
 					/*if (dto.getStatusCode() == 2) {
 						System.out.println("Å»ÅðÇÑ È¸¿ø");
 					}*/
-					session.setMaxInactiveInterval(60 * 30);
+					session.setMaxInactiveInterval(60*30);
 					info.setEmail(email);
 					info.setLevel(dto.getLevelCode());
 					info.setName(dto.getCompanyName());
@@ -97,9 +97,8 @@ public class MemberServlet extends MyServlet {
 					return;
 				}
 			}
-
 		}
-		forward(req, resp, "/WEB-INF/views/member/login.jsp");
+		resp.sendRedirect(cp+"/member/login.do");
 	}
 
 	protected void joinForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

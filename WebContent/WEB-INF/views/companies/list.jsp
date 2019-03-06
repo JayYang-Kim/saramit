@@ -39,11 +39,42 @@
             <div style="height:61px"></div>
             <!-- contents -->
             <div class="contents">
-       			<div class="companyList list">
+       			<div class="companyList list" style="min-height: 740px;">
        				<div class="inner">
        					<div class="list">
-       						<h3>| 기업 검색</h3>
-       						<div align="center">
+       						<h3 style="margin-top: 30px;">| 기업 검색</h3>
+       						
+       						<br>
+       						<c:forEach var="n" items="${companies}" varStatus="status">
+									${status.index==0?"<ul style='margin-top : 10px;'>":""}
+										<c:if test="${status.index != 0 && status.index%4==0}">
+											<c:out value="</ul><ul style='margin-top : 10px;'>" escapeXml="false"/>
+										</c:if>
+		       							<li class="item"> <!-- 하나 하나의 박스 -->
+		       								<div class="bg">
+		       									<div class="color">
+		       										<img src="<%=cp%>/resources/images/common/${n.savefilename}" width="100%" alt="로고"/>
+		       									</div>
+		       									<span style="display:inline-block; font-size: 20px; width:90%;">${n.companyName}</span>
+		       								</div>
+		       								<ul>
+		       									<li><span>사원수 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.employees}"/>(명)</span></li>
+		       									<li><span>매출액 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.sale}"/>(만원)</span></li>
+		       									<li><span>평균연봉 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.salary}"/>(만원)</span></li>
+		       									<li><span>위치 : ${n.location}</span></li>
+		       								</ul>
+		       								<div class="extra">
+		       									<div class="site">
+		       										<span>${n.homepage}</span>
+		       									</div>
+		       									<a style="cursor: pointer;" onclick="javascript:location.href='<%=cp%>/companies/info.do?email=${n.companyEmail}';">더보기</a>
+		       								</div>
+		       							</li> 					
+       						</c:forEach>
+       						<c:out value="</ul>" escapeXml="false"/>
+       						<!-- 문제나면 여기야 확실해 -->
+       						<div style="padding-top:10px;text-align: center;">${paging}</div> 
+       						<div align="center" style="margin-top: 10px;">
 	       						<form name="searchForm">
 		       						<select name="searchKey">
 		       							<option value="companyname">기업명</option>
@@ -54,61 +85,6 @@
 		       						<button type="button" class="btn btn-darkGray" style="height: 26px" onclick="search();">검 색</button>
 	       						</form>
        						</div>
-       						<br>
-       						<c:set var="count" value="0"/>
-       						<c:forEach var="n" items="${companies}">
-								<c:if test="${count%4==0}">
-	       							<ul style="margin-top : 10px;">
-		       							<li class="item"> <!-- 하나 하나의 박스 -->
-		       								<div class="bg">
-		       									<div class="color">
-		       										<img src="<%=cp%>/resources/images/common/${n.originalfilename}" width="100%" alt="로고"/>
-		       									</div>
-		       									<span style="display:inline-block; font-size: 20px; width:90%;">${n.companyName}</span>
-		       								</div>
-		       								<ul>
-		       									<li><span>사원수 : ${n.employees}</span></li>
-		       									<li><span>매출액 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.sale}"/>(원)</span></li>
-		       									<li><span>평균연봉 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.salary}"/>(원)</span></li>
-		       									<li><span>위치 : ${n.location}</span></li>
-		       								</ul>
-		       								<div class="extra">
-		       									<div class="site">
-		       										<span>${n.homepage}</span>
-		       									</div>
-		       									<a style="cursor: pointer;" onclick="openInfo('${n.companyEmail}');">더보기</a>
-		       								</div>
-		       							</li> 					
-	       							
-								</c:if>
-								<c:if test="${count%4!=0}">
-									<li class="item"> <!-- 하나 하나의 박스 -->
-	       								<div class="bg">
-	       									<div class="color">
-	       										<img src="<%=cp%>/resources/images/common/${n.originalfilename}" width="100%" alt="로고"/>
-	       									</div>
-	       									<span style="display:inline-block; font-size: 20px; width:90%;">${n.companyName}</span>
-	       								</div>
-	       								<ul>
-	       									<li><span>사원수 : ${n.employees}</span></li>
-	       									<li><span>매출액 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.sale}"/>(만원)</span></li>
-	       									<li><span>평균연봉 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.salary}"/>(만원)</span></li>
-	       									<li><span>위치 : ${n.location}</span></li>
-	       								</ul>
-	       								<div class="extra">
-	       									<div class="site">
-	       										<span>${n.homepage}</span>
-	       									</div>
-	       									<a style="cursor: pointer;" onclick="openInfo('${n.companyEmail}');">더보기</a>
-	       								</div>
-	       							</li> 	
-								</c:if>
-								<c:if test="${(count+1)%4==0}">
-									</ul>
-								</c:if>
-       							<c:set var="count" value="${count+1}"></c:set>
-       						</c:forEach>
-       						<div style="padding-top:10px;text-align: center;">${paging}</div> 
        					</div>
        				</div>
        			</div>

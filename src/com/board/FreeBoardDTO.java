@@ -1,15 +1,40 @@
 package com.board;
 
-public class BoardDTO {
+public class FreeBoardDTO {
 	private String userEmail;
 	private String subject;
 	private String content;
+	private String name;
+	
+	private int boardNum;
+
 	private int groupNum;
 	private int dept;
 	private int orderNum;
 	private int parent;
 	private String created;
 	private int hitCount;
+	private int listNum;
+	
+	
+	public final int getBoardNum() {
+		return boardNum;
+	}
+	public final void setBoardNum(int boardNum) {
+		this.boardNum = boardNum;
+	}
+	public final String getName() {
+		return name;
+	}
+	public final void setName(String name) {
+		this.name = name;
+	}
+	public final int getListNum() {
+		return listNum;
+	}
+	public final void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
 	public String getUserEmail() {
 		return userEmail;
 	}

@@ -38,7 +38,7 @@
 		                <li><a href="<%=cp%>/companies/list.do">회사검색</a></li>
 		                <li><a href="#">회사평가</a></li>
 		                <li><a href="#">피드백 게시판</a></li>
-		                <li><a href="#">자유게시판</a></li>
+		                <li><a href="<%=cp%>/board/free/list.do">자유게시판</a></li>
 		                <li><a href="#">자소서 관리</a></li>
 		            </ul>
 		        </div>
@@ -59,13 +59,13 @@
 	        <c:if test="${sessionScope.member.email != null}">
 	         <div class="userInfo_login">
 	             <ul>
-	                 <li><span>${sessionScope.member.name}</span></li>
+	                 <li><span>${sessionScope.member.name}님</span></li>
 	                 <li><span>|</span></li>
 	                 <li><a href="<%=cp%>/member/myPage.do">마이페이지</a></li>
 	                 <li><span>|</span></li>
 	                 <li><a href="<%=cp%>/member/logout.do">로그아웃</a></li>
 	             </ul>
-	         </div> -->
+	         </div>
 	        </c:if>
 	        <!-- 회원 : 로그인 -->
 	    </div>

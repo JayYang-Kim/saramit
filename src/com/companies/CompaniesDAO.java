@@ -67,8 +67,8 @@ public class CompaniesDAO {
 				sb.append("select memberemail, statuscode, levelcode, ");
 				sb.append("c.businesslicensenum, c.companyname, c.owner, ");
 				sb.append("c.establishmentdate, c.employees, c.sales, c.location, ");
-				sb.append("c.salary, c.introduction, c.homepage, c.savefilename, ");
-				sb.append("c.originalfilename, c.filesize from member m join company c on m.memberemail = c.companyemail ");
+				sb.append("c.salary, c.introduction, c.homepage, c.savefilename ");
+				sb.append("from member m join company c on m.memberemail = c.companyemail ");
 				sb.append(")tb where rownum <=" + end);
 				sb.append(" ) where rnum >=" + start);
 				pstmt = conn.prepareStatement(sb.toString());
@@ -78,8 +78,8 @@ public class CompaniesDAO {
 				sb.append("select memberemail, statuscode, levelcode, ");
 				sb.append("c.businesslicensenum, c.companyname, c.owner, ");
 				sb.append("c.establishmentdate, c.employees, c.sales, c.location, ");
-				sb.append("c.salary, c.introduction, c.homepage, c.savefilename, ");
-				sb.append("c.originalfilename, c.filesize from member m join company c on m.memberemail = c.companyemail ");
+				sb.append("c.salary, c.introduction, c.homepage, c.savefilename ");
+				sb.append("from member m join company c on m.memberemail = c.companyemail ");
 				if(searchKey.equals("location") || searchKey.equals("companyname")) {
 					sb.append("where instr("+searchKey+",?)>0 ");
 				}else {
@@ -108,8 +108,6 @@ public class CompaniesDAO {
 				dto.setIntroduction(rs.getString(12));
 				dto.setHomepage(rs.getString(13));
 				dto.setSavefilename(rs.getString(14));
-				dto.setOriginalfilename(rs.getString(15));
-				dto.setFilesize(rs.getInt(16));
 				list.add(dto);
 			}
 
@@ -149,8 +147,8 @@ public class CompaniesDAO {
 				sb.append("select memberemail, statuscode, levelcode, ");
 				sb.append("c.businesslicensenum, c.companyname, c.owner, ");
 				sb.append("c.establishmentdate, c.employees, c.sales, c.location, ");
-				sb.append("c.salary, c.introduction, c.homepage, c.savefilename, ");
-				sb.append("c.originalfilename, c.filesize from member m join company c on m.memberemail = c.companyemail");
+				sb.append("c.salary, c.introduction, c.homepage, c.savefilename ");
+				sb.append("from member m join company c on m.memberemail = c.companyemail");
 				sb.append(" where memberemail = ?");
 				pstmt = conn.prepareStatement(sb.toString());
 				pstmt.setString(1, email);
@@ -171,8 +169,6 @@ public class CompaniesDAO {
 				dto.setIntroduction(rs.getString(12));
 				dto.setHomepage(rs.getString(13));
 				dto.setSavefilename(rs.getString(14));
-				dto.setOriginalfilename(rs.getString(15));
-				dto.setFilesize(rs.getInt(16));
 			}
 
 		} catch (Exception e) {
@@ -212,8 +208,8 @@ public class CompaniesDAO {
 				sb.append("select memberemail, statuscode, levelcode, ");
 				sb.append("c.businesslicensenum, c.companyname, c.owner, ");
 				sb.append("c.establishmentdate, c.employees, c.sales, c.location, ");
-				sb.append("c.salary, c.introduction, c.homepage, c.savefilename, ");
-				sb.append("c.originalfilename, c.filesize from member m join company c on m.memberemail = c.companyemail ");
+				sb.append("c.salary, c.introduction, c.homepage, c.savefilename ");
+				sb.append("from member m join company c on m.memberemail = c.companyemail ");
 				sb.append("order by created desc");
 				sb.append(")tb where rownum <=4");
 				pstmt = conn.prepareStatement(sb.toString());
@@ -234,8 +230,6 @@ public class CompaniesDAO {
 				dto.setIntroduction(rs.getString(12));
 				dto.setHomepage(rs.getString(13));
 				dto.setSavefilename(rs.getString(14));
-				dto.setOriginalfilename(rs.getString(15));
-				dto.setFilesize(rs.getInt(16));
 				list.add(dto);
 			}
 
