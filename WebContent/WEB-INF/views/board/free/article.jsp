@@ -50,6 +50,13 @@
     		}
     		f.submit();
     	}
+    	
+    	function deleteOk(){
+    		if(confirm("해당 게시글을 삭제하시겠습니까?")){
+    			alert("삭제가 완료되었습니다.");
+    			location.href="<%=cp%>/board/free/delete.do?page=${page}&num=${dto.boardNum}";
+    		}
+    	}
     </script>
 <body>
     <!-- Wrap -->
@@ -66,8 +73,8 @@
 					<div class="freeContainer">
 						<h1 style="text-align: left; padding: 5px 8px">자유게시판</h1>
 						<div class="board" align="center" style="text-align: center">
-							<h2 style="text-align: center; padding: 5px 8px; margin-top: 10px;">글보기</h2>
-							<form name="sendForm" action="<%=cp%>/board/free/created_ok.do" method="post">
+							<h2 style="text-align: center; padding: 5px 8px; background-color: #4c4c4c; color: #fff">글보기</h2>
+							<form name="sendForm" action="<%=cp%>/board/free/created_ok.do" method="post" style="font-size: 13px;"> 
 								<div class="innerDiv" style="padding-top: 15px; text-align: left;">
 									<b style="margin-left: 60px;">제 &nbsp;목 : </b><input type="text" name="subject" value="${dto.subject}"style="margin-left:5px; width: 55%; font-weight:bold; height: 30px; border: none; outline: none;" readonly="readonly">
 									<b>조회수 :&nbsp;</b>${dto.hitCount}
@@ -89,7 +96,7 @@
 									<button type="button" class="btn btn-black" onclick="sendOk();">수정하기</button>&nbsp;
 									</c:if>
 									<c:if test="${dto.userEmail == sessionScope.member.email or sessionScope.member.email=='admin'}">
-									<button type="reset" class="btn btn-black">삭제하기</button>&nbsp;
+									<button type="reset" class="btn btn-black" onclick="deleteOk();">삭제하기</button>&nbsp;
 									</c:if>
 									<button type="button" class="btn btn-black" onclick="javascript:location.href='${list_url}';">목록으로</button>
 								</div>

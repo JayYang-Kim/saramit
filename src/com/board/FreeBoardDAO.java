@@ -249,7 +249,6 @@ public class FreeBoardDAO {
 				sb.append("select rownum, tb.* from(");
 				sb.append("select boardNum,subject from board where boardNum<?");
 				sb.append(" order by boardNum DESC)tb where rownum = 1");
-				System.out.println("hi");
 				pstmt = conn.prepareStatement(sb.toString());
 				pstmt.setInt(1, num);
 			}else {
@@ -375,5 +374,28 @@ public class FreeBoardDAO {
 			}
 		}
 		return dto;
+	}
+	
+	public void removeBoard(int num) {
+		PreparedStatement pstmt = null;
+		String sql = "";
+		try{
+			sql = "delete from board where boardNum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,num);
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
 	}
 }

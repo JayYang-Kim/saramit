@@ -158,7 +158,11 @@ public class FreeBoardServlet extends MyServlet{
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 삭제
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		int num = Integer.parseInt(req.getParameter("num"));
+		String page = req.getParameter("page");
+		FreeBoardDAO dao = new FreeBoardDAO();
+		dao.removeBoard(num);
+		resp.sendRedirect(cp+"/board/free/list.do?page="+page);
 	}
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 삭제
@@ -204,6 +208,7 @@ public class FreeBoardServlet extends MyServlet{
 		 * resp.sendRedirect(list_url); return; }
 		 */
 		
+		req.setAttribute("page", page);
 		req.setAttribute("dto",dto);
 		req.setAttribute("prevDto", prevDto);
 		req.setAttribute("nextDto", nextDto);

@@ -66,7 +66,7 @@
 					<div class="freeContainer">
 						<h1 style="text-align: left; padding: 5px 8px">자유게시판</h1>
 						<div class="board" align="center" style="text-align: center">
-							<h2 style="text-align: center; padding: 5px 8px; margin-top: 10px;">글쓰기</h2>
+							<h2 style="text-align: center; padding: 5px 8px;background-color: #4c4c4c; color: #fff">글쓰기</h2>
 							<form name="sendForm" action="<%=cp%>/board/free/created_ok.do" method="post">
 								<div class="innerDiv" style="padding-top: 15px;">
 									<input type="text" name="subject" placeholder="제목" style="width: 80%; font-size: 18px; height: 30px;">

@@ -71,7 +71,7 @@
 	                    	<form action="<%=cp%>/board/free/created.do">
 	                    		<button type="submit" class="btn btn-black" style="float: right; margin-right:10px; margin-bottom: 10px;">글쓰기</button>
 	                    		<table>
-	                    		 	<tr style="border-bottom: 1px solid #e4e4e4;font-size: 20px;" height="40px" >
+	                    		 	<tr style="border-bottom: 1px solid #e4e4e4;font-size: 20px;color: #fff" height="50px;" bgcolor="#4c4c4c" >
 	                    		 		<th width="100px">글번호</th>
 	                    		 		<th>제목</th>
 	                    		 		<th width="250px">글쓴이</th>
@@ -79,7 +79,7 @@
 	                    		 	</tr>
 	                    		 	<c:if test="${dataCount!=0}">
 	                    		 	<c:forEach var="n" items="${list}">
-	                    		 	<tr height="30px" style="border-bottom: 1px solid #e4e4e4;">
+	                    		 	<tr height="40px" style="border-bottom: 1px solid #e4e4e4;">
 	                    		 		<td>${n.listNum}</td>
 	                    		 		<td><a href="${article_url}&boardNum=${n.boardNum}">${n.subject}</a></td>
 	                    		 		<td>${n.name}</td>
@@ -88,7 +88,7 @@
 	                    		 	</c:forEach>
 	                    		 	</c:if>
 	                    		 	<c:if test="${dataCount==0}">
-	                    		 	<tr height="30px" style="border-bottom: 1px solid #e4e4e4;">
+	                    		 	<tr height="40px" style="border-bottom: 1px solid #e4e4e4;">
 	                    		 		<td colspan="4"><b>등록된 게시물이 없습니다.</b></td>
 	                    		 	</tr>
 	                    		 	</c:if>
@@ -105,7 +105,7 @@
 	                    			<option value="name">작성자</option>
 	                    		</select>
 	                    		<input type="text" name="searchValue">
-	                    		<button type="submit" class="btn btn-black" style="height: 26px;">검 색</button>
+	                    		<button type="submit" class="btn btn-black" style="height: 26px; line-height: 10px;">검 색</button>
 	                    	</form>	 
                     	</div>
                     	<!-- board -->
