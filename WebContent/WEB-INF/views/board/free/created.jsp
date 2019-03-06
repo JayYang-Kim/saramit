@@ -29,7 +29,28 @@
     		border: 1px solid #e4e4e4;
     		margin-top : 20px;
     	}
+    	
+    	.freeBody .freeContainer .board .innerDiv{
+    		border-bottom: 1px solid #e4e4e4;
+    		width: 100%;
+    		padding: 5px 0 5px;
+    	}
     </style>
+    <script type="text/javascript">
+    	function sendOk(){
+    		var f = document.sendForm;
+    		
+    		if(!f.subject.value){
+    			alert('제목을 입력하세요');
+    			return;
+    		}
+    		if(!f.content.value){
+    			alert('내용을 입력하세요');
+    			return;
+    		}
+    		f.submit();
+    	}
+    </script>
 <body>
     <!-- Wrap -->
     <div id="wrap">
@@ -45,20 +66,21 @@
 					<div class="freeContainer">
 						<h1 style="text-align: left; padding: 5px 8px">자유게시판</h1>
 						<div class="board" align="center" style="text-align: center">
-							<form>
-								<div style="border-bottom: 1px solid #e4e4e4; width: 100%; padding: 15px 0 5px">
-									<input type="text" name="title" placeholder="제목" style="width: 80%; font-size: 18px; height: 30px;">
+							<h2 style="text-align: center; padding: 5px 8px; margin-top: 10px;">글쓰기</h2>
+							<form name="sendForm" action="<%=cp%>/board/free/created_ok.do" method="post">
+								<div class="innerDiv" style="padding-top: 15px;">
+									<input type="text" name="subject" placeholder="제목" style="width: 80%; font-size: 18px; height: 30px;">
 								</div>
-								<div style="border-bottom: 1px solid #e4e4e4; width: 100%; padding: 5px 0 5px">
-									<input type="text" name="writer" value="작성자" readonly="readonly" style="border: none; outline: none; width: 80%; font-weight: bold;">
+								<div class="innerDiv">
+									<b style="padding-left: 45px;">작성자 : </b><input type="text" name="writer" value="${sessionScope.member.name}" readonly="readonly" style="border: none; outline: none; width: 80%; font-weight: bold;">
 								</div>
-								<div style="border-bottom: 1px solid #e4e4e4; width: 100%; padding: 5px 0 5px">
-									<textarea style="width:80%;height: 350px;"></textarea>
+								<div class="innerDiv">
+									<textarea style="width:80%; height: 350px;" placeholder="내 용" maxlength="1000" name="content"></textarea>
 								</div>
 								<div style="margin-top: 10px;">
-								<button type="button" class="btn btn-black">작성하기</button>&nbsp;
-								<button type="reset" class="btn btn-black">초기화</button>&nbsp;
-								<button type="button" class="btn btn-black">목록으로</button>
+									<button type="button" class="btn btn-black" onclick="sendOk();">작성하기</button>&nbsp;
+									<button type="reset" class="btn btn-black">초기화</button>&nbsp;
+									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/list.do';">목록으로</button>
 								</div>
 							</form>
 						</div>

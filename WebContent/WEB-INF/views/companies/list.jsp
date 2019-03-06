@@ -42,18 +42,8 @@
        			<div class="companyList list" style="min-height: 740px;">
        				<div class="inner">
        					<div class="list">
-       						<h3>| 기업 검색</h3>
-       						<div align="center">
-	       						<form name="searchForm">
-		       						<select name="searchKey">
-		       							<option value="companyname">기업명</option>
-		       							<option value="owner">대표이름</option>
-		       							<option value="location">지역</option>
-		       						</select>
-		       						<input type="text" name="searchValue"/>
-		       						<button type="button" class="btn btn-darkGray" style="height: 26px" onclick="search();">검 색</button>
-	       						</form>
-       						</div>
+       						<h3 style="margin-top: 30px;">| 기업 검색</h3>
+       						
        						<br>
        						<c:forEach var="n" items="${companies}" varStatus="status">
 									${status.index==0?"<ul style='margin-top : 10px;'>":""}
@@ -84,6 +74,17 @@
        						<c:out value="</ul>" escapeXml="false"/>
        						<!-- 문제나면 여기야 확실해 -->
        						<div style="padding-top:10px;text-align: center;">${paging}</div> 
+       						<div align="center" style="margin-top: 10px;">
+	       						<form name="searchForm">
+		       						<select name="searchKey">
+		       							<option value="companyname">기업명</option>
+		       							<option value="owner">대표이름</option>
+		       							<option value="location">지역</option>
+		       						</select>
+		       						<input type="text" name="searchValue"/>
+		       						<button type="button" class="btn btn-darkGray" style="height: 26px" onclick="search();">검 색</button>
+	       						</form>
+       						</div>
        					</div>
        				</div>
        			</div>
