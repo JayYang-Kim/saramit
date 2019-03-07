@@ -38,6 +38,7 @@
 		                <li><a href="<%=cp%>/companies/list.do">회사검색</a></li>
 		                <li><a href="<%=cp%>/companies/listReview.do">회사평가</a></li>
 		                <li><a href="<%=cp%>/board/list.do">피드백 게시판</a></li>
+		                <li><a href="<%=cp%>/pass_board/list.do">합격자소서 보기</a></li>
 		                <li><a href="<%=cp%>/board/free/list.do">자유게시판</a></li>
 		                <li><a href="#">자소서 관리</a></li>
 		            </ul>

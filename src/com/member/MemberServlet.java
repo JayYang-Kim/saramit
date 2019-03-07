@@ -2,6 +2,7 @@ package com.member;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,8 @@ import com.companies.CompaniesDTO;
 import com.main.SessionInfo;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.resume.ResumeDAO;
+import com.resume.ResumeDTO;
 import com.util.FileManager;
 import com.util.MyServlet;
 
@@ -79,7 +82,6 @@ public class MemberServlet extends MyServlet {
 		
 		String userLevel = req.getParameter("radioLevel");
 		String email = req.getParameter("email");
-		
 		String pwd = req.getParameter("pwd");
 
 		SessionInfo info = new SessionInfo(); // 이메일, 이름, 기업/개인 정보를 가지고 세션에 저장될 객체
@@ -92,7 +94,7 @@ public class MemberServlet extends MyServlet {
 					/*if (dto.getStatusCode() == 2) {
 						System.out.println("탈퇴한 회원");
 					}*/
-					session.setMaxInactiveInterval(60);
+					session.setMaxInactiveInterval(60 * 30);
 					info.setEmail(email);
 					info.setLevel(dto.getLevelCode());
 					info.setName(dto.getUserName());
@@ -290,7 +292,34 @@ public class MemberServlet extends MyServlet {
 	}
 
 	protected void myPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/member/join.jsp"); // 여기 정확히 어디로 갈지 헷갈려서 냅둠
+		String cp = req.getContextPath();
+		
+		ResumeDAO dao = new ResumeDAO();
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
+
+		String email = info.getEmail();
+		int level = info.getLevel();
+
+		// 게시물 가져오기
+		/*
+		 * if (level == 2) { UserDTO dto = dao.readUser(email); req.setAttribute("dto",
+		 * dto); } else { CompaniesDTO dto = dao.readCompany(email);
+		 * req.setAttribute("dto", dto); }
+		 */
+		
+			if (level ==2) {
+				List<ResumeDTO> dto = dao.readResume(email);
+				req.setAttribute("dto", dto);
+				
+			}
+		req.setAttribute("level", level);
+		forward(req, resp, "/WEB-INF/views/member/mypage.jsp"); // 여기 정확히 어디로 갈지 헷갈려서 냅둠
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
