@@ -15,6 +15,7 @@
     <!-- Css -->
     <link rel="stylesheet" href="<%=cp%>/resources/css/common.css" media="all" />
 	<link rel="stylesheet" href="<%=cp%>/resources/css/style.css" media="all" />
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css">
 
     <!-- Javascript -->
     <script src="<%=cp%>/resources/js/lib/jquery-1.12.4.min.js"></script>

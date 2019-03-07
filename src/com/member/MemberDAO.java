@@ -94,7 +94,7 @@ public class MemberDAO {
 			pstmt.setInt(9, dto.getSalary());
 			pstmt.setString(10, dto.getIntroduction());
 			pstmt.setString(11, dto.getHomepage());
-			pstmt.setString(12, dto.getSaveFilename());
+			pstmt.setString(12, dto.getSavefilename());
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -190,7 +190,7 @@ public class MemberDAO {
 				dto.setSalary(rs.getInt(12));
 				dto.setIntroduction(rs.getString(13));
 				dto.setHomepage(rs.getString(14));
-				dto.setSaveFilename(rs.getString(15));
+				dto.setSavefilename(rs.getString(15));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -348,7 +348,7 @@ public class MemberDAO {
 			pstmt.setString(6, dto.getLocation());
 			pstmt.setInt(7, dto.getSalary());
 			pstmt.setString(8, dto.getHomepage());
-			pstmt.setString(9, dto.getSaveFilename());
+			pstmt.setString(9, dto.getSavefilename());
 			pstmt.setString(10, dto.getIntroduction());
 			pstmt.setString(11, dto.getCompanyEmail());
 			

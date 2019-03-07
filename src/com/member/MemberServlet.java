@@ -92,7 +92,7 @@ public class MemberServlet extends MyServlet {
 					/*if (dto.getStatusCode() == 2) {
 						System.out.println("탈퇴한 회원");
 					}*/
-					session.setMaxInactiveInterval(60 * 30);
+					session.setMaxInactiveInterval(60);
 					info.setEmail(email);
 					info.setLevel(dto.getLevelCode());
 					info.setName(dto.getUserName());
@@ -108,7 +108,7 @@ public class MemberServlet extends MyServlet {
 					/*if (dto.getStatusCode() == 2) {
 						System.out.println("탈퇴한 회원");
 					}*/
-					session.setMaxInactiveInterval(60 * 30);
+					session.setMaxInactiveInterval(60*30);
 					info.setEmail(email);
 					info.setLevel(dto.getLevelCode());
 					info.setName(dto.getCompanyName());
@@ -117,7 +117,6 @@ public class MemberServlet extends MyServlet {
 					return;
 				}
 			}
-
 		}
 		
 		resp.sendRedirect(cp + "/member/login.do");
@@ -180,7 +179,7 @@ public class MemberServlet extends MyServlet {
 				
 				// 파일명 변경
 				saveFilename = FileManager.doFilerename(pathname, saveFilename);
-				dto.setSaveFilename(saveFilename);
+				dto.setSavefilename(saveFilename);
 			} else {
 				// 로고 DB쪽에서 not null이 아니기 때문에 등록안할때 기본 이미지를 줄것인지 아님 필수 입력을 할 것인지 회의 필요
 			}
@@ -269,10 +268,10 @@ public class MemberServlet extends MyServlet {
 			dto.setLocation(mreq.getParameter("location"));
 			dto.setSalary(Integer.parseInt(mreq.getParameter("salary")));
 			dto.setHomepage(mreq.getParameter("homepage"));
-			dto.setSaveFilename(mreq.getParameter("og_saveFilename"));
+			dto.setSavefilename(mreq.getParameter("og_saveFilename"));
 			if(mreq.getFile("file") != null) {
 				// 기존 파일 삭제
-				FileManager.doFiledelete(pathname, dto.getSaveFilename());
+				FileManager.doFiledelete(pathname, dto.getSavefilename());
 				
 				// 서버에 저장된 새로운 파일명
 				String saveFilename = mreq.getFilesystemName("file");
@@ -280,7 +279,7 @@ public class MemberServlet extends MyServlet {
 				// 이름 변경
 				saveFilename = FileManager.doFilerename(pathname, saveFilename);
 				
-				dto.setSaveFilename(saveFilename);
+				dto.setSavefilename(saveFilename);
 			}
 			dto.setIntroduction(mreq.getParameter("introduction"));
 			

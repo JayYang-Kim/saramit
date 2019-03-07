@@ -15,7 +15,7 @@ public class CompaniesDTO {
 	private String homepage;
 	private int statusCode; //회원 상태
 	private int levelCode; //개인,기업 종류
-	private String saveFilename; //로고용
+	private String savefilename; //로고용
 	private String originalFilename;
 	private int filesize;
 	
@@ -103,11 +103,11 @@ public class CompaniesDTO {
 	public void setLevelCode(int levelCode) {
 		this.levelCode = levelCode;
 	}
-	public String getSaveFilename() {
-		return saveFilename;
+	public String getSavefilename() {
+		return savefilename;
 	}
-	public void setSaveFilename(String saveFilename) {
-		this.saveFilename = saveFilename;
+	public void setSavefilename(String saveFilename) {
+		this.savefilename = saveFilename;
 	}
 	public String getOriginalFilename() {
 		return originalFilename;

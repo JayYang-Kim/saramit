@@ -9,6 +9,7 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
+<<<<<<< HEAD
     <script type="text/javascript">
     	function joinUser() {
     		var f = document.joinUser_form;
@@ -120,12 +121,24 @@
 	        }).open();
 	    }
     </script>
+=======
+>>>>>>> refs/heads/sangkeun
 </head>
 
 <body>
     <!-- Wrap -->
     <div id="wrap" class="login_wrap">
         <!-- Header -->
+<<<<<<< HEAD
+=======
+        <!-- <header>
+            <div class="login_header">
+                <h1 class="title">
+                    <a href="main.html">SARAMIT | 회원가입</a>
+                </h1>
+            </div>
+        </header> -->
+>>>>>>> refs/heads/sangkeun
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         

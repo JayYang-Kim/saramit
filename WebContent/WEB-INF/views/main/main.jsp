@@ -37,35 +37,11 @@
                                 <img src="resources/images/common/web_title_img_1551145711.jpg" alt="img">
                             </div>
                             <div class="item">
-                                <img src="resources/images/common/web_title_img_1551145711.jpg" alt="img">
+                                <img src="resources/images/common/main2_img.jpg" alt="img">
                             </div>
                             <div class="item">
-                                <img src="resources/images/common/web_title_img_1551145711.jpg" alt="img">
+                                <img src="resources/images/common/banner03.png" alt="img">
                             </div>
-                            <!-- <div class="item active">
-                                <img src="resources/images/main_img/main_slide01.jpg" alt="...">
-                                <div class="main_slide_btn">
-                                    <img src="resources/images/main_img/main_slide_txt01.png" alt="">
-                                </div>
-                            </div>
-                            <div class="item">
-                                <img src="resources/images/main_img/main_slide02.jpg" alt="...">
-                                <div class="main_slide_btn">
-                                    <img src="resources/images/main_img/main_slide_txt02.png" alt="">
-                                    <p class="mt25">
-                                        <a href="#" class="button main">자세히 보기</a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <img src="resources/images/main_img/main_slide03.jpg" alt="...">
-                                <div class="main_slide_btn">
-                                    <img src="resources/images/main_img/main_slide_txt03.png" alt="">
-                                    <p class="mt25">
-                                        <a href="#" class="button main">자세히 보기</a>
-                                    </p>
-                                </div>
-                            </div> -->
                         </div>
                     
                         <!-- Controls -->
@@ -78,6 +54,7 @@
                             <span class="sr-only">Next</span>
                         </a>
                     </div>
+                    
                     <!-- //carousel -->
                     <div class="newUser_info">
                         <div class="inner">
@@ -93,82 +70,30 @@
                             <div class="list">
                                 <h3>최신 회사정보</h3>
                                 <ul>
+                                  <c:forEach var="n" items="${recentCompanies}">
                                     <li class="item">
                                         <div class="bg">
                                             <div class="color">
-                                                <img src="./resources/images/common/smilegate.gif" alt="로고"/>
+                                                <img src="<%=cp%>/resources/images/common/${n.savefilename}" alt="로고"/>
                                             </div>
-                                            <span>회사명</span>
+                                            <span>${n.companyName}</span>
                                         </div>
                                         <ul>
-                                            <li><span>사원수 : </span></li>
-                                            <li><span>매출액 : </span></li>
-                                            <li><span>평균연봉 : </span></li>
-                                            <li><span>위치 : </span></li>
+                                            <li><span>사원수 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.employees}"/>(명)</span></li>
+                                            <li><span>매출액 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.sale}"/>(만원)</span></li>
+                                            <li><span>평균연봉 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${n.salary}"/>(만원)</span></li>
+                                            <li><span>위치 : ${n.location}</span></li>
                                         </ul>
                                         <div class="extra">
                                             <div class="site">
-                                                <span>http://naver.com</span>
+                                                <span>${n.homepage}</span>
                                             </div>
-                                            <a href="#">더보기</a>
+                                            <span><a style="cursor: pointer;" onclick="info('${n.companyEmail}')">더보기</a></span>
                                         </div>
                                     </li>
-                                    <li class="item">
-                                        <div class="bg">
-                                            <div class="color"></div>
-                                            <span>회사명</span>
-                                        </div>
-                                        <ul>
-                                            <li><span>사원수 : </span></li>
-                                            <li><span>매출액 : </span></li>
-                                            <li><span>평균연봉 : </span></li>
-                                            <li><span>위치 : </span></li>
-                                        </ul>
-                                        <div class="extra">
-                                            <div class="site">
-                                                <span>http://naver.com</span>
-                                            </div>
-                                            <a href="#">더보기</a>
-                                        </div>
-                                    </li>
-                                    <li class="item">
-                                        <div class="bg">
-                                            <div class="color"></div>
-                                            <span>회사명</span>
-                                        </div>
-                                        <ul>
-                                            <li><span>사원수 : </span></li>
-                                            <li><span>매출액 : </span></li>
-                                            <li><span>평균연봉 : </span></li>
-                                            <li><span>위치 : </span></li>
-                                        </ul>
-                                        <div class="extra">
-                                            <div class="site">
-                                                <span>http://naver.com</span>
-                                            </div>
-                                            <a href="#">더보기</a>
-                                        </div>
-                                    </li>
-                                    <li class="item">
-                                        <div class="bg">
-                                            <div class="color"></div>
-                                            <span>회사명</span>
-                                        </div>
-                                        <ul>
-                                            <li><span>사원수 : </span></li>
-                                            <li><span>매출액 : </span></li>
-                                            <li><span>평균연봉 : </span></li>
-                                            <li><span>위치 : </span></li>
-                                        </ul>
-                                        <div class="extra">
-                                            <div class="site">
-                                                <span>http://naver.com</span>
-                                            </div>
-                                            <a href="#">더보기</a>
-                                        </div>
-                                    </li>
+                                    </c:forEach>
                                 </ul>
-                                <a href="#" class="add">회사 더보기</a>
+                                <a href="<%=cp%>/companies/list.do" class="add">회사 더보기</a>
                             </div>
                         </div>
                     </div>
@@ -180,7 +105,7 @@
                                     <li class="item">
                                         <div class="bg">
                                             <div class="color">
-                                                <img src="./resources/images/common/smilegate.gif" alt="로고"/>
+                                                <img src="<%=cp%>/resources/images/common/smilegate.gif" alt="로고"/>
                                             </div>
                                             <span>회사명</span>
                                         </div>
