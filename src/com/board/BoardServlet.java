@@ -37,8 +37,8 @@ public class BoardServlet extends MyServlet{
 			createdSubmit(req, resp);
 		}else if(uri.indexOf("list.do") != -1) {
 			list(req, resp);
-		}else if (uri.indexOf("view.do") != -1) {
-			view(req, resp);
+		}else if (uri.indexOf("article.do") != -1) {
+			article(req, resp);
 		}else if(uri.indexOf("update.do") != -1) {
 			updateForm(req, resp);
 		}else if(uri.indexOf("update_ok.do") != -1) {
@@ -131,9 +131,23 @@ public class BoardServlet extends MyServlet{
 		
 		resp.sendRedirect(cp + "/board/list.do");
 	}
-	protected void view(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 상세
-		forward(req, resp, "/WEB-INF/views/board/view.jsp");
+		String cp = req.getContextPath();
+		
+		BoardDAO dao = new BoardDAO();
+		
+		int boardNum = Integer.parseInt(req.getParameter("num"));
+		String page = req.getParameter("page");
+		
+		BoardDTO dto = new BoardDTO();
+		
+		dto = dao.readBoard(boardNum);
+		
+		req.setAttribute("dto", dto);
+		req.setAttribute("page", page);
+		
+		forward(req, resp, "/WEB-INF/views/board/article.jsp");
 	}
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 수정폼

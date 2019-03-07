@@ -23,9 +23,13 @@
     
     <script src="<%=cp%>/resources/js/plugins.js"></script>
     <script src="<%=cp%>/resources/js/basic.js"></script>
+    <script src="<%=cp%>/resources/js/util.js"></script>
 
     <!-- Carousel -->
     <script type="text/javascript" src="<%=cp%>/resources/js/carousel.js"></script>
+    
+    <!-- 다음 주소검색 -->
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
    
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

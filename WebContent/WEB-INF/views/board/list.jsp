@@ -29,7 +29,7 @@
                 	</div>
                 	<!-- //pageTitle -->
                 	<div>
-                		<table class="tb_basic big">
+                		<table class="tb_basic tb_hover big">
                 			<colgroup>
                 				<col style="width:70px">
                 				<col>
@@ -48,7 +48,7 @@
                 			</thead>
                 			<tbody>
                 				<c:forEach var="dto" items="${list}">
-                					<tr>
+                					<tr onclick="location.href='<%=cp%>/board/article.do?num=${dto.boardNum}&page=${page}'">
 	                					<td>${dto.listNum}</td>
 	                					<td>${dto.subject}</td>
 	                					<td>${dto.userName}</td>

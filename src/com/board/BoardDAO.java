@@ -115,6 +115,62 @@ public class BoardDAO {
 		return result;
 	}
 	
+	public BoardDTO readBoard(int boardNum) {
+		BoardDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		
+		try {
+			sql = "SELECT boardNum, mu.userEmail, mu.userName, subject, content, groupNum, depth, orderNo, parent, created, hitCount " 
+					+ "FROM member_user mu\n" 
+					+ "JOIN feedback fb\n" 
+					+ "ON mu.userEmail = fb.userEmail\n" 
+					+ "WHERE boardNum = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new BoardDTO();
+				dto.setBoardNum(rs.getInt("boardNum"));
+				dto.setUserEmail(rs.getString("userEmail"));
+				dto.setUserName(rs.getString("userName"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setGroupNum(rs.getInt("groupNum"));
+				dto.setDept(rs.getInt("depth"));
+				dto.setOrderNum(rs.getInt("orderNo"));
+				dto.setParent(rs.getInt("parent"));
+				dto.setCreated(rs.getDate("created").toString());
+				dto.setHitCount(rs.getInt("hitCount"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+
+				}
+			}
+		}
+		
+		return dto;
+	}
+	
 	public int dataCount() {
 		int result = 0;
 		PreparedStatement pstmt = null;
