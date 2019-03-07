@@ -21,7 +21,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = "select levelCode, memberPwd, userName "
+			sql = "select levelCode, memberPwd, userName, statusCode "
 					+ "from member m1 join member_user m2 "
 					+ "on m1.memberEmail=m2.userEmail where memberEmail=?";
 			pstmt = conn.prepareStatement(sql);
@@ -67,7 +67,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = "select levelCode, memberPwd, companyName from member m1 join company c on m1.memberEmail = c.companyEmail where memberEmail=?";
+			sql = "select levelCode, memberPwd, companyName, statusCode from member m1 join company c on m1.memberEmail = c.companyEmail where memberEmail=?";
 			System.out.println(email);
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, email);

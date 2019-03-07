@@ -1,16 +1,18 @@
 package com.member;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import com.companies.CompaniesDTO;
 import com.main.SessionInfo;
+import com.resume.ResumeDAO;
+import com.resume.ResumeDTO;
 import com.util.MyServlet;
 
 @WebServlet("/member/*")
@@ -113,7 +115,7 @@ public class MemberServlet extends MyServlet {
 	}
 
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/member/join.jsp");
+		forward(req, resp, "/WEB-INF/views/member/update.jsp");
 	}
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -122,7 +124,35 @@ public class MemberServlet extends MyServlet {
 	}
 
 	protected void myPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/member/join.jsp"); // 여기 정확히 어디로 갈지 헷갈려서 냅둠
+		String cp = req.getContextPath();
+
+		
+		ResumeDAO dao = new ResumeDAO();
+
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
+
+		String email = info.getEmail();
+		int level = info.getLevel();
+
+		// 게시물 가져오기
+		/*
+		 * if (level == 2) { UserDTO dto = dao.readUser(email); req.setAttribute("dto",
+		 * dto); } else { CompaniesDTO dto = dao.readCompany(email);
+		 * req.setAttribute("dto", dto); }
+		 */
+		
+			if (level ==2) {
+				List<ResumeDTO> dto = dao.readResume(email);
+				req.setAttribute("dto", dto);
+				
+			}
+		req.setAttribute("level", level);
+		forward(req, resp, "/WEB-INF/views/member/mypage.jsp"); // 여기 정확히 어디로 갈지 헷갈려서 냅둠
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

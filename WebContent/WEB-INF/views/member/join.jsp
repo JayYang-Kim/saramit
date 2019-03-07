@@ -34,7 +34,7 @@
 					<li><a href="#tabCon2">회사회원</a></li>
 				</ul>
 				<div id="tabCon1" class="tab_cont">
-					<form name="joinUser_form" action="#" method="#">
+					<form name="joinUser_form" action="#" method="post">
 						<fieldset>
 							<div class="box_login">
 								<h3 class="title">회원가입</h3>

@@ -5,8 +5,6 @@
 <%
 	String cp = request.getContextPath();
 	String uri = request.getRequestURI();
-	
-	System.out.print(uri);
 %>
 
 	<header>
@@ -40,6 +38,7 @@
 		                <li><a href="#">회사검색</a></li>
 		                <li><a href="#">회사평가</a></li>
 		                <li><a href="#">피드백 게시판</a></li>
+		                <li><a href="<%=cp%>/pass_board/list.do">합격자소서 보기</a></li>
 		                <li><a href="#">자유게시판</a></li>
 		                <li><a href="#">자소서 관리</a></li>
 		            </ul>
@@ -67,7 +66,7 @@
 	                 <li><span>|</span></li>
 	                 <li><a href="<%=cp%>/member/logout.do">로그아웃</a></li>
 	             </ul>
-	         </div> -->
+	         </div>
 	        </c:if>
 	        <!-- 회원 : 로그인 -->
 	    </div>
