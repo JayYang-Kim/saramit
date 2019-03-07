@@ -56,10 +56,10 @@ public class EvaluationDAO {
 		StringBuffer sb = new StringBuffer();
 		
 		try {
-			sb.append("select c.companyname,e.boardnum,star,content1,content2,content3,content4 ");
+			sb.append("select c.companyname,e.boardNum,star,content1,content2,content3,content4 ");
 			sb.append("        from cop_evaluation e ");
 			sb.append("        join company c on e.companyemail=c.companyemail ");
-			sb.append("where boardnum=?;");
+			sb.append("where boardNum=?");
 			
 			pstmt=conn.prepareStatement(sb.toString());
 			pstmt.setInt(1, boardNum);
@@ -68,7 +68,7 @@ public class EvaluationDAO {
 			
 			if(rs.next()) {
 				dto=new EvaluationDTO();
-				dto.setBoardNum(rs.getInt("boardnum"));
+				dto.setBoardNum(rs.getInt("boardNum"));
 				dto.setCop_name(rs.getString("companyname"));
 				dto.setStar(rs.getInt("star"));
 				dto.setContent1(rs.getString("content1"));
@@ -107,9 +107,9 @@ public class EvaluationDAO {
 		try {
 			sb.append("select * from ( ");
 			sb.append("    select rownum rnum, tb.* from ( ");
-			sb.append("        select c.companyname,e.boardnum,to_char(e.created,'yyyymmdd') created ");
+			sb.append("        select c.companyname,e.boardNum,to_char(e.created,'yyyymmdd') created ");
 			sb.append("        from cop_evaluation e");
-			sb.append("		   join company c on e.companyemail=c.companyemail ");
+			sb.append("		   join company c on c.companyemail=e.companyemail ");
 			sb.append("        order by boardNum desc ");
 			sb.append("    ) tb where rownum <= ?");
 			sb.append(") where rnum >= ?");
@@ -123,7 +123,7 @@ public class EvaluationDAO {
 			while(rs.next()) {
 				EvaluationDTO dto = new EvaluationDTO();
 				dto.setCop_name(rs.getString("companyname"));
-				dto.setBoardNum(rs.getInt("BoardNum"));
+				dto.setBoardNum(rs.getInt("boardNum"));
 				dto.setCreated(rs.getString("created"));
 				
 				list.add(dto);
@@ -161,18 +161,16 @@ public class EvaluationDAO {
 		try {
 			sb.append("select * from ( ");
 			sb.append("    select rownum rnum, tb.* from ( ");
-			sb.append("        select boardNum,to_char(created,'yyyy-mm-dd') ");
-			sb.append("        from cop_evaluation ");
+			sb.append("        select c.companyname,e.boardNum,to_char(e.created,'yyyymmdd') created ");
+			sb.append("        from cop_evaluation e");
+			sb.append("        join company c on c.companyemail=e.companyemail ");
 			
 			if(searchKey.equals("cop")) {
 				searchValue=searchValue.replaceAll(" ", "");
-				sb.append("        where companyemail=(");
-				sb.append("            select companyemail ");
-				sb.append("            from company");
-				sb.append("            where instr(companyname,'스마일') >= 1)");
+				sb.append("        where instr(companyname,?)>=1 ");
 			} else if(searchKey.equals("created")) {
 				searchValue=searchValue.replaceAll("-", "");
-				sb.append("        where to_char(created,'yyyymmdd') = ?");
+				sb.append("        where to_char(e.created,'yyyymmdd') = ?");
 			} else {
 				sb.append("        where instr(" + searchKey + ", ? ) >= 1");
 			}
@@ -191,13 +189,14 @@ public class EvaluationDAO {
 			while(rs.next()) {
 				EvaluationDTO dto = new EvaluationDTO();
 				
+				dto.setCop_name(rs.getString("companyname"));
 				dto.setBoardNum(rs.getInt("boardNum"));
 				dto.setCreated(rs.getString("created"));
 				
 				list.add(dto);
 			}
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		} finally {
 			if(rs!=null) {
 				try {
@@ -259,30 +258,32 @@ public class EvaluationDAO {
 		StringBuffer sb = new StringBuffer();
 		
 		try {
-			sb.append("select nvl(count(*),0) from cop_evaluation");
+			
 			
 			if(searchKey.equals("created")) {
 				searchValue=searchValue.replaceAll("-", "");
-				sb.append("  WHERE TO_CHAR(created, 'YYYYMMDD') = ? ");
+				sb.append("select nvl(count(*),0) from cop_evaluation");
+				sb.append(" where to_char(created, 'YYYYMMDD') = ? ");
 			} else if(searchKey.equals("cop")) {
 				searchValue=searchValue.replaceAll(" ", "");
-				sb.append("        where companyemail=(");
-				sb.append("            select companyemail ");
-				sb.append("            from company");
-				sb.append("            where instr(companyname,'스마일') >= 1)");
+				sb.append("select nvl(count(*),0) from cop_evaluation e ");
+				sb.append("join company c on c.companyemail=e.companyemail ");
+				sb.append("where instr(c.companyname,?)>=1 ");
 			} else {
-				sb.append("        where instr(" + searchKey + ", ? ) >= 1");
+				sb.append("select nvl(count(*),0) from cop_evaluation");
+				sb.append(" where instr(" + searchKey + ", ? ) >= 1");
 			}
 			
 			pstmt=conn.prepareStatement(sb.toString());
 			pstmt.setString(1, searchValue);
 			
 			rs=pstmt.executeQuery();
+			
 			if(rs.next())
 				result=rs.getInt(1);
 			
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		} finally {
 			if(rs!=null) {
 				try {
@@ -307,7 +308,7 @@ public class EvaluationDAO {
 		String co_name=null;
 		
 		try {
-			sql="select companyName from company c join cop_evaluation e on e.companyemail=c.companyemail where c.companyemail=?";
+			sql="select companyName from company c join cop_evaluation e on e.companyemail=c.companyemail where e.companyemail= ? ";
 			pstmt=conn.prepareStatement(sql);
 		
 			pstmt.setString(1, companyEmail);

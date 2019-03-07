@@ -47,10 +47,10 @@
                   		<h3>이거 회사평가 게시글이다</h3>
                   	</div>
                   	<div style="height:50px; margin: 30px auto;">
-                  		<form name="searchForm" action="<%=cp%>/evaluation/listReview.do" method="post">
+                  		<form name="searchForm" action="<%=cp%>/companies/listReview.do" method="post">
                   			<select name="searchKey" class="selectField" style="width:120px; height:45px;">
                   				<option value="cop" selected="selected">기업명</option>
-                  				<option value="content">내용</option>
+                  				<option value="content1">내용</option>
                   				<option value="created">등록일</option>
                   			</select>
                   			<input type="text" name="searchValue" style="width:474px; height:45px;">
@@ -64,7 +64,7 @@
                   			<td align="right">&nbsp;</td>
                   		</tr>		
                   	</table>
-                  	<table style="width:100%; margin: 0px auto; border-spacing: 0px; border-collapse: collapse;">
+                  	<table style="width:100%; margin: 0px auto; border-spacing: 0px; border-collapse: collapse;" class="tb_basic tb_hover">
                   		<tr align="center" height="35" style="border-top: 1px solid; #cccccc; border-bottom: 1px solid #cccccc;">
                   			<th width="40">번호</th>
                   			<th width="120">기업명</th>
@@ -73,10 +73,10 @@
                   		</tr>
                   		
                   <c:forEach var="dto" items="${list}"> 
-                  		<tr align="center" height="35" style="border-bottom: 1px solid #cccccc;">
+                  		<tr align="center" height="35" style="border-bottom: 1px solid #cccccc;" onclick="location.href='${articleUrl}&boardNum=${dto.boardNum}'">
                   			<td>${dto.boardNum}</td>
-                  			<%-- <td><a href="${articleUrl}&num=${dto.boardNum}">${dto.cop_name}</a></td> --%>
-                  			<td><a href="<%=cp%>/companies/articleReview.do?page=1&num=${dto.boardNum}">${dto.cop_name}</a></td>
+                  			<!--<td><a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.cop_name}</a></td>-->
+                  			<td>${dto.cop_name}</td>
                   			<td>${dto.created}</td>
                   		<!-- 	<td>조회수</td> -->
                   		</tr>

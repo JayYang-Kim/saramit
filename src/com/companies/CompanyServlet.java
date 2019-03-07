@@ -151,7 +151,7 @@ public class CompanyServlet extends MyServlet{
 		EvaluationDAO dao = new EvaluationDAO();
 		String cp = req.getContextPath();
 		
-		int boardNum = Integer.parseInt(req.getParameter("num"));
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
 		String page = req.getParameter("page");
 		
 		String searchKey = req.getParameter("searchKey");
