@@ -13,14 +13,14 @@
 	<style>
 		.freeBody {
     		background-color: #F5F6F7;
-    		min-height: 720px;
+    		min-height: 828px;
     	}
     	
     	.freeBody .freeContainer{
     		width:650px;
   			padding-top:30px;
   			margin : 0 auto;
-  			min-height: 720px;
+  			min-height: 828px;
     	}
     	
     	.freeBody .freeContainer .board{
@@ -48,6 +48,9 @@
     			alert('내용을 입력하세요');
     			return;
     		}
+    		if(${mode != null && mode=='update'}){
+    			f.action="<%=cp%>/board/free/update_ok.do?boardNum=${num}&page=${page}";
+    		}
     		f.submit();
     	}
     </script>
@@ -69,18 +72,18 @@
 							<h2 style="text-align: center; padding: 5px 8px;background-color: #4c4c4c; color: #fff">글쓰기</h2>
 							<form name="sendForm" action="<%=cp%>/board/free/created_ok.do" method="post">
 								<div class="innerDiv" style="padding-top: 15px;">
-									<input type="text" name="subject" placeholder="제목" style="width: 80%; font-size: 18px; height: 30px;">
+									<b>제 목 :&nbsp;</b> &nbsp;&nbsp;<input type="text" name="subject" style="width: 73%; font-size: 16px; height: 30px;" value="${mode=='update'?dto.subject:''}">
 								</div>
 								<div class="innerDiv">
 									<b style="padding-left: 45px;">작성자 : </b><input type="text" name="writer" value="${sessionScope.member.name}" readonly="readonly" style="border: none; outline: none; width: 80%; font-weight: bold;">
 								</div>
 								<div class="innerDiv">
-									<textarea style="width:80%; height: 350px;" placeholder="내 용" maxlength="1000" name="content"></textarea>
+									<textarea style="width:80%; height: 350px;" placeholder="내 용" maxlength="1000" name="content">${mode=='update'?dto.content:''}</textarea>
 								</div>
 								<div style="margin-top: 10px;">
-									<button type="button" class="btn btn-black" onclick="sendOk();">작성하기</button>&nbsp;
+									<button type="button" class="btn btn-black" onclick="sendOk();">${mode=='update'?'수정하기':'작성하기'}</button>&nbsp;
 									<button type="reset" class="btn btn-black">초기화</button>&nbsp;
-									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/list.do';">목록으로</button>
+									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/article.do?boardNum=${num}&page=${page}';">취소하기</button>
 								</div>
 							</form>
 						</div>

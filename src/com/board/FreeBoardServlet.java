@@ -97,17 +97,14 @@ public class FreeBoardServlet extends MyServlet{
 		}else {
 			list = dao.listBoard(start, end,"","");
 		}
-		
 		//리스트 번호 만들기
 		int n = 0;
 		for(FreeBoardDTO dto : list) {
 			dto.setListNum(dataCount-((current_page-1)*rows)-n);
 			n++;
 		}
-	
 		//페이징
 		String paging = util.paging(current_page, total_page, list_url);
-		
 		//어트리뷰트 삽입
 		req.setAttribute("page", page);
 		req.setAttribute("list", list);
@@ -118,7 +115,6 @@ public class FreeBoardServlet extends MyServlet{
 	}
 	protected void createdForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 생성폼
-		
 		forward(req, resp, "/WEB-INF/views/board/free/created.jsp");
 	}
 	protected void createdSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -126,25 +122,47 @@ public class FreeBoardServlet extends MyServlet{
 		//기본 준비
 		MyUtil util = new MyUtil();
 		String cp = req.getContextPath();
+		req.setCharacterEncoding("utf-8");
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
 		FreeBoardDTO dto = new FreeBoardDTO();
 		FreeBoardDAO dao = new FreeBoardDAO();
 		dto.setUserEmail(info.getEmail());
-		dto.setSubject(req.getParameter("subject"));
+		dto.setSubject(util.htmlSymbols(req.getParameter("subject")));
 		dto.setContent(util.htmlSymbols(req.getParameter("content")));
 		dao.insertBoard(dto,info.getName());
 		resp.sendRedirect(cp+"/board/free/list.do");
 	}
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 수정폼
+		FreeBoardDAO dao = new FreeBoardDAO();
+		FreeBoardDTO dto = dao.readBoard(Integer.parseInt(req.getParameter("num")));
+		if(dto==null) {
+			
+		}
+		req.setAttribute("num", req.getParameter("num"));
+		req.setAttribute("page", req.getParameter("page"));
+		req.setAttribute("dto", dto);
+		req.setAttribute("mode", "update");
 		forward(req, resp, "/WEB-INF/views/board/free/created.jsp");
 	}
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 수정완료
+		//기본작업
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		req.setCharacterEncoding("utf-8");
+		String page = req.getParameter("page");
+		MyUtil util = new MyUtil();
+		int num = Integer.parseInt(req.getParameter("boardNum"));
+		
+		FreeBoardDAO dao = new FreeBoardDAO();
+		FreeBoardDTO dto = new FreeBoardDTO();
+		dto.setBoardNum(num);
+		dto.setSubject(util.htmlSymbols(req.getParameter("subject")));
+		dto.setContent(util.htmlSymbols(req.getParameter("content")));		
+		dao.updateBoard(dto);
+		resp.sendRedirect(cp+"/board/free/article.do?page="+page+"&boardNum="+num);
 	}
 	protected void replyForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//답글 폼

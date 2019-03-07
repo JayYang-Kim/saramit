@@ -35,28 +35,46 @@
     		width: 100%;
     		padding: 5px 0 5px;
     	}
+		.ui-widget-header {
+  			background: #4c4c4c;
+  			color: #fff;
+  		}
     </style>
     <script type="text/javascript">
-    	function sendOk(){
-    		var f = document.sendForm;
-    		
-    		if(!f.subject.value){
-    			alert('제목을 입력하세요');
-    			return;
-    		}
-    		if(!f.content.value){
-    			alert('내용을 입력하세요');
-    			return;
-    		}
-    		f.submit();
-    	}
+    $(function(){
+    	$("#btn_update").click(function(){
+    		$("#dlg_update").dialog({
+    			title:"확인메세지",
+    			width:350,
+    			height:140,
+    			modal:true,
+    			hide:"explode"
+    		});
+    		$("#update_ok").click(function(){
+				location.href="<%=cp%>/board/free/update.do?page=${page}&num=${dto.boardNum}";
+			});
+			$("#update_cancel").click(function(){
+				$("#dlg_update").dialog("close");
+			});
+    	});
+    	$("#btn_delete").click(function(){
+    		$("#dlg_delete").dialog({
+    			title:"확인메세지",
+    			width:350,
+    			height:140,
+    			modal:true,
+    			hide:"explode"
+    		});
+    		$("#delete_ok").click(function(){
+				location.href="<%=cp%>/board/free/delete.do?page=${page}&num=${dto.boardNum}";
+			});
+			$("#delete_cancel").click(function(){
+				$("#dlg_delete").dialog("close");
+			});
+    	});
     	
-    	function deleteOk(){
-    		if(confirm("해당 게시글을 삭제하시겠습니까?")){
-    			alert("삭제가 완료되었습니다.");
-    			location.href="<%=cp%>/board/free/delete.do?page=${page}&num=${dto.boardNum}";
-    		}
-    	}
+    	
+    });
     </script>
 <body>
     <!-- Wrap -->
@@ -73,8 +91,7 @@
 					<div class="freeContainer">
 						<h1 style="text-align: left; padding: 5px 8px">자유게시판</h1>
 						<div class="board" align="center" style="text-align: center">
-							<h2 style="text-align: center; padding: 5px 8px; background-color: #4c4c4c; color: #fff">글보기</h2>
-							<form name="sendForm" action="<%=cp%>/board/free/created_ok.do" method="post" style="font-size: 13px;"> 
+							<h2 style="text-align: center; padding: 5px 8px; background-color: #4c4c4c; color: #fff">글보기</h2> 
 								<div class="innerDiv" style="padding-top: 15px; text-align: left;">
 									<b style="margin-left: 60px;">제 &nbsp;목 : </b><input type="text" name="subject" value="${dto.subject}"style="margin-left:5px; width: 55%; font-weight:bold; height: 30px; border: none; outline: none;" readonly="readonly">
 									<b>조회수 :&nbsp;</b>${dto.hitCount}
@@ -93,14 +110,13 @@
 									<b>다음 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='${next_url}'">${nextDto.subject}</a></p></div>
 								<div style="margin-top: 10px; height: 45px;">
 									<c:if test="${dto.userEmail == sessionScope.member.email}">
-									<button type="button" class="btn btn-black" onclick="sendOk();">수정하기</button>&nbsp;
+									<button type="button" class="btn btn-black" id="btn_update">수정하기</button>&nbsp;
 									</c:if>
 									<c:if test="${dto.userEmail == sessionScope.member.email or sessionScope.member.email=='admin'}">
-									<button type="reset" class="btn btn-black" onclick="deleteOk();">삭제하기</button>&nbsp;
+									<button type="button" class="btn btn-black" id="btn_delete">삭제하기</button>&nbsp;
 									</c:if>
 									<button type="button" class="btn btn-black" onclick="javascript:location.href='${list_url}';">목록으로</button>
 								</div>
-							</form>
 						</div>
 					</div>
 				</div>
@@ -113,5 +129,19 @@
         <!-- //Footer -->
     </div>
     <!-- //Wrap -->
+    <div id="dlg_update" style="display:none;" align="center">
+    	<h3>해당 게시물을 수정하시겠습니까?</h3>
+	    <div style="margin-top:30px;">
+	    <button class="btn btn-black" id="update_ok">확인</button>
+	    <button class="btn btn-black" id="update_cancel">취소</button>
+	    </div>
+    </div>
+    <div id="dlg_delete" style="display:none;" align="center">
+    	<h3>해당 게시물을 삭제하시겠습니까?</h3>
+    	<div style="margin-top:30px;">
+    	<button class="btn btn-black" id="delete_ok">확인</button>
+    	<button class="btn btn-black" id="delete_cancel">취소</button>
+    	</div>
+    </div>
 </body>
 </html>

@@ -26,7 +26,7 @@
     		width:100%;
     		min-height: 700px;
     		margin : 0 auto;
-    		margin-top: 30px;
+    		margin-top: 20px;
     	}
   		.freeList .freeContainer .board  table{
   			height: 100%; 
@@ -34,8 +34,10 @@
   			border: 1px solid #e4e4e4; 
   			background-color: #fff; 
   			clear: both; 
-  			font-size: 17px;
+  			font-size: 15px;
   			text-overflow: ellipsis;
+  			border-collapse: collapse;
+  			border-spacing: 0;
   		}
     </style>
     <script type="text/javascript">
@@ -68,34 +70,34 @@
                     <div class="freeContainer">
                     	<h1>자유게시판</h1>
                     	<div class="board">
-	                    	<form action="<%=cp%>/board/free/created.do">
-	                    		<button type="submit" class="btn btn-black" style="float: right; margin-right:10px; margin-bottom: 10px;">글쓰기</button>
-	                    		<table>
+	                    		<button type="button" class="btn btn-black" style="float: right; margin-right:10px; margin-bottom: 10px; color: #fff; font-size: 14px;" onclick="javacript:location.href='<%=cp%>/board/free/created.do';">글쓰기</button>
+	                    		<table class="tb_hover">
+	                    		<thead>
 	                    		 	<tr style="border-bottom: 1px solid #e4e4e4;font-size: 20px;color: #fff" height="50px;" bgcolor="#4c4c4c" >
-	                    		 		<th width="100px">글번호</th>
+	                    		 		<th width="80px" style="padding-left: 3px;">글번호</th>
 	                    		 		<th>제목</th>
-	                    		 		<th width="250px">글쓴이</th>
-	                    		 		<th width="100px">조회수</th>
+	                    		 		<th width="170px">글쓴이</th>
+	                    		 		<th width="70px">조회수</th>
+	                    		 		<th width="150px">작성일</th>
 	                    		 	</tr>
+	                    		</thead>
 	                    		 	<c:if test="${dataCount!=0}">
 	                    		 	<c:forEach var="n" items="${list}">
-	                    		 	<tr height="40px" style="border-bottom: 1px solid #e4e4e4;">
+	                    		 	<tr height="30px" style="border-bottom: 1px solid #e4e4e4;">
 	                    		 		<td>${n.listNum}</td>
-	                    		 		<td><a href="${article_url}&boardNum=${n.boardNum}">${n.subject}</a></td>
+	                    		 		<td style="cursor: pointer;" onclick="javascript:location.href='${article_url}&boardNum=${n.boardNum}'">${n.subject}</td>
 	                    		 		<td>${n.name}</td>
 	                    		 		<td>${n.hitCount}</td>
+	                    		 		<td>${n.created}</td>
 	                    		 	</tr>
 	                    		 	</c:forEach>
 	                    		 	</c:if>
 	                    		 	<c:if test="${dataCount==0}">
-	                    		 	<tr height="40px" style="border-bottom: 1px solid #e4e4e4;">
+	                    		 	<tr height="30px" style="border-bottom: 1px solid #e4e4e4;">
 	                    		 		<td colspan="4"><b>등록된 게시물이 없습니다.</b></td>
 	                    		 	</tr>
 	                    		 	</c:if>
 	                    		</table>
-	                    		
-	                    		
-	                    	</form>
 	                    	<div class="t_center mt20 mb20">${paging}</div>
 	                    	<form name="searchForm" method="post" onsubmit="return search();" style="text-align: center; margin-top: 10px;">
 	                    		<select name="searchKey">

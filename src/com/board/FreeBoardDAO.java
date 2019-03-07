@@ -104,12 +104,12 @@ public class FreeBoardDAO {
 			sb.append("select * from ( ");
 			sb.append("select tb.*, rownum rnum from( ");
 			if(searchKey.equals("") && searchValue.equals("")) { //검색값이 없는 경우
-				sb.append("select useremail,subject,content,name,hitCount,boardNum from board order by created desc ");
+				sb.append("select useremail,subject,content,name,hitCount,boardNum, created from board order by created desc ");
 				sb.append(")tb where rownum<="+end);
 				sb.append(") where rnum >="+start);
 				pstmt = conn.prepareStatement(sb.toString());
 			}else { //검색 값이 있는 경우
-				sb.append("select useremail,subject,content,name,hitCount,boardNum from board ");
+				sb.append("select useremail,subject,content,name,hitCount,boardNum, created from board ");
 				if(searchKey.equalsIgnoreCase("name")) {
 					sb.append("where name=? order by created DESC");
 					sb.append(")tb where rownum<="+end);
@@ -140,6 +140,7 @@ public class FreeBoardDAO {
 				dto.setName(rs.getString(4));
 				dto.setHitCount(rs.getInt(5));
 				dto.setBoardNum(rs.getInt(6));
+				dto.setCreated(rs.getDate(7).toString());
 				list.add(dto);
 			}
 		}catch (Exception e) {
@@ -383,6 +384,31 @@ public class FreeBoardDAO {
 			sql = "delete from board where boardNum=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,num);
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+
+	public void updateBoard(FreeBoardDTO dto) {
+		PreparedStatement pstmt = null;
+		String sql = "";
+		try{
+			sql = "update board set subject=?, content=? where boardNum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,dto.getSubject());
+			pstmt.setString(2,dto.getContent());
+			pstmt.setInt(3, dto.getBoardNum());
 			pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
