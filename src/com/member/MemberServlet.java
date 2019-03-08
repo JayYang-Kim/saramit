@@ -150,7 +150,10 @@ public class MemberServlet extends MyServlet {
 			dto.setUserName(req.getParameter("userName"));
 			dto.setBirth(req.getParameter("birth"));
 			dto.setGender(req.getParameter("gender"));
+			dto.setPostCode(req.getParameter("postCode"));
 			dto.setAddress(req.getParameter("address"));
+			dto.setDetailAddress(req.getParameter("detailAddress"));
+			dto.setExtraAddress(req.getParameter("extraAddress"));
 			dto.setStatusCode(Integer.parseInt(req.getParameter("status")));
 			dto.setLevelCode(Integer.parseInt(req.getParameter("level")));
 			
@@ -172,7 +175,10 @@ public class MemberServlet extends MyServlet {
 			dto.setEstablishmentDate(mreq.getParameter("establishmentDate"));
 			dto.setEmployees(Integer.parseInt(mreq.getParameter("employees")));
 			dto.setSale(Integer.parseInt(mreq.getParameter("employees")));
+			dto.setPostCode(mreq.getParameter("postCode"));
 			dto.setLocation(mreq.getParameter("location"));
+			dto.setDetailLocation(mreq.getParameter("detailLocation"));
+			dto.setExtraLocation(mreq.getParameter("extraLocation"));
 			dto.setSalary(Integer.parseInt(mreq.getParameter("salary")));
 			dto.setHomepage(mreq.getParameter("homepage"));
 			if(mreq.getFile("file") != null) {

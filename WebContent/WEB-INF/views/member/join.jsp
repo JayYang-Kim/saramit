@@ -105,17 +105,17 @@
 	                        extraAddr = ' (' + extraAddr + ')';
 	                    }
 	                    // 조합된 참고항목을 해당 필드에 넣는다.
-	                    document.getElementById("extraAddress").value = extraAddr;
+	                    document.getElementById("company_extraAddress").value = extraAddr;
 	                
 	                } else {
-	                    document.getElementById("extraAddress").value = '';
+	                    document.getElementById("company_extraAddress").value = '';
 	                }
 
 	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-	                document.getElementById('postcode').value = data.zonecode;
-	                document.getElementById("address").value = addr;
+	                document.getElementById('company_postcode').value = data.zonecode;
+	                document.getElementById("company_address").value = addr;
 	                // 커서를 상세주소 필드로 이동한다.
-	                document.getElementById("detailAddress").focus();
+	                document.getElementById("company_detailAddress").focus();
 	            }
 	        }).open();
 	    }
@@ -265,8 +265,12 @@
 								</div>
 								<div class="mt30">
 									<label for="txt_location">위치(주소)</label>
-									<div>
-										<input type="text" name="location" id="txt_location" class="boxTf" autocomplete="off" autofocus/>
+									<div class="mt15">
+										<input type="text" id="company_postcode" name="postCode" class="boxTf" autocomplete="off" autofocus placeholder="우편번호" style="width:75%">
+										<input type="button" onclick="company_Postcode()" value="우편번호 찾기" class="btn btn-black" style="height:45px;margin-top:10px;margin-left:3px;"><br>
+										<input type="text" id="company_address" name="location" placeholder="주소" class="boxTf" autocomplete="off" autofocus/><br>
+										<input type="text" id="company_detailAddress" name="detailLocation" placeholder="상세주소" class="boxTf" autocomplete="off" autofocus/>
+										<input type="text" id="company_extraAddress" name="extraLocation" placeholder="참고항목" class="boxTf" autocomplete="off" autofocus/>
 									</div>
 								</div>
 								<div class="mt30">

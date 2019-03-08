@@ -34,15 +34,18 @@ public class MemberDAO {
 			
 			pstmt.close();
 			
-			sql = "INSERT INTO member_user(userEmail, userName, address, birth, gender) VALUES(?, ?, ?, ?, ?)";
+			sql = "INSERT INTO member_user(userEmail, userName, postCode, address, detailAddress, extraAddress, birth, gender) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getUserEmail());
 			pstmt.setString(2, dto.getUserName());
-			pstmt.setString(3, dto.getAddress());
-			pstmt.setString(4, dto.getBirth());
-			pstmt.setString(5, dto.getGender());
+			pstmt.setString(3, dto.getPostCode());
+			pstmt.setString(4, dto.getAddress());
+			pstmt.setString(5, dto.getDetailAddress());
+			pstmt.setString(6, dto.getExtraAddress());
+			pstmt.setString(7, dto.getBirth());
+			pstmt.setString(8, dto.getGender());
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -78,8 +81,8 @@ public class MemberDAO {
 			
 			pstmt.close();
 			
-			sql = "INSERT INTO company(companyEmail, businessLicenseNum, companyName, owner, establishmentDate, employees, sales, location, salary, introduction, homepage, saveFilename) "
-					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			sql = "INSERT INTO company(companyEmail, businessLicenseNum, companyName, owner, establishmentDate, employees, sales, postCode, location, detailLocation, extraLocation, salary, introduction, homepage, saveFilename) "
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -90,11 +93,14 @@ public class MemberDAO {
 			pstmt.setString(5, dto.getEstablishmentDate());
 			pstmt.setInt(6, dto.getEmployees());
 			pstmt.setInt(7, dto.getSale());
-			pstmt.setString(8, dto.getLocation());
-			pstmt.setInt(9, dto.getSalary());
-			pstmt.setString(10, dto.getIntroduction());
-			pstmt.setString(11, dto.getHomepage());
-			pstmt.setString(12, dto.getSavefilename());
+			pstmt.setString(8, dto.getPostCode());
+			pstmt.setString(9, dto.getLocation());
+			pstmt.setString(10, dto.getDetailLocation());
+			pstmt.setString(11, dto.getExtraLocation());
+			pstmt.setInt(12, dto.getSalary());
+			pstmt.setString(13, dto.getIntroduction());
+			pstmt.setString(14, dto.getHomepage());
+			pstmt.setString(15, dto.getSavefilename());
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {

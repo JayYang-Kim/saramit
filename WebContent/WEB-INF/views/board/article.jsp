@@ -10,7 +10,12 @@
 <head>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
     <script type="text/javascript">
-    	
+    	function deleteBoard(boardNum) {
+    		if(confirm("게시물을 삭제 하시겠습니까?")) {
+    			var url = "<%=cp%>/board/delete.do?boardNum=" + boardNum + "&${query}";
+    			location.href = url;
+    		}
+    	}
     </script>
 </head>
 
@@ -64,10 +69,28 @@
 	                			</tr>
 	                		</table>
 	                	</div>
-	                	<div class="mt20 mb20"> 
-	                		<button type="button" class="btn_classic btn-white">이전</button>
-	                		<button type="button" class="btn_classic btn-white">다음</button>
-	                		<button type="button" class="btn_classic btn-black" style="float:right;" onclick="location.href='<%=cp%>/board/list.do?page=${page}'">목록보기</button>
+	                	<div class="mt20 mb20">
+	                		<c:if test="${empty preReadDto}">
+	                			<button type="button" class="btn_classic btn-white" disabled="disabled">이전</button>
+	                		</c:if>
+	                		<c:if test="${not empty preReadDto}">
+	                			<button type="button" class="btn_classic btn-white" onclick="location.href='<%=cp%>/board/article.do?boardNum=${preReadDto.boardNum}&${query}'">이전</button>
+	                		</c:if>
+	                		<c:if test="${empty nextReadDto}">
+	                			<button type="button" class="btn_classic btn-white" disabled="disabled">다음</button>
+	                		</c:if>
+	                		<c:if test="${not empty nextReadDto}">
+	                			<button type="button" class="btn_classic btn-white" onclick="location.href='<%=cp%>/board/article.do?boardNum=${nextReadDto.boardNum}&${query}'">다음</button>
+	                		</c:if>
+	                		<c:if test="${sessionScope.member.email == dto.userEmail || sessionScope.member.email == 'admin'}">
+								<button type="button" class="btn_classic btn-red" style="float:right;" onclick="deleteBoard('${dto.boardNum}');">삭제하기</button>
+							</c:if>
+	                		<c:if test="${sessionScope.member.email == dto.userEmail}">
+								<button type="button" class="btn_classic btn-white mr5" style="float:right;" onclick="javascript:location.href='<%=cp%>/board/update.do?boardNum=${dto.boardNum}&${query}';">수정하기</button>
+							</c:if>
+							<c:if test="${sessionScope.member.email != dto.userEmail}">
+	                		<button type="button" class="btn_classic btn-black" style="float:right;" onclick="location.href='<%=cp%>/board/list.do?${query}'">목록보기</button>
+	                		</c:if>
 	                	</div>
                 	</form>
                 </div>
