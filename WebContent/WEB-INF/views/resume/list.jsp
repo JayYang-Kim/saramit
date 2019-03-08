@@ -8,8 +8,6 @@
 <!doctype html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>이력서 리스트</title>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
 	<style>
 	body{

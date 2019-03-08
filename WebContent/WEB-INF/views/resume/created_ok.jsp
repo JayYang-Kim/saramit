@@ -8,9 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>이력서 작성완료</title>
-<jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
 	<style>
 	body{
 		background-color: #f5f5f5;

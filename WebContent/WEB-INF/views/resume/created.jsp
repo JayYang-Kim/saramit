@@ -9,7 +9,6 @@
 <html>
 <head>
 	<title>이력서 작성</title>
-	<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
 	<style>
 	body{
