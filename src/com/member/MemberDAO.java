@@ -123,7 +123,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = "select levelCode, memberPwd, userName, statusCode, address, birth, gender "
+			sql = "select levelCode, memberPwd, userName, statusCode, postCode, address, detailAddress, extraAddress, birth, gender "
 					+ "from member m1 join member_user m2 "
 					+ "on m1.memberEmail=m2.userEmail where memberEmail=?";
 			pstmt = conn.prepareStatement(sql);
@@ -137,9 +137,12 @@ public class MemberDAO {
 				dto.setUserPwd(rs.getString(2));
 				dto.setUserName(rs.getString(3));
 				dto.setStatusCode(rs.getInt(4));
-				dto.setAddress(rs.getString(5)); 
-				dto.setBirth(rs.getDate(6).toString());
-				dto.setGender(rs.getString(7));
+				dto.setPostCode(rs.getString(5));
+				dto.setAddress(rs.getString(6));
+				dto.setDetailAddress(rs.getString(7));
+				dto.setExtraAddress(rs.getString(8));
+				dto.setBirth(rs.getDate(9).toString());
+				dto.setGender(rs.getString(10));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -171,7 +174,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = "select levelCode, memberPwd, companyName, statusCode, businessLicenseNum, companyName, owner, establishmentdate, employees, sales, location, salary, introduction, homepage, saveFileName, created "
+			sql = "select levelCode, memberPwd, companyName, statusCode, businessLicenseNum, companyName, owner, establishmentdate, employees, sales, postCode, location, detailLocation, extraLocation, salary, introduction, homepage, saveFileName "
 					+ "from member m1 join company c "
 					+ "on m1.memberEmail = c.companyEmail where memberEmail=?";
 			System.out.println(email);
@@ -192,11 +195,14 @@ public class MemberDAO {
 				dto.setEstablishmentDate(rs.getDate(8).toString());
 				dto.setEmployees(rs.getInt(9));
 				dto.setSale(rs.getInt(10));
-				dto.setLocation(rs.getString(11));
-				dto.setSalary(rs.getInt(12));
-				dto.setIntroduction(rs.getString(13));
-				dto.setHomepage(rs.getString(14));
-				dto.setSavefilename(rs.getString(15));
+				dto.setPostCode(rs.getString(11));
+				dto.setLocation(rs.getString(12));
+				dto.setDetailLocation(rs.getString(13));
+				dto.setExtraLocation(rs.getString(14));
+				dto.setSalary(rs.getInt(15));
+				dto.setIntroduction(rs.getString(16));
+				dto.setHomepage(rs.getString(17));
+				dto.setSavefilename(rs.getString(18));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -290,14 +296,17 @@ public class MemberDAO {
 			
 			pstmt.close();
 			
-			sql = "UPDATE member_user SET userName = ?, address = ?, birth = ? WHERE userEmail = ?";
+			sql = "UPDATE member_user SET userName = ?, postCode = ?, address = ?, detailAddress = ?, extraAddress = ?, birth = ? WHERE userEmail = ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getUserName());
-			pstmt.setString(2, dto.getAddress());
-			pstmt.setString(3, dto.getBirth());
-			pstmt.setString(4, dto.getUserEmail());
+			pstmt.setString(2, dto.getPostCode());
+			pstmt.setString(3, dto.getAddress());
+			pstmt.setString(4, dto.getDetailAddress());
+			pstmt.setString(5, dto.getExtraAddress());
+			pstmt.setString(6, dto.getBirth());
+			pstmt.setString(7, dto.getUserEmail());
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -337,7 +346,10 @@ public class MemberDAO {
 					+ "owner = ?, "
 					+ "employees = ?, "
 					+ "sales = ?, "
+					+ "postCode = ?, "
 					+ "location = ?, "
+					+ "detailLocation = ?, "
+					+ "extraLocation = ?, "
 					+ "salary = ?, "
 					+ "homepage = ?, "
 					+ "savefilename = ?, "
@@ -351,12 +363,15 @@ public class MemberDAO {
 			pstmt.setString(3, dto.getOwner());
 			pstmt.setInt(4, dto.getEmployees());
 			pstmt.setInt(5, dto.getSale());
-			pstmt.setString(6, dto.getLocation());
-			pstmt.setInt(7, dto.getSalary());
-			pstmt.setString(8, dto.getHomepage());
-			pstmt.setString(9, dto.getSavefilename());
-			pstmt.setString(10, dto.getIntroduction());
-			pstmt.setString(11, dto.getCompanyEmail());
+			pstmt.setString(6, dto.getPostCode());
+			pstmt.setString(7, dto.getLocation());
+			pstmt.setString(8, dto.getDetailLocation());
+			pstmt.setString(9, dto.getExtraLocation());
+			pstmt.setInt(10, dto.getSalary());
+			pstmt.setString(11, dto.getHomepage());
+			pstmt.setString(12, dto.getSavefilename());
+			pstmt.setString(13, dto.getIntroduction());
+			pstmt.setString(14, dto.getCompanyEmail());
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
