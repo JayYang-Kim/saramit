@@ -41,8 +41,8 @@
         <div id="container">
             <div style="height:61px"></div>
             <!-- contents -->
-            <div class="contents" style="width:700px; height:700px; margin: 30px auto 30px;">
-                <div>
+            <div class="contents" style=" height:700px; margin: 30px auto 30px;">
+                <div class="inner">
                 	<div>
                   		<h3>이거 회사평가 게시글이다</h3>
                   	</div>
@@ -83,7 +83,7 @@
                   </c:forEach> 
                   	</table>
                   	
-                  	<table style="width:100%; margin:0px auto; border-spacing: 0px;'">
+                  	<table style="width:100%; margin:10px auto; border-spacing: 0px;'">
                   		<tr height="35">
                   			<td align="center">
                   				<c:if test="${dataCount==0}">

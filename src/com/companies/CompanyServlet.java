@@ -190,12 +190,16 @@ public class CompanyServlet extends MyServlet{
 	protected void review(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	      //회사 평가
 		EvaluationDAO dao = new EvaluationDAO();
-		
+		CompaniesDAO c_dao = new CompaniesDAO();
 	      
 	      String email = req.getParameter("email");
-	      email="smilegate@saramit.com";
 	      
 	      String cop_name=dao.searchCoName(email);
+	      
+	      CompaniesDTO dto = c_dao.readCompany(email);
+	      String savefilename=dto.getSavefilename();
+	      
+	      req.setAttribute("savefilename", savefilename);
 	      req.setAttribute("cop_name", cop_name);
 		  req.setAttribute("email", email);
 		  
@@ -270,7 +274,8 @@ public class CompanyServlet extends MyServlet{
 		dto.setContent2(req.getParameter("content2"));
 		dto.setContent3(req.getParameter("content3"));
 		dto.setContent4(req.getParameter("content4"));
-		dto.setStar(Integer.parseInt(req.getParameter("star")));
+		dto.setStar(Integer.parseInt(req.getParameter("score")));
+		
 		
 		dao.insertReview(dto,"created");
 		

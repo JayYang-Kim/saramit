@@ -21,20 +21,25 @@
         <div id="container">
             <div style="height:61px"></div>
             <!-- contents -->
-            <div style="height:180px">
-            	<div style="text-align: center; padding-top: 100px">
-            		<h2>${dto.cop_name}</h2>
+            <div style="height:230px; background-color: #2b2d2e;">
+            	<div style="text-align: center; padding-top: 100px; color: white">
+            		<h1>${dto.cop_name}</h1>
             	</div>
             </div>
-            <div class="contents">
+            <div class="contents" style="background-color: #F5F6F7;">
             
-                <div class="reviewForm" style="width:900px; height:1000px; margin: 70px auto; padding:20px;">
+                <div class="reviewForm" style="width:900px; margin: 0 auto; padding:30px;">
 				
-				<br>
-				<br>
-				<div>
-					<form name="ReviewForm" action="#" method="post">
+				
+				<div style="background-color: white;">
+					
 						<div class="t_center mt30">
+							<label>별점</label>
+							<div class="p10">
+								${dto.star}&nbsp;점
+							</div>
+						</div>
+						<div class="t_center mt30" style="padding-top: 30px;">
 							<h2 class="m20" style="text-align: left;">&nbsp;&nbsp;content1</h2>
 							<div class="p10 m20" style="border:1px solid gray; box-shadow: 1px 1px 3px rgba(0,0,0,0.13); height:130px;">${dto.content1}</div>
 						</div>
@@ -54,20 +59,8 @@
 							<div class="p10 m20" style="border:1px solid gray; box-shadow: 1px 1px 3px rgba(0,0,0,0.13); height:130px;">${dto.content4}</div>
 						</div>
 						<br>
-						<div class="t_center mt30">
-							<label>별점</label>
-							<div class="p10">
-								${dto.star}&nbsp;점
-							</div>
-						</div>
-						<%-- 
-						<div class="t_center mt20">
-						    <input type="hidden" name="email" value="${email}">
-							<button type="button" class="btn_classic btn-black">작성취소</button>
-							<button type="button" class="btn_classic btn-black ml20" onclick="sendReview();">${mode=='update'?'수정완료':'등록완료'}</button>
-						</div>
-							 --%>
-					</form>
+						
+					
 				</div>
 		
 		</div>

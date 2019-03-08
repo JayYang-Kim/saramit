@@ -5,6 +5,7 @@ public class EvaluationDTO {
 	private String cop_name;
 	private String userEmail;
 	private String companyEmail;
+	private String savefilename;
 	private int star;
 	private String content1;
 	private String content2;
@@ -79,6 +80,12 @@ public class EvaluationDTO {
 	}
 	public void setCop_name(String cop_name) {
 		this.cop_name = cop_name;
+	}
+	public String getSavefilename() {
+		return savefilename;
+	}
+	public void setSavefilename(String savefilename) {
+		this.savefilename = savefilename;
 	}
 	
 }

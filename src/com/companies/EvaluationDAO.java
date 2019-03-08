@@ -306,13 +306,17 @@ public class EvaluationDAO {
 		PreparedStatement pstmt=null;
 		String sql;
 		String co_name=null;
+		ResultSet rs = null;
 		
 		try {
-			sql="select companyName from company c join cop_evaluation e on e.companyemail=c.companyemail where e.companyemail= ? ";
+			sql="select companyName from company where companyemail=?";
 			pstmt=conn.prepareStatement(sql);
 		
 			pstmt.setString(1, companyEmail);
-			pstmt.executeQuery();
+			rs=pstmt.executeQuery();
+			
+			if(rs.next())
+				co_name=rs.getString(1);
 			
 		} catch (Exception e) {
 			System.out.println(e.toString());
