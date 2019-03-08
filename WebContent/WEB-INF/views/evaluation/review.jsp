@@ -153,14 +153,6 @@ div {
             return;
         }
         
-        var str = f.star.value;
-        if(!str) {
-            alert("별점을 입력하세요. ");
-            f.star.focus();
-            return;
-        }
-        
-
     	var mode="${mode}";
     	if(mode=="created")
     		f.action="<%=cp%>/companies/review_ok.do";
