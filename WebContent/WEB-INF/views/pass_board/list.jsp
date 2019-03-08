@@ -83,8 +83,8 @@
 					</tr>
 
 <c:forEach var="dto" items="${list}">
-					<tr align="center" height="35"
-						style="border-bottom: 1px solid #cccccc;">
+					<tr align="center" height="35" style="border-bottom: 1px solid #cccccc;
+						onclick="location.href='<%=cp%>/pass_board/article.do'">
 						<td>${dto.listNum}</td>
 						<td>${dto.title}</td>
 						<td>${dto.companyName}</td>
@@ -116,7 +116,7 @@
 			<!-- //container -->
 
 			<!-- Footer -->
-			<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
+			<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include> 
 			<!-- //Footer -->
 		</div>
 	</div>

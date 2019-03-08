@@ -181,7 +181,44 @@ public class Pass_BoardServlet extends MyServlet {
 	}
 
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/pass_board/created.jsp");
+		//글보기
+		String cp = req.getContextPath();
+		Pass_boardDAO dao = new Pass_boardDAO();
+		MyUtil myUtil = new MyUtil();
+		
+		int num=Integer.parseInt(req.getParameter("num"));
+		String page=req.getParameter("page");
+		String searchKey=req.getParameter("searchKey");
+		String searchValue=req.getParameter("searchValue");
+		if(searchKey==null) {
+			searchKey="subject";
+			searchValue="";
+		}
+		
+		searchValue=URLDecoder.decode(searchValue, "utf-8");
+		
+		String query="page="+page;
+		if(searchValue.length()!=0) {
+			query+="&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
+		}
+		
+		//조회수 증가
+		dao.updateHitCount(num);
+		
+		//게시물 가져오기
+		Pass_BoardDTO dto=dao.readBoard(num);
+		if(dto==null) {
+			resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
+			return;
+		}
+		dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+		
+		//JSP로 포워딩할 속성
+		req.setAttribute("dto", dto);
+		req.setAttribute("page", page);
+		req.setAttribute("query", query);
+		
+		forward(req, resp, "/WEB-INF/views/pass_board/article.jsp");
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
