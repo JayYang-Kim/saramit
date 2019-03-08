@@ -4,7 +4,10 @@ public class UserDTO {
 	private String userEmail; //이메일
 	private String userPwd; //비밀번호
 	private String userName; //이름
+	private String postCode; // 우편번호
 	private String address; //주소
+	private String detailAddress; // 상세주소
+	private String extraAddress; // 참고항목
 	private String birth; //생년월일
 	private String gender; //성별
 	private int statusCode; //회원 상태
@@ -27,11 +30,29 @@ public class UserDTO {
 	public final void setUserName(String userName) {
 		this.userName = userName;
 	}
+	public String getPostCode() {
+		return postCode;
+	}
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
 	public final String getAddress() {
 		return address;
 	}
 	public final void setAddress(String address) {
 		this.address = address;
+	}
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
+	}
+	public String getExtraAddress() {
+		return extraAddress;
+	}
+	public void setExtraAddress(String extraAddress) {
+		this.extraAddress = extraAddress;
 	}
 	public final String getBirth() {
 		return birth;
@@ -57,6 +78,4 @@ public class UserDTO {
 	public final void setLevelCode(int levelCode) {
 		this.levelCode = levelCode;
 	}
-	
-	
 }

@@ -123,9 +123,9 @@ public class BoardDAO {
 		
 		try {
 			sql = "SELECT boardNum, mu.userEmail, mu.userName, subject, content, groupNum, depth, orderNo, parent, created, hitCount " 
-					+ "FROM member_user mu\n" 
-					+ "JOIN feedback fb\n" 
-					+ "ON mu.userEmail = fb.userEmail\n" 
+					+ "FROM member_user mu " 
+					+ "JOIN feedback fb " 
+					+ "ON mu.userEmail = fb.userEmail " 
 					+ "WHERE boardNum = ?";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -207,6 +207,53 @@ public class BoardDAO {
 			}
 		}
 			
+		return result;
+	}
+	
+	public int dataCount(String searchKey, String searchValue) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		
+		try {
+			if(searchKey.equals("created")) {
+        		searchValue = searchValue.replaceAll("-", "");
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE TO_CHAR(created, 'YYYYMMDD') = ? ";
+        	} else if(searchKey.equals("userName")) {
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(userName, ?) = 1 ";
+        	} else {
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(" + searchKey + ", ?) >= 1 ";
+        	}
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, searchValue);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
 		
 		return result;
 	}
@@ -271,5 +318,300 @@ public class BoardDAO {
 		}
 		
 		return list;
+	}
+	
+	public List<BoardDTO> listBoard(int start, int end, String searchKey, String searchValue) {
+		List<BoardDTO> list = new ArrayList<BoardDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append("SELECT * FROM (");
+			sb.append("    SELECT ROWNUM rnum, tb.* FROM (");
+			sb.append("        SELECT boardNum, b.userEmail, userName, subject, groupNum, orderNo, depth, hitCount, created");
+			sb.append("        FROM feedback b");
+			sb.append("        JOIN member_user mu"); 
+			sb.append("        ON b.userEmail = mu.userEmail");
+			if(searchKey.equals("created")) {
+				searchValue = searchValue.replaceAll("-", "");
+				sb.append("           WHERE TO_CHAR(created, 'YYYYMMDD') = ? ");
+			} else if(searchKey.equals("userName")) {
+				sb.append("           WHERE INSTR(userName, ?) = 1 ");
+			} else {
+				sb.append("           WHERE INSTR(" + searchKey + ", ?) >= 1 ");
+			}
+			sb.append("        ORDER BY groupNum DESC, orderNo ASC");
+			sb.append("    ) tb WHERE ROWNUM <= ?");
+			sb.append(") WHERE rnum >= ?");
+			
+			pstmt = conn.prepareStatement(sb.toString());
+			
+			pstmt.setString(1, searchValue);
+			pstmt.setInt(2, end);
+			pstmt.setInt(3, start);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBoardNum(rs.getInt("boardNum"));
+				dto.setUserEmail(rs.getString("userEmail"));
+				dto.setUserName(rs.getString("userName"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setGroupNum(rs.getInt("groupNum"));
+				dto.setDept(rs.getInt("depth"));
+				dto.setOrderNum(rs.getInt("orderNo"));
+				dto.setHitCount(rs.getInt("hitCount"));
+				dto.setCreated(rs.getDate("created").toString());
+				
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				
+				}
+			}
+		}
+		
+		return list;
+	}
+	
+	public BoardDTO preReadBoard(int groupNum, int orderNo, String searchKey, String searchValue) {
+		BoardDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			if(searchValue != null && searchValue.length() != 0) {
+                sb.append("SELECT ROWNUM, tb.* FROM ( ");
+                sb.append("  SELECT boardNum, subject  ");
+    			sb.append("               FROM feedback fb");
+    			sb.append("               JOIN member_user mu ON fb.userEmail = mu.userEmail");
+    			if(searchKey.equals("created")) {
+    				searchValue = searchValue.replaceAll("-", "");
+    				sb.append("           WHERE (TO_CHAR(created, 'YYYYMMDD') = ? ) AND ");
+    			} else if(searchKey.equals("userName")) {
+    				sb.append("           WHERE (INSTR(userName, ?) = 1 ) AND ");
+    			} else {
+    				sb.append("           WHERE (INSTR(" + searchKey + ", ?) >= 1 ) AND ");
+            	}
+                sb.append("     (( groupNum = ? AND orderNo < ?) ");
+                sb.append("         OR (groupNum > ? )) ");
+                sb.append("         ORDER BY groupNum ASC, orderNo DESC) tb WHERE ROWNUM = 1 ");
+
+                pstmt=conn.prepareStatement(sb.toString());
+                
+                pstmt.setString(1, searchValue);
+                pstmt.setInt(2, groupNum);
+                pstmt.setInt(3, orderNo);
+                pstmt.setInt(4, groupNum);
+			} else {
+                sb.append("SELECT ROWNUM, tb.* FROM ( ");
+                sb.append("     SELECT boardNum, subject FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail ");                
+                sb.append("  WHERE (groupNum = ? AND orderNo < ?) ");
+                sb.append("         OR (groupNum > ? ) ");
+                sb.append("         ORDER BY groupNum ASC, orderNo DESC) tb WHERE ROWNUM = 1 ");
+
+                pstmt=conn.prepareStatement(sb.toString());
+                pstmt.setInt(1, groupNum);
+                pstmt.setInt(2, orderNo);
+                pstmt.setInt(3, groupNum);
+			}
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new BoardDTO();
+				dto.setBoardNum(rs.getInt("boardNum"));
+				dto.setSubject(rs.getString("subject"));
+			}
+		} catch (Exception e) {
+			
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				
+				}
+			}
+		}
+		
+		return dto;
+	}
+	
+	public BoardDTO nextReadBoard(int groupNum, int orderNo, String searchKey, String searchValue) {
+		BoardDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			if(searchValue != null && searchValue.length() != 0) {
+                sb.append("SELECT ROWNUM, tb.* FROM ( ");
+                sb.append("  SELECT boardNum, subject  ");
+    			sb.append("               FROM feedback fb");
+    			sb.append("               JOIN member_user mu ON fb.userEmail = mu.userEmail");
+    			if(searchKey.equals("created")) {
+    				searchValue = searchValue.replaceAll("-", "");
+    				sb.append("           WHERE (TO_CHAR(created, 'YYYYMMDD') = ? ) AND ");
+    			} else if(searchKey.equals("userName")) {
+    				sb.append("           WHERE (INSTR(userName, ?) = 1 ) AND ");
+    			} else {
+    				sb.append("           WHERE (INSTR(" + searchKey + ", ?) >= 1 ) AND ");
+            	}
+                sb.append("     (( groupNum = ? AND orderNo > ?) ");
+                sb.append("         OR (groupNum < ? )) ");
+                sb.append("         ORDER BY groupNum DESC, orderNo ASC) tb WHERE ROWNUM = 1 ");
+
+                pstmt=conn.prepareStatement(sb.toString());
+                
+                pstmt.setString(1, searchValue);
+                pstmt.setInt(2, groupNum);
+                pstmt.setInt(3, orderNo);
+                pstmt.setInt(4, groupNum);
+			} else {
+                sb.append("SELECT ROWNUM, tb.* FROM ( ");
+                sb.append("     SELECT boardNum, subject FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail ");                
+                sb.append("  WHERE (groupNum = ? AND orderNo > ?) ");
+                sb.append("         OR (groupNum < ? ) ");
+                sb.append("         ORDER BY groupNum DESC, orderNo ASC) tb WHERE ROWNUM = 1 ");
+
+                pstmt=conn.prepareStatement(sb.toString());
+                pstmt.setInt(1, groupNum);
+                pstmt.setInt(2, orderNo);
+                pstmt.setInt(3, groupNum);
+			}
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new BoardDTO();
+				dto.setBoardNum(rs.getInt("boardNum"));
+				dto.setSubject(rs.getString("subject"));
+			}
+		} catch (Exception e) {
+			
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				
+				}
+			}
+		}
+		
+		return dto;
+	}
+	
+	public void updateHitCount(int boardNum) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "UPDATE feedback SET hitCount = hitCount + 1 WHERE boardNum = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
+	
+	public void updateBoard(BoardDTO dto, String userEmail) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "UPDATE feedback SET subject = ?, content = ? WHERE boardNum = ? AND userEmail = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getSubject());
+			pstmt.setString(2, dto.getContent());
+			pstmt.setInt(3, dto.getBoardNum());
+			pstmt.setString(4, userEmail);
+			
+			pstmt.executeUpdate();	
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
+	
+	public void deleteBoard(int boardNum) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "DELETE FROM feedback WHERE boardNum IN (SELECT boardNum FROM feedback START WITH  boardNum = ? CONNECT BY PRIOR boardNum = parent)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
 	}
 }
