@@ -340,11 +340,11 @@ input[type="text"], input[type="password"],input[type="search"],select, option{c
 .tb_basic thead .tb_basicBLeft:first-child, .tb_basic tbody .tb_basicBLeft:first-child{border-left:2px solid #8f8f8f;}
 .tb_basic tbody th:first-child, .tb_basic tbody td:first-child{border-left:none;}
 .tb_basic thead th, .tb_basic tbody td{border-left:1px solid #c4c4c4;}
+.tb_basic.big th, .tb_basic.big td{padding:20px 15px;}
 
 /* Table_style02 */
 .tb_basic02{position:relative;border-top:1px solid #b9bdc0;border-bottom:1px solid #b9bdc0;background-color:#fff}
-.tb_basic02 th,
-.tb_basic02 td{padding:8px 5px;text-align:center !important;}
+.tb_basic02 th, .tb_basic02 td{padding:8px 5px;text-align:center !important;}
 .tb_basic02 thead th:first-child{border-left:none;}
 .tb_basic02 thead .tb_firstL:first-child, .tb_basic02 tbody .tb_firstL:first-child {border-left: 1px solid #d8d8d8;}
 .tb_basic02 thead th{background-color:#f4f4f4;color:#2c2e2f;border-bottom:1px solid #d8d8d8;}
@@ -354,8 +354,7 @@ input[type="text"], input[type="password"],input[type="search"],select, option{c
 
 /* Table_style03 */
 .tb_basic03{position:relative;border-top:1px solid #b9bdc0;border-bottom:1px solid #b9bdc0;background-color:#fff;}
-.tb_basic03 th,
-.tb_basic03 td{padding:8px 5px;text-align:center !important;}
+.tb_basic03 th, .tb_basic03 td{padding:8px 5px;text-align:center !important;}
 .tb_basic03 thead th:first-child{border-left:none;}
 .tb_basic03 thead .tb_firstL:first-child, .tb_basic03 tbody .tb_firstL:first-child {border-left: 1px solid #d8d8d8;}
 .tb_basic03 thead th{color:#2c2e2f;border-bottom:1px solid #d8d8d8;}
@@ -365,8 +364,7 @@ input[type="text"], input[type="password"],input[type="search"],select, option{c
 
 /* Table_white */
 .tb_basic_w{position:relative;border-top:1px solid #b9bdc0;border-bottom:1px solid #b9bdc0;background-color:#fff;}
-.tb_basic_w th,
-.tb_basic_w td{padding:8px 5px;text-align:center !important;}
+.tb_basic_w th, .tb_basic_w td{padding:8px 5px;text-align:center !important;}
 .tb_basic_w thead th:first-child{border-left:none;}
 .tb_basic_w thead .tb_firstL:first-child, .tb_basic_w tbody .tb_firstL:first-child {border-left: 1px solid #d8d8d8;}
 .tb_basic_w thead th{color:#2c2e2f;border-bottom:1px solid #d8d8d8;}
@@ -378,8 +376,7 @@ input[type="text"], input[type="password"],input[type="search"],select, option{c
 
 /* Table_stroped */
 .tb_basic_striped{position:relative;border-top:1px solid #b9bdc0;border-bottom:1px solid #b9bdc0;background-color:#fff;}
-.tb_basic_striped th,
-.tb_basic_striped td{padding:8px 5px;text-align:center !important;}
+.tb_basic_striped th, .tb_basic_striped td{padding:8px 5px;text-align:center !important;}
 .tb_basic_striped thead th:first-child{border-left:none;}
 .tb_basic_striped thead .tb_firstL:first-child, .tb_basic_striped tbody .tb_firstL:first-child {border-left: 1px solid #d8d8d8;}
 .tb_basic_striped thead th{color:#2c2e2f;border-bottom:1px solid #d8d8d8;}
@@ -395,6 +392,7 @@ input[type="text"], input[type="password"],input[type="search"],select, option{c
 .tb_basic_row tbody th:first-child, .tb_basic_row tbody td:first-child{border-left:none;}
 .tb_basic_row th{background-color:#f4f4f4;}
 .tb_basic_row td{text-align:left;}
+.tb_basic_row.big th, .tb_basic_row.big td{padding:15px;}
 
 /* Table tr:hover, Table border */
 .tb_border{border:1px solid #c4c4c4;}

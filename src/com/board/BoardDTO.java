@@ -1,7 +1,10 @@
 package com.board;
 
 public class BoardDTO {
+	private int boardNum;
+	private int listNum;
 	private String userEmail;
+	private String userName;
 	private String subject;
 	private String content;
 	private int groupNum;
@@ -10,11 +13,30 @@ public class BoardDTO {
 	private int parent;
 	private String created;
 	private int hitCount;
+	
+	public int getBoardNum() {
+		return boardNum;
+	}
+	public void setBoardNum(int boardNum) {
+		this.boardNum = boardNum;
+	}
+	public int getListNum() {
+		return listNum;
+	}
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
 	public String getUserEmail() {
 		return userEmail;
 	}
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getSubject() {
 		return subject;
@@ -64,6 +86,4 @@ public class BoardDTO {
 	public void setHitCount(int hitCount) {
 		this.hitCount = hitCount;
 	}
-	
-	
 }

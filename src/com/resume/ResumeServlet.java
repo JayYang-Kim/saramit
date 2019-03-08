@@ -45,32 +45,39 @@ public class ResumeServlet extends MyServlet {
 	}
 
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//내가 작성한 이력서 목록 출력
 		forward(req, resp, "/WEB-INF/views/resume/list.jsp");
 	}
 
 	protected void createdForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//이력서 작성폼
 		forward(req, resp, "/WEB-INF/views/resume/created.jsp");
 	}
 
 	protected void createdSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//이력서 작성완료
 		String cp = req.getContextPath();
 		resp.sendRedirect(cp);
 	}
 
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//익력서 수정
 		forward(req, resp, "/WEB-INF/views/resume/created.jsp");
 	}
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//이력서 수정완료
 		String cp = req.getContextPath();
 		resp.sendRedirect(cp);
 	}
 
 	protected void view(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//이력서 보기
 		forward(req, resp, "/WEB-INF/views/resume/created.jsp");
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//이력서 삭제
 		String cp = req.getContextPath();
 		resp.sendRedirect(cp);
 	}
