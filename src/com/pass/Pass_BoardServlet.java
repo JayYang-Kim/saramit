@@ -120,7 +120,7 @@ public class Pass_BoardServlet extends MyServlet {
 		
 		//페이징 처리
 		String listUrl=cp+"/pass_board/list.do";
-		String articleUrl=cp+"/pass_board/acticle.do?page="+current_page;
+		String articleUrl=cp+"/pass_board/article.do?page="+current_page;
 		if(query.length()!=0) {
 			listUrl+="?"+query;
 			articleUrl+="&"+query;

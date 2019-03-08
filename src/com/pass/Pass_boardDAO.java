@@ -242,6 +242,7 @@ public class Pass_boardDAO {
 		return list;
 	}
 	
+	//조회수 증가
 	public int updateHitCount(int num) {
 		int result=0;
 		PreparedStatement pstmt = null;
@@ -267,6 +268,7 @@ public class Pass_boardDAO {
 		return result;
 	}
 	
+	//해당 게시물 보기
 	public Pass_BoardDTO readBoard(int num) {
 		Pass_BoardDTO dto=null;
 		PreparedStatement pstmt=null;
