@@ -61,7 +61,7 @@
                             <div class="t_center">
                                 <h3>"야 너도 취업할 수 있어!! 취준생 당신을 응원합니다."</h3>
                                 <p>취준생 모두가 취업하는 그날까지</p>
-                                <a href="#" class="btn_classic btn-black mt20">나만의 이력서 작성</a>
+                                <a href="<%=cp%>/resume/created.do" class="btn_classic btn-black mt20">나만의 이력서 작성</a>
                             </div>
                         </div>
                     </div>
