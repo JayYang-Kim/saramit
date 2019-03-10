@@ -44,43 +44,33 @@
 						<form name="searchForm" action="<%=cp%>/pass_board/list.do"
 							method="post">
 							<select name="searchKey" class="searchField"
-								style="width: 120px; height: 50px">
+								style="width: 120px; height: 40px">
 								<option value="companyName">회사명</option>
 								<option value="field">지원분야</option>
 							</select> <input type="text" name="searchValue" class="box_TF"
-								style="width: 300px; height: 50px">
-							<button type="button" class="btn" onclick="searchList()"
-								style="height: 50px">검색</button>
+								style="width: 300px; height: 40px">
+							<button type="button" class="btn btn-white" onclick="searchList()"
+								style="height: 40px">검색</button>
 						</form>
 					</div>
 	
-					<div style="font-size: 10px;">
+					<div style="font-size: 13px;">
 						<ul>
-							<li style="text-align:left;width:50%">검색결과: ${dataCount}개(${page} / ${total_page} 페이지)</li>
+							<li style="text-align:left;width:50%">검색결과: ${dataCount}개 (${page} / ${total_page} 페이지)</li>
 							<li style="">&nbsp;</li>
 						</ul>
 					</div>
-					<!-- 
-	                <div class="list">
-	                	<ul class="">
-	                		<li>번호</li>
-	                		<li>제목</li>
-	                		<li>회사명</li>
-	                		<li>지원분야</li>
-	                		<li>구분</li>
-	                	</ul>
-	                </div>
-	                 -->
+					
 					<table class="tb_basic tb_hover">
 						<tr align="center" height="35"
-							style="border-bottom: 1px solid #cccccc;">
-							<th width="50">번호</th>
-							<th width="120">제목</th>
-							<th width="100">회사이름</th>
-							<th width="100">지원분야</th>
-							<th width="70">구분</th>
-							<th width="80">등록일</th>
-							<th width="50">조회수</th>
+							style="border-bottom: 1px solid #cccccc; background-color: #efefef;">
+							<th width="30">번호</th>
+							<th width="200">제목</th>
+							<th width="120">회사명</th>
+							<th width="60">지원분야</th>
+							<th width="30">구분</th>
+							<th width="50">등록일</th>
+							<th width="30">조회수</th>
 						</tr>
 	
 	<c:forEach var="dto" items="${list}">
