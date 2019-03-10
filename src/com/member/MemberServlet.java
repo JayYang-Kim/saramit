@@ -331,7 +331,7 @@ public class MemberServlet extends MyServlet {
 				
 			}
 		req.setAttribute("level", level);
-		forward(req, resp, "/WEB-INF/views/member/mypage.jsp"); // 여기 정확히 어디로 갈지 헷갈려서 냅둠
+		forward(req, resp, "/WEB-INF/views/member/mypage.jsp");
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

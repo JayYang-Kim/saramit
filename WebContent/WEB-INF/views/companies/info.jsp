@@ -94,11 +94,11 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
                 <div class="cp_info_bg">

@@ -178,7 +178,7 @@ div {
 </script>
 </head>
 <body>
-<div id="wrap">
+<div id="wrap" class="tb_wrap">
 	<div class="cp_info_bg">
 		<div class="cp_info_logoBox">
 			<div class="cp_info_logo">

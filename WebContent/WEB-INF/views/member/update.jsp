@@ -157,15 +157,18 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap" class="login_wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         
         <!-- container -->
-        <div id="container" class="login_container">
+        <div id="container" class="tb_container">
             <!-- contents -->
-            <div class="register" style="padding:141px 0 60px">
+            <div class="login" style="padding:0;">
+            	<div class="contents_header_bg join top mb50">
+            		<div class="bg_black"></div>
+            	</div>
 				<div>
 					<fieldset>
 						<div class="box_login">

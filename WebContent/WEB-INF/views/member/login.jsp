@@ -25,15 +25,15 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap" class="login_wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         
         <!-- container -->
-        <div id="container" class="login_container">
+        <div id="container" class="tb_container">
             <!-- contents -->
-            <div class="register">
+            <div class="login">
                 <form name="login_form" action="<%=cp%>/member/login_ok.do" method="post">
                     <fieldset>
                         <div class="box_login">

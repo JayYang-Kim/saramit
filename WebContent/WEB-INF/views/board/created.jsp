@@ -35,24 +35,26 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
-            <div style="height:61px"></div>
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
+            	<div class="contents_header_bg board_list bottom">
+            		<div class="bg_black"></div>
+            	</div>
                 <div class="inner">
                 	<!-- pageTitle -->
-                	<div class="pageTitle mt20 mb20">
-                		<h3>자소서 피드백 게시판 - 등록</h3>
+                	<div class="pageTitle mt30 pb10">
+                		<h3>자소서 피드백 - 등록</h3>
                 	</div>
                 	<!-- //pageTitle -->
                 	<form name="feedback_form" method="post">
-                		<div>
-	                		<table class="tb_basic_row big">
+                		<div class="mt15 mb15">
+	                		<table class="tb_kakao_row big">
 	                			<colgroup>
 	                				<col style="width:20%">
 	                				<col style="width:30%">

@@ -124,15 +124,18 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap" class="login_wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         
         <!-- container -->
-        <div id="container" class="login_container">
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="register">
+            	<div class="contents_header_bg join top mb50">
+            		<div class="bg_black"></div>
+            	</div>
 				<ul class="tabmenu2 tabMotion">
 					<li class="on"><a href="#tabCon1">개인회원</a></li>
 					<li><a href="#tabCon2">회사회원</a></li>
@@ -140,7 +143,7 @@
 				<div id="tabCon1" class="tab_cont">
 					<form name="joinUser_form" method="post">
 						<fieldset>
-							<div class="box_login">
+							<div class="box_register">
 								<h3 class="title">회원가입</h3>
 								<div class="mt30">
 									<label for="txt_userEmail">이메일</label>
@@ -198,7 +201,7 @@
 								<div class="mt30">
 									<input type="hidden" name="status" value="1"/>
 									<input type="hidden" name="level" value="2"/>
-									<button type="button" class="btn_login" onclick="joinUser()">회원가입</button>
+									<button type="button" class="btn_register" onclick="joinUser()">회원가입</button>
 								</div>
 							</div>
 						</fieldset>
@@ -207,7 +210,7 @@
 				<div id="tabCon2" class="tab_cont">
 					<form name="joinCompany_form" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<div class="box_login">
+							<div class="box_register">
 								<h3 class="title">회원가입</h3>
 								<div class="mt30">
 									<label for="txt_companyEmail">이메일</label>
@@ -306,7 +309,7 @@
 								<div class="mt30">
 									<input type="hidden" name="status" value="1"/>
 									<input type="hidden" name="level" value="1"/>
-									<button type="button" class="btn_login" onclick="joinCompany()">회원가입</button>
+									<button type="button" class="btn_register" onclick="joinCompany()">회원가입</button>
 								</div>
 							</div>
 						</fieldset>

@@ -127,7 +127,7 @@ public class ResumeDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, num);
 			pstmt.setString(2, dto.getLicense_name());
-			pstmt.setString(3, dto.getLicense_Date());
+			pstmt.setString(3, dto.getLicense_date());
 			pstmt.setString(4, dto.getLicense_publisher());
 			pstmt.executeUpdate();
 		} catch (Exception e) {

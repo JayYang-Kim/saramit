@@ -10,52 +10,52 @@ public class EducationDTO {
 	private String graduate;
 	private String graduate_status;
 	
-	int getEducationCode() {
+	public int getEducationCode() {
 		return educationCode;
 	}
-	void setEducationCode(int educationCode) {
+	public void setEducationCode(int educationCode) {
 		this.educationCode = educationCode;
 	}
-	int getResumeCode() {
+	public int getResumeCode() {
 		return resumeCode;
 	}
-	void setResumeCode(int resumeCode) {
+	public void setResumeCode(int resumeCode) {
 		this.resumeCode = resumeCode;
 	}
-	String getSchoolName() {
+	public String getSchoolName() {
 		return schoolName;
 	}
-	void setSchoolName(String schoolName) {
+	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
 	}
-	String getRegion() {
+	public String getRegion() {
 		return region;
 	}
-	void setRegion(String region) {
+	public void setRegion(String region) {
 		this.region = region;
 	}
-	String getMajor() {
+	public String getMajor() {
 		return major;
 	}
-	void setMajor(String major) {
+	public void setMajor(String major) {
 		this.major = major;
 	}
-	String getEntrance() {
+	public String getEntrance() {
 		return entrance;
 	}
-	void setEntrance(String entrance) {
+	public void setEntrance(String entrance) {
 		this.entrance = entrance;
 	}
-	String getGraduate() {
+	public String getGraduate() {
 		return graduate;
 	}
-	void setGraduate(String graduate) {
+	public void setGraduate(String graduate) {
 		this.graduate = graduate;
 	}
-	String getGraduate_status() {
+	public String getGraduate_status() {
 		return graduate_status;
 	}
-	void setGraduate_status(String graduate_status) {
+	public void setGraduate_status(String graduate_status) {
 		this.graduate_status = graduate_status;
 	}
 }

@@ -9,68 +9,53 @@ public class ResumeDTO {
 	private String birth;
 	private String created;
 	private String title;
-
-	int getResumeCode() {
+	
+	public int getResumeCode() {
 		return resumeCode;
 	}
-
-	void setResumeCode(int resumeCode) {
+	public void setResumeCode(int resumeCode) {
 		this.resumeCode = resumeCode;
 	}
-
-	String getUserEmail() {
+	public String getUserEmail() {
 		return userEmail;
 	}
-
-	void setUserEmail(String userEmail) {
+	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
-
-	String getName() {
+	public String getName() {
 		return name;
 	}
-
-	void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
-
-	String getAddr() {
+	public String getAddr() {
 		return addr;
 	}
-
-	void setAddr(String addr) {
+	public void setAddr(String addr) {
 		this.addr = addr;
 	}
-
-	String getGender() {
+	public String getGender() {
 		return gender;
 	}
-
-	void setGender(String gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
-	String getBirth() {
+	public String getBirth() {
 		return birth;
 	}
-
-	void setBirth(String birth) {
+	public void setBirth(String birth) {
 		this.birth = birth;
 	}
-
-	String getCreated() {
+	public String getCreated() {
 		return created;
 	}
-
-	void setCreated(String created) {
+	public void setCreated(String created) {
 		this.created = created;
 	}
-
-	String getTitle() {
+	public String getTitle() {
 		return title;
 	}
-
-	void setTitle(String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 }

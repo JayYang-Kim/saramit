@@ -56,13 +56,12 @@
     </script>
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
-            <div style="height:61px"></div>
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
 				<div class="freeBody">

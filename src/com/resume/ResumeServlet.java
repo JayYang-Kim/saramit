@@ -84,7 +84,7 @@ public class ResumeServlet extends MyServlet {
 			for(int i=0; i<license_name.length; i++) {
 				LicenseDTO dto_license=new LicenseDTO();
 				dto_license.setLicense_name(license_name[i]);
-				dto_license.setLicense_Date(license_date[i]);
+				dto_license.setLicense_date(license_date[i]);
 				dto_license.setLicense_publisher(license_publisher[i]);
 				dao.insertLicense(dto_license,rnum);
 			}

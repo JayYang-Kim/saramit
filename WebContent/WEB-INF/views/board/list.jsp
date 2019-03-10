@@ -26,18 +26,20 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
-            <div style="height:61px"></div>
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
+            	<div class="contents_header_bg board_list bottom">
+            		<div class="bg_black"></div>
+            	</div>
                 <div class="inner">
                 	<!-- pageTitle -->
-                	<div class="pageTitle mt20">
+                	<div class="pageTitle mt30 pb10">
                 		<h3>자소서 피드백</h3>
                 	</div>
                 	<!-- //pageTitle -->
@@ -54,7 +56,7 @@
                			</form>
                 	</div>
                 	<div>
-                		<table class="tb_basic tb_hover big">
+                		<table class="tb_kakao tb_hover big">
                 			<colgroup>
                 				<col style="width:70px">
                 				<col>
@@ -75,7 +77,7 @@
                 				<c:forEach var="dto" items="${list}">
                 					<tr onclick="location.href='<%=cp%>/board/article.do?boardNum=${dto.boardNum}&page=${page}'">
 	                					<td>${dto.listNum}</td>
-	                					<td>${dto.subject}</td>
+	                					<td class="left txt_overflow">${dto.subject}</td>
 	                					<td>${dto.userName}</td>
 	                					<td>${dto.hitCount}</td>
 	                					<td>${dto.created}</td>
