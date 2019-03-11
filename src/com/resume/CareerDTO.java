@@ -10,52 +10,52 @@ public class CareerDTO{
 	private String task;
 	private String position;
 	
-	int getCareerCode() {
+	public int getCareerCode() {
 		return careerCode;
 	}
-	void setCareerCode(int careerCode) {
+	public void setCareerCode(int careerCode) {
 		this.careerCode = careerCode;
 	}
-	int getResumeCode() {
+	public int getResumeCode() {
 		return resumeCode;
 	}
-	void setResumeCode(int resumeCode) {
+	public void setResumeCode(int resumeCode) {
 		this.resumeCode = resumeCode;
 	}
-	String getGubun() {
+	public String getGubun() {
 		return gubun;
 	}
-	void setGubun(String gubun) {
+	public void setGubun(String gubun) {
 		this.gubun = gubun;
 	}
-	String getCopName() {
+	public String getCopName() {
 		return copName;
 	}
-	void setCopName(String copName) {
+	public void setCopName(String copName) {
 		this.copName = copName;
 	}
-	String getJoinDate() {
+	public String getJoinDate() {
 		return joinDate;
 	}
-	void setJoinDate(String joinDate) {
+	public void setJoinDate(String joinDate) {
 		this.joinDate = joinDate;
 	}
-	String getResignDate() {
+	public String getResignDate() {
 		return resignDate;
 	}
-	void setResignDate(String resignDate) {
+	public void setResignDate(String resignDate) {
 		this.resignDate = resignDate;
 	}
-	String getTask() {
+	public String getTask() {
 		return task;
 	}
-	void setTask(String task) {
+	public void setTask(String task) {
 		this.task = task;
 	}
-	String getPosition() {
+	public String getPosition() {
 		return position;
 	}
-	void setPosition(String position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 }
