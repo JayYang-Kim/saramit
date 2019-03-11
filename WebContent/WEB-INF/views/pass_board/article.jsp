@@ -9,6 +9,30 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
+	<script type="text/javascript">
+	<%-- function deleteBoard(num) {
+		var page = "${page}";
+		var query = "num="+num+"&page="+page;
+		var url = "<%=cp%>/pass_board/delete.do?" + query;
+		
+		
+	} --%>
+	
+	function updateBoard(num) {
+<c:if test="${sessionScope.member.userEmail==dto.userEmail}">
+	var page="${page}";
+	var query="num="+num+"&page="+page;
+	var url="<%=cp%>/pass_board/update.do?" + query;
+	
+	location.href=url;
+</c:if>
+
+<c:if test="${sessionScope.member.userEmail!=dto.userEmail}">
+	alert("게시물 수정 권한이 없습니다.");
+</c:if>
+	}
+	
+	</script>
 </head>
 
 <body>
@@ -42,7 +66,7 @@
 			      	${dto.companyName}
 			    </td>
 			    <td width="50px" bgcolor="#eeeeee" style="text-align: center;">작성일</td>
-			    <td width="100px" align="right" style="padding-right: 5px;">
+			    <td width="100px" align="left" style="padding-left: 5px;">
 			        ${dto.created}
 			    </td>
 			</tr>
@@ -59,7 +83,7 @@
 			</tr>
 			
 			<tr style="border-bottom: 1px solid #cccccc;">
-			  <td colspan="2" align="left" style="padding: 10px 5px;" valign="top" height="200">
+			  <td colspan="4" align="left" style="padding: 10px 5px;" valign="top" height="200">
 			      ${dto.content}
 			   </td>
 			</tr>
@@ -67,17 +91,17 @@
 			
 			<table style="width: 100%; margin: 0px auto 20px; border-spacing: 0px;">
 			<tr height="45">
-			    <%-- <td width="300" align="left">
+			    <td width="300" align="left">
 			       <c:if test="${sessionScope.member.userEmail==dto.userEmail}">				    
 			          <button type="button" class="btn" onclick="updateBoard('${dto.num}');">수정</button>
 			       </c:if>
 			       <c:if test="${sessionScope.member.userEmail==dto.userEmail || sessionScope.member.userEmail=='admin'}">				    
 			          <button type="button" class="btn" onclick="deleteBoard('${dto.num}');">삭제</button>
 			       </c:if>
-			    </td> --%>
+			    </td>
 			
 			    <td align="right">
-			        <button type="button" class="btn" onclick="javascript:location.href='<%=cp%>/pass_board/list.do?${query}';">리스트</button>
+			        <button type="button" class="btn_classic btn-black" onclick="javascript:location.href='<%=cp%>/pass_board/list.do?${query}';">리스트</button>
 			    </td>
 			</tr>
 			</table>

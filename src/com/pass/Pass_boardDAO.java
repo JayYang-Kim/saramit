@@ -319,5 +319,39 @@ public class Pass_boardDAO {
 		return dto;
 	}
 	
+	//게시물 수정
+	public int updateBoard(Pass_BoardDTO dto, String userEmail) {
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql;
+		
+		sql="UPDATE pass_resume SET title=?, companyName=?, field=?, content=?, gubun=? WHERE num=? AND userEmail=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getCompanyName());
+			pstmt.setString(3, dto.getField());
+			pstmt.setString(4, dto.getContent());
+			pstmt.setString(5, dto.getGubun());
+			pstmt.setInt(6, dto.getNum());
+			pstmt.setString(7, userEmail);
+			
+			result=pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}		
+		return result;
+		
+		
+	}
+	
 	
 }

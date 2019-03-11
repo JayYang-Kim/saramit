@@ -172,6 +172,32 @@ public class Pass_BoardServlet extends MyServlet {
 	}
 
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//¼öÁ¤ Æû
+		String cp = req.getContextPath();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		Pass_boardDAO dao = new Pass_boardDAO();
+		
+		String page=req.getParameter("page");
+		int num=Integer.parseInt(req.getParameter("num"));
+		Pass_BoardDTO dto=dao.readBoard(num);
+		
+		if(dto==null) {
+			resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
+			return;
+		}
+		
+		if(! dto.getUserEmail().equals(info.getEmail())) {
+			resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
+			return;
+		}
+		
+		req.setAttribute("dto", dto);
+		req.setAttribute("page", page);
+		req.setAttribute("mode", "update");
+		
 		forward(req, resp, "/WEB-INF/views/pass_board/created.jsp");
 	}
 
