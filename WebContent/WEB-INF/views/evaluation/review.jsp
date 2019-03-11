@@ -152,13 +152,7 @@ div {
             f.content4.focus();
             return;
         }
-        
-        var str = f.star.value;
-        if(!str) {
-            alert("별점을 입력하세요. ");
-            f.star.focus();
-            return;
-        }
+
         
 
     	var mode="${mode}";
@@ -259,8 +253,7 @@ div {
 					<div class="t_center mt20 pb20">
 						<input type="hidden" name="email" value="${email}">
 						<button type="button" class="btn_classic btn-black">작성취소</button>
-						<button type="button" class="btn_classic btn-black ml20"
-							onclick="sendReview();">${mode=='update'?'수정완료':'등록완료'}</button>
+						<button type="button" class="btn_classic btn-black ml20" onclick="sendReview();">${mode=='update'?'수정완료':'등록완료'}</button>
 					</div>
 
 				</form>

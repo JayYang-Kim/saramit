@@ -109,13 +109,7 @@ public class CompanyServlet extends MyServlet{
 		String cp = req.getContextPath();
 		MyUtil util = new MyUtil();
 		EvaluationDAO dao = new EvaluationDAO();
-		
-		//String email = req.getParameter("email");
-	    //email="smilegate@saramit.com";
 	      
-	    //String cop_name=dao.searchCoName("smilegate@saramit.com");
-	    
-		  
 		String page = req.getParameter("page");
 		int current_page=1;
 		if(page!=null) 
