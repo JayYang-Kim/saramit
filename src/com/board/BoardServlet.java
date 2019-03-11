@@ -1,6 +1,8 @@
 package com.board;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 
@@ -64,8 +66,23 @@ public class BoardServlet extends MyServlet{
 			current_page = Integer.parseInt(page);
 		}
 		
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if(searchKey == null) {
+			searchKey = "subject";
+			searchValue ="";
+		}
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+		
 		int dataCount;
-		dataCount = dao.dataCount();
+		if(searchValue.length() == 0) {
+			dataCount = dao.dataCount();
+		} else {
+			dataCount = dao.dataCount(searchKey, searchValue);
+		}
 		
 		int rows = 10;
 		int total_page = util.pageCount(rows, dataCount);
@@ -77,7 +94,11 @@ public class BoardServlet extends MyServlet{
 		int end = current_page * rows;
 		
 		List<BoardDTO> list;
-		list = dao.listBoard(start, end);
+		if(searchValue.length() == 0) {
+			list = dao.listBoard(start, end);
+		} else {
+			list = dao.listBoard(start, end, searchKey, searchValue);
+		}
 		
 		int listNum, n = 0;
 		Iterator<BoardDTO> it = list.iterator();
@@ -89,8 +110,17 @@ public class BoardServlet extends MyServlet{
 			n++;
 		}
 		
+		String query = "";
+		if(searchValue.length() != 0) {
+			query = "searchKey" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
 		String list_url = cp + "/board/list.do";
-		String view_url = cp + "/board/view.do?page=" + current_page;
+		String article_url = cp + "/board/article.do?page=" + current_page;
+		if(query.length() != 0) {
+			list_url += "?" + query;
+			article_url += "&" + query;
+		}
 		
 		String paging = util.paging(current_page, total_page, list_url);
 		
@@ -98,7 +128,7 @@ public class BoardServlet extends MyServlet{
 		req.setAttribute("dataCount", dataCount);
 		req.setAttribute("page", current_page);
 		req.setAttribute("total_page", total_page);
-		req.setAttribute("view_url", view_url);
+		req.setAttribute("article_url", article_url);
 		req.setAttribute("paging", paging);
 		
 		forward(req, resp, "/WEB-INF/views/board/list.jsp");
@@ -120,6 +150,11 @@ public class BoardServlet extends MyServlet{
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp + "/board/list.do");
+			return;
+		}
+		
 		BoardDAO dao = new BoardDAO();
 		BoardDTO dto = new BoardDTO();
 		
@@ -137,26 +172,121 @@ public class BoardServlet extends MyServlet{
 		
 		BoardDAO dao = new BoardDAO();
 		
-		int boardNum = Integer.parseInt(req.getParameter("num"));
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
 		String page = req.getParameter("page");
 		
-		BoardDTO dto = new BoardDTO();
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if(searchKey == null) {
+			searchKey = "subject";
+			searchValue = "";
+		}
 		
-		dto = dao.readBoard(boardNum);
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "page=" + page;
+		if(searchValue.length() != 0) {
+			query = "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		dao.updateHitCount(boardNum);
+		BoardDTO dto = dao.readBoard(boardNum);
+		if(dto == null) {
+			resp.sendRedirect(cp + "/board/list.do?" + query);
+		}
+		
+		MyUtil util = new MyUtil();
+		dto.setContent(util.htmlSymbols(dto.getContent()));
+		
+		BoardDTO preReadDto = dao.preReadBoard(dto.getGroupNum(), dto.getOrderNum(), searchKey, searchValue);
+		BoardDTO nextReadDto = dao.nextReadBoard(dto.getGroupNum(), dto.getOrderNum(), searchKey, searchValue);
 		
 		req.setAttribute("dto", dto);
+		req.setAttribute("preReadDto", preReadDto);
+		req.setAttribute("nextReadDto", nextReadDto);
+		req.setAttribute("query", query);
 		req.setAttribute("page", page);
 		
 		forward(req, resp, "/WEB-INF/views/board/article.jsp");
 	}
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 수정폼
+		String cp = req.getContextPath();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		BoardDAO dao = new BoardDAO();
+		
+		String page = req.getParameter("page");
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if(searchKey == null) {
+			searchKey = "subject";
+			searchValue = "";
+		}
+		
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "page=" + page;
+		if(searchValue.length()!=0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "utf-8");
+		}
+		
+		int boardNum=Integer.parseInt(req.getParameter("boardNum"));
+		
+		BoardDTO dto=dao.readBoard(boardNum);
+		
+		if(dto == null) {
+			resp.sendRedirect(cp + "/board/list.do?" + query);
+			return;
+		}
+		
+		if(! dto.getUserEmail().equals(info.getEmail())) {
+			resp.sendRedirect(cp + "/board/list.do?" + query);
+			return;
+		}
+		
+		req.setAttribute("dto", dto);
+		req.setAttribute("page", page);
+		req.setAttribute("searchKey", searchKey);
+		req.setAttribute("searchValue", searchValue);
+		req.setAttribute("mode", "update");
+		
 		forward(req, resp, "/WEB-INF/views/board/created.jsp");
 	}
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 수정완료
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp + "/board/list.do");
+			return;
+		}
+		
+		BoardDAO dao = new BoardDAO();
+		
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+		String page = req.getParameter("page");
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		
+		String query = "page=" + page;
+		if(searchValue.length() != 0) {
+			query += "&searchKey" + searchKey + "&searchValue=" + URLDecoder.decode(searchValue, "UTF-8");
+		}
+		
+		BoardDTO dto = new BoardDTO();
+		dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
+		dto.setSubject(req.getParameter("subject"));
+		dto.setContent(req.getParameter("contents"));
+		
+		dao.updateBoard(dto, info.getEmail());
+		
+		resp.sendRedirect(cp + "/board/article.do?boardNum=" + boardNum +"&" + query);
 	}
 	protected void replyForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//답글 폼
@@ -170,7 +300,43 @@ public class BoardServlet extends MyServlet{
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 삭제
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		BoardDAO dao = new BoardDAO();
+		
+		String page = req.getParameter("page");
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if(searchKey == null) {
+			searchKey = "subject";
+			searchValue = "";
+		}
+		
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "page=" + page;
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+		BoardDTO dto = dao.readBoard(boardNum);
+		
+		if(dto == null) {
+			resp.sendRedirect(cp + "/board/list.do?" + query);
+			return;
+		}
+		
+		if(!dto.getUserEmail().equals(info.getEmail()) && !info.getEmail().equals("admin")) {
+			resp.sendRedirect(cp + "/board/list.do?" + query);
+			return;
+		}
+		
+		dao.deleteBoard(boardNum);
+		
+		resp.sendRedirect(cp + "/board/list.do?" + query);
 	}
 
 

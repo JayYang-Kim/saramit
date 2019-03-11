@@ -9,7 +9,10 @@ public class CompaniesDTO {
 	private String establishmentDate;
 	private int employees;
 	private int sale;
+	private String postCode;
 	private String location;
+	private String detailLocation;
+	private String extraLocation;
 	private int salary;
 	private String introduction;
 	private String homepage;
@@ -67,11 +70,29 @@ public class CompaniesDTO {
 	public void setSale(int sale) {
 		this.sale = sale;
 	}
+	public String getPostCode() {
+		return postCode;
+	}
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
 	public String getLocation() {
 		return location;
 	}
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	public String getDetailLocation() {
+		return detailLocation;
+	}
+	public void setDetailLocation(String detailLocation) {
+		this.detailLocation = detailLocation;
+	}
+	public String getExtraLocation() {
+		return extraLocation;
+	}
+	public void setExtraLocation(String extraLocation) {
+		this.extraLocation = extraLocation;
 	}
 	public int getSalary() {
 		return salary;

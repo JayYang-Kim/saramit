@@ -21,8 +21,8 @@
 	    		<h1 class="title">
 		            <a href="<%=cp%>/main.do">SARAMIT</a>
 		        </h1>
-		        <!-- gnb : 회사 -->
-		        <!-- <div class="gnb">
+		        <%-- gnb : 회사 --%>
+		        <%-- <div class="gnb">
 		            <ul>
 		                <li><a href="#">회사검색</a></li>
 		                <li><a href="#">지원확인</a></li>
@@ -30,22 +30,22 @@
 		                <li><a href="#">자유게시판</a></li>
 		                <li><a href="#">사람잇과 소통</a></li>
 		            </ul>
-		        </div> -->
-		        <!-- //gnb -->
-		        <!-- gnb : 유저 -->
+		        </div> --%>
+		        <%-- //gnb --%>
+		        <%-- gnb : 유저 --%>
 		        <div class="gnb">
 		            <ul>
 		                <li><a href="<%=cp%>/companies/list.do">회사검색</a></li>
 		                <li><a href="<%=cp%>/companies/listReview.do">회사평가</a></li>
 		                <li><a href="<%=cp%>/board/list.do">피드백 게시판</a></li>
-		                <li><a href="<%=cp%>/pass_board/list.do">합격자소서 보기</a></li>
+		                <li><a href="<%=cp%>/pass_board/list.do">합격자소서</a></li>
 		                <li><a href="<%=cp%>/board/free/list.do">자유게시판</a></li>
 		                <li><a href="#">자소서 관리</a></li>
 		            </ul>
 		        </div>
-		        <!-- //gnb -->
+		        <%-- //gnb --%>
 	    	<% } %>
-	        <!-- 회원 : 비로그인 -->
+	        <%-- 회원 : 비로그인 --%>
 	        <c:if test="${sessionScope.member.email == null}">
 	        <div class="userInfo">
 	            <ul>
@@ -55,8 +55,8 @@
 	            </ul>
 	        </div>
 	        </c:if>
-	        <!-- //회원 -->
-	        <!-- 회원 : 로그인 -->
+	        <%-- //회원 --%>
+	        <%-- 회원 : 로그인 --%>
 	        <c:if test="${sessionScope.member.email != null}">
 				<div class="userInfo_login">
 				    <ul>
@@ -68,6 +68,6 @@
 				    </ul>
 				</div> 
 	        </c:if>
-	        <!-- 회원 : 로그인 -->
+	        <%-- 회원 : 로그인 --%>
 	    </div>
 	</header>

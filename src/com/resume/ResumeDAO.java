@@ -87,9 +87,112 @@ public class ResumeDAO {
 		return list;
 	}
 	
-	
-	
-	
-	
+	public int insertResume(ResumeDTO dto) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		int resumeNum = -1;
+		try {
+			sql = "select resume_seq.nextval from dual";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				resumeNum = rs.getInt(1);
+			}
+			sql = "INSERT INTO resume(resumeCode,name,addr,gender,birth,title,userEmail) VALUES(?,?,?,?,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeNum);
+			pstmt.setString(2, dto.getName());
+			pstmt.setString(3, dto.getAddr());
+			pstmt.setString(4, dto.getGender());
+			pstmt.setString(5, dto.getBirth());
+			pstmt.setString(6, dto.getTitle());
+			pstmt.setString(7, dto.getUserEmail());
+			pstmt.executeUpdate();
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resumeNum;
+	}
+
+	public void insertLicense(LicenseDTO dto, int num) {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+			sql = "INSERT INTO license(licenseCode,resumeCode,licenseName,license_Date,license_Publisher) VALUES(license_seq.nextval,?,?,?,?)";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.setString(2, dto.getLicense_name());
+			pstmt.setString(3, dto.getLicense_date());
+			pstmt.setString(4, dto.getLicense_publisher());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void insertAwards(AwardsDTO dto,int num) {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+			sql = "INSERT INTO awards(awardsCode,resumeCode,awardsName,awards_date,awards_publisher) VALUES(awards_seq.nextval,?,?,?,?)";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.setString(2, dto.getAwardsName());
+			pstmt.setString(3, dto.getAwards_date());
+			pstmt.setString(4, dto.getAwards_publisher());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void insertEducation(EducationDTO dto, int num) {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+			sql = "INSERT INTO education(educationCode,resumeCode,schoolName,region,major,entrance,graduate,graduate_status,gubun) VALUES(education_seq.nextval,?,?,?,?,?,?,?,?)";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.setString(2, dto.getSchoolName());
+			pstmt.setString(3, dto.getRegion());
+			pstmt.setString(4, dto.getMajor());
+			pstmt.setString(5, dto.getEntrance());
+			pstmt.setString(6, dto.getGraduate());
+			pstmt.setString(7, dto.getGraduate_status());
+			pstmt.setInt(8, dto.getEducationCode());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void insertCareer(CareerDTO dto, int num) {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+			sql = "INSERT INTO career(careerCode,resumeCode,gubun,copName,joinDate,resignDate,task,position) VALUES(career_seq.nextval,?,?,?,?,?,?,?)";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.setString(2, dto.getGubun());
+			pstmt.setString(3, dto.getCopName());
+			pstmt.setString(4, dto.getJoinDate());
+			pstmt.setString(5, dto.getResignDate());
+			pstmt.setString(6, dto.getTask());
+			pstmt.setString(7, dto.getPosition());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

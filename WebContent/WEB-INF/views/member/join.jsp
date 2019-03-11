@@ -105,17 +105,17 @@
 	                        extraAddr = ' (' + extraAddr + ')';
 	                    }
 	                    // 조합된 참고항목을 해당 필드에 넣는다.
-	                    document.getElementById("extraAddress").value = extraAddr;
+	                    document.getElementById("company_extraAddress").value = extraAddr;
 	                
 	                } else {
-	                    document.getElementById("extraAddress").value = '';
+	                    document.getElementById("company_extraAddress").value = '';
 	                }
 
 	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-	                document.getElementById('postcode').value = data.zonecode;
-	                document.getElementById("address").value = addr;
+	                document.getElementById('company_postcode').value = data.zonecode;
+	                document.getElementById("company_address").value = addr;
 	                // 커서를 상세주소 필드로 이동한다.
-	                document.getElementById("detailAddress").focus();
+	                document.getElementById("company_detailAddress").focus();
 	            }
 	        }).open();
 	    }
@@ -124,15 +124,18 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap" class="login_wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         
         <!-- container -->
-        <div id="container" class="login_container">
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="register">
+            	<div class="contents_header_bg join top mb50">
+            		<div class="bg_black"></div>
+            	</div>
 				<ul class="tabmenu2 tabMotion">
 					<li class="on"><a href="#tabCon1">개인회원</a></li>
 					<li><a href="#tabCon2">회사회원</a></li>
@@ -140,7 +143,7 @@
 				<div id="tabCon1" class="tab_cont">
 					<form name="joinUser_form" method="post">
 						<fieldset>
-							<div class="box_login">
+							<div class="box_register">
 								<h3 class="title">회원가입</h3>
 								<div class="mt30">
 									<label for="txt_userEmail">이메일</label>
@@ -198,7 +201,7 @@
 								<div class="mt30">
 									<input type="hidden" name="status" value="1"/>
 									<input type="hidden" name="level" value="2"/>
-									<button type="button" class="btn_login" onclick="joinUser()">회원가입</button>
+									<button type="button" class="btn_register" onclick="joinUser()">회원가입</button>
 								</div>
 							</div>
 						</fieldset>
@@ -207,7 +210,7 @@
 				<div id="tabCon2" class="tab_cont">
 					<form name="joinCompany_form" method="post" enctype="multipart/form-data">
 						<fieldset>
-							<div class="box_login">
+							<div class="box_register">
 								<h3 class="title">회원가입</h3>
 								<div class="mt30">
 									<label for="txt_companyEmail">이메일</label>
@@ -265,8 +268,12 @@
 								</div>
 								<div class="mt30">
 									<label for="txt_location">위치(주소)</label>
-									<div>
-										<input type="text" name="location" id="txt_location" class="boxTf" autocomplete="off" autofocus/>
+									<div class="mt15">
+										<input type="text" id="company_postcode" name="postCode" class="boxTf" autocomplete="off" autofocus placeholder="우편번호" style="width:75%">
+										<input type="button" onclick="company_Postcode()" value="우편번호 찾기" class="btn btn-black" style="height:45px;margin-top:10px;margin-left:3px;"><br>
+										<input type="text" id="company_address" name="location" placeholder="주소" class="boxTf" autocomplete="off" autofocus/><br>
+										<input type="text" id="company_detailAddress" name="detailLocation" placeholder="상세주소" class="boxTf" autocomplete="off" autofocus/>
+										<input type="text" id="company_extraAddress" name="extraLocation" placeholder="참고항목" class="boxTf" autocomplete="off" autofocus/>
 									</div>
 								</div>
 								<div class="mt30">
@@ -302,7 +309,7 @@
 								<div class="mt30">
 									<input type="hidden" name="status" value="1"/>
 									<input type="hidden" name="level" value="1"/>
-									<button type="button" class="btn_login" onclick="joinCompany()">회원가입</button>
+									<button type="button" class="btn_register" onclick="joinCompany()">회원가입</button>
 								</div>
 							</div>
 						</fieldset>

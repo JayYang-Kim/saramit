@@ -242,5 +242,82 @@ public class Pass_boardDAO {
 		return list;
 	}
 	
+	//조회수 증가
+	public int updateHitCount(int num) {
+		int result=0;
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		sql= "UPDATE pass_resume SET hitCount=hitCount+1 WHERE num=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			result=pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	//해당 게시물 보기
+	public Pass_BoardDTO readBoard(int num) {
+		Pass_BoardDTO dto=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		StringBuffer sb=new StringBuffer();
+		
+		try {
+			sb.append("SELECT num, p.userEmail, title, companyName, field, content, gubun, created, hitCount");
+			sb.append("    FROM pass_resume p");
+			sb.append("    JOIN member_user m ON p.userEmail=m.useremail");
+			sb.append("    WHERE num=?");
+			
+			pstmt=conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, num);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new Pass_BoardDTO();
+				dto.setNum(rs.getInt("num"));
+				dto.setUserEmail(rs.getString("userEmail"));
+				dto.setTitle(rs.getString("title"));
+				dto.setCompanyName(rs.getString("companyName"));
+				dto.setField(rs.getString("field"));
+				dto.setContent(rs.getString("content"));
+				dto.setGubun(rs.getString("gubun"));
+				dto.setCreated(rs.getDate("created").toString());
+				dto.setHitCount(rs.getInt("hitCount"));
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+				
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+		
+		return dto;
+	}
+	
 	
 }

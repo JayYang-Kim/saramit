@@ -13,13 +13,12 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
-            <div style="height:61px"></div>
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
                 <div>
@@ -61,14 +60,14 @@
                             <div class="t_center">
                                 <h3>"야 너도 취업할 수 있어!! 취준생 당신을 응원합니다."</h3>
                                 <p>취준생 모두가 취업하는 그날까지</p>
-                                <a href="#" class="btn_classic btn-black mt20">나만의 이력서 작성</a>
+                                <a href="<%=cp%>/resume/created.do" class="btn_classic btn-black mt20">나만의 이력서 작성</a>
                             </div>
                         </div>
                     </div>
                     <div class="companyList list">
                         <div class="inner">
                             <div class="list">
-                                <h3>최신 회사정보</h3>
+                                <h3 class="mt20 mb20">최신 회사정보</h3>
                                 <ul>
                                   <c:forEach var="n" items="${recentCompanies}">
                                     <li class="item">
@@ -100,7 +99,7 @@
                     <div class="companyList new">
                         <div class="inner">
                             <div class="list">
-                                <h3>최신 회사정보</h3>
+                                <h3 class="mt20 mb20">최신 회사정보</h3>
                                 <ul>
                                     <li class="item">
                                         <div class="bg">
@@ -185,7 +184,7 @@
                     <div class="companyList top">
                         <div class="inner">
                             <div class="list">
-                                <h3>인기 회사정보</h3>
+                                <h3 class="mt20 mb20">인기 회사정보</h3>
                                 <ul>
                                     <li class="item">
                                         <div class="bg">

@@ -152,9 +152,7 @@ div {
             f.content4.focus();
             return;
         }
-
         
-
     	var mode="${mode}";
     	if(mode=="created")
     		f.action="<%=cp%>/companies/review_ok.do";
@@ -180,7 +178,7 @@ div {
 </script>
 </head>
 <body>
-<div id="wrap">
+<div id="wrap" class="tb_wrap">
 	<div class="cp_info_bg">
 		<div class="cp_info_logoBox">
 			<div class="cp_info_logo">
@@ -253,7 +251,8 @@ div {
 					<div class="t_center mt20 pb20">
 						<input type="hidden" name="email" value="${email}">
 						<button type="button" class="btn_classic btn-black">작성취소</button>
-						<button type="button" class="btn_classic btn-black ml20" onclick="sendReview();">${mode=='update'?'수정완료':'등록완료'}</button>
+						<button type="button" class="btn_classic btn-black ml20"
+							onclick="sendReview();">${mode=='update'?'수정완료':'등록완료'}</button>
 					</div>
 
 				</form>
