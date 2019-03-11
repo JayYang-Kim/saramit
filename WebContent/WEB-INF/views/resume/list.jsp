@@ -30,40 +30,38 @@
         <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
-                <div align="left" style="width:30%; margin:0 auto;">
+                <div align="center" style="width:30%; margin:0 auto;">
           <div>
           <form> 
            <h2>&nbsp; 이력서 관리</h2>   
            <br><br>  
-           <table border="1">
-           <tr>
-           	<td>
-         		<div>이력서 번호</div>
-         	</td>
-			<td>
-         		<div>이력서 제목</div>
-         	</td>
-           	<td>
-         		<div>작성일자</div>
-         	</td>         	      
-         </tr>
-         <tr>
-         	<td>
-         		<div>1</div>
-         	</td>
-         	<td>
-         		<div>2</div>
-         	</td>
-         	<td>
-         		<div>3</div>
-         	</td>         	         	
-         </tr>
+           <table  style="width: 700px; margin: 0px auto; border-spacing: 0px; border-collapse: collapse;">
+           	<tr align="center" bgcolor="#eeeeee" height="35" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc">
+      		<th width="60" style="color: #787878;">글 번호</th>
+      		<th style="color: #787878;">제목</th>
+		      <th width="80" style="color: #787878;">작성일자</th>
+		  	</tr>           		
+           	<c:forEach var="dto" items="${list}">
+           	<tr align="center" bgcolor="#ffffff" height="35" style="border-bottom: 1px solid #ffffff;">
+          		<td>${dto.userEmail}</td>        	
+ 				<td align="left" style="padding-left: 10px;">         	        
+            </td>
+            <tr>             
+	 			<td>글번호</td>
+	 			<td>제목</td>
+	 			<td>작성일자</td>
+ 			</tr>
+  			<tr>
+         		<td>${dto.resumeCode}</td>
+         		<td>${dto.title}</td>
+         		<td>${dto.created}</td>
+         	</tr>
+        	
+ 	
+         </c:forEach>	
        </table>
-          <br><br>
-          	
-          	
-          	
-
+         <br><br>
+             
           </form>  
           </div>
          <br><br> 

@@ -1,6 +1,7 @@
 package com.resume;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,11 +48,17 @@ public class ResumeServlet extends MyServlet {
 
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//req.setAttribute(name, o);
+		ResumeDAO dao = new ResumeDAO();
+		
+		List<ResumeDTO> list = dao.listResume();
+		
+		req.setAttribute("list", list);
+		
 		forward(req, resp, "/WEB-INF/views/resume/list.jsp");
 	}
 
 	protected void createdForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//¿Ã∑¬º≠ ¿€º∫∆˚
+		//Ïù¥Î†•ÏÑú ÏûëÏÑ±Ìèº
 		req.setAttribute("mode", "created");
 		HttpSession session =req.getSession();
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
@@ -63,7 +70,7 @@ public class ResumeServlet extends MyServlet {
 	}
 
 	protected void createdSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//¿Ã∑¬º≠ ¿€º∫øœ∑·
+		//Ïù¥Î†•ÏÑú ÏûëÏÑ±ÏôÑÎ£å
 		req.setCharacterEncoding("utf-8");
 		req.setAttribute("mode", "created_ok");
 		ResumeDAO dao=new ResumeDAO();
@@ -111,49 +118,50 @@ public class ResumeServlet extends MyServlet {
 		String[] carrerresignDate=req.getParameterValues("carrerresignDate");
 		if(gubun!=null && copName!=null && task!=null && position!=null && carrerjoinDate!=null && carrerresignDate!=null) {
 		for(int i=0;i<gubun.length;i++) {
-		CareerDTO dto_career=new CareerDTO();
-		dto_career.setGubun(req.getParameter("gubun"));
-		dto_career.setCopName(req.getParameter("copName"));
-		dto_career.setTask(req.getParameter("task"));
-		dto_career.setPosition(req.getParameter("position"));
-		dto_career.setJoinDate(req.getParameter("carrerjoinDate"));
-		dto_career.setResignDate(req.getParameter("carrerresignDate"));
-		dao.insertCareer(dto_career,rnum);
-		}	
-	}
+				CareerDTO dto_career=new CareerDTO();
+				dto_career.setGubun(req.getParameter("gubun"));
+				dto_career.setCopName(req.getParameter("copName"));
+				dto_career.setTask(req.getParameter("task"));
+				dto_career.setPosition(req.getParameter("position"));
+				dto_career.setJoinDate(req.getParameter("carrerjoinDate"));
+				dto_career.setResignDate(req.getParameter("carrerresignDate"));
+				dao.insertCareer(dto_career,rnum);
+			}	
+		}
 		
 		EducationDTO dto_education=new EducationDTO();
 		dto_education.setEducationCode(Integer.parseInt(req.getParameter("educationCode")));
 		dto_education.setSchoolName(req.getParameter("schoolName"));
+		System.out.println(req.getParameter("schoolName"));
 		dto_education.setRegion(req.getParameter("region"));
 		dto_education.setMajor(req.getParameter("major"));
 		dto_education.setEntrance(req.getParameter("entrance"));
 		dto_education.setGraduate(req.getParameter("graduate"));
 		dto_education.setGraduate_status(req.getParameter("graduate_status"));
 		System.out.println(rnum);
-		dao.insertEducation(dto_education,rnum);
+		//dao.insertEducation(dto_education,rnum);
 		
 		forward(req, resp, "/WEB-INF/views/resume/created_ok.jsp");
 	}
 
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//¿Ã∑¬º≠ ºˆ¡§
+		//Ïù¥Î†•ÏÑú ÏàòÏ†ï
 		forward(req, resp, "/WEB-INF/views/resume/created.jsp");
 	}
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//¿Ã∑¬º≠ ºˆ¡§øœ∑·
+		//Ïù¥Î†•ÏÑú ÏàòÏ†ïÏôÑÎ£å
 		String cp = req.getContextPath();
 		resp.sendRedirect(cp);
 	}
 
 	protected void view(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//¿Ã∑¬º≠ ∫∏±‚
+		//Ïù¥Î†•ÏÑú Î≥¥Í∏∞
 		forward(req, resp, "/WEB-INF/views/resume/created.jsp");
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//¿Ã∑¬º≠ªË¡¶
+		//Ïù¥Î†•ÏÑúÏÇ≠Ï†ú
 		String cp = req.getContextPath();
 		resp.sendRedirect(cp);
 	}

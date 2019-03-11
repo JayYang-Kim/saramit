@@ -15,7 +15,7 @@ public class ResumeDAO {
 		conn = DBConn.getConnection();
 	}
 	
-	//¸¶ÀÌÆäÀÌÁö¿ë ÀÌ·Â¼­ ÀÐ¾î¿À±â
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·Â¼ï¿½ ï¿½Ð¾ï¿½ï¿½ï¿½ï¿½
 	public List<ResumeDTO> readResume(String userEmail) {
 		List<ResumeDTO> list=new ArrayList<ResumeDTO>();
 		PreparedStatement pstmt=null;
@@ -75,6 +75,51 @@ public class ResumeDAO {
 				}
 			}
 			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		
+		
+		return list;
+	}
+	
+	public List<ResumeDTO> listResume() {
+		List<ResumeDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		
+		try {
+			sql = "SELECT userEmail, resumeCode, title, created FROM resume";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				ResumeDTO dto = new ResumeDTO();
+				dto.setUserEmail(rs.getString(1));
+				dto.setResumeCode(rs.getInt(2));
+				dto.setTitle(rs.getString(3));
+				dto.setCreated(rs.getDate(4).toString());
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (Exception e2) {
