@@ -8,7 +8,7 @@ public class BoardDTO {
 	private String subject;
 	private String content;
 	private int groupNum;
-	private int dept;
+	private int depth;
 	private int orderNum;
 	private int parent;
 	private String created;
@@ -56,11 +56,11 @@ public class BoardDTO {
 	public void setGroupNum(int groupNum) {
 		this.groupNum = groupNum;
 	}
-	public int getDept() {
-		return dept;
+	public int getDepth() {
+		return depth;
 	}
-	public void setDept(int dept) {
-		this.dept = dept;
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}
 	public int getOrderNum() {
 		return orderNum;

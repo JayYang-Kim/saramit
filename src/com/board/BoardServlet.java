@@ -206,6 +206,7 @@ public class BoardServlet extends MyServlet{
 		req.setAttribute("nextReadDto", nextReadDto);
 		req.setAttribute("query", query);
 		req.setAttribute("page", page);
+		req.setAttribute("mode", "reply");
 		
 		forward(req, resp, "/WEB-INF/views/board/article.jsp");
 	}
@@ -295,7 +296,52 @@ public class BoardServlet extends MyServlet{
 	protected void replySubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 답글 완료
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp + "/board/list.do");
+			return;
+		}
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		BoardDAO dao = new BoardDAO();
+		BoardDTO dto = new BoardDTO();
+		
+		String subject = "[" + req.getParameter("parent") + "] 답변";
+		
+		int boardNum = Integer.parseInt(req.getParameter("parent"));
+		String page = req.getParameter("page");
+		
+		dto.setSubject(subject);
+		
+		MyUtil util = new MyUtil();
+		dto.setContent(util.htmlSymbols(req.getParameter("content")));
+		
+		dto.setGroupNum(Integer.parseInt(req.getParameter("groupNum")));
+		dto.setOrderNum(Integer.parseInt(req.getParameter("orderNo")));
+		dto.setDepth(Integer.parseInt(req.getParameter("depth")));
+		dto.setParent(Integer.parseInt(req.getParameter("parent")));
+		
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if(searchKey == null) {
+			searchKey = "subject";
+			searchValue = "";
+		}
+		
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "page=" + page;
+		if(searchValue.length() != 0) {
+			query = "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		dto.setUserEmail(info.getEmail());
+		
+		dao.insertBoard(dto, "reply");
+		
+		resp.sendRedirect(cp + "/board/article.do?" + query + "&boardNum=" + boardNum);
 	}
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 삭제

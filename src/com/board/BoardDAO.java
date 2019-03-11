@@ -42,12 +42,12 @@ public class BoardDAO {
 			if(mode.equalsIgnoreCase("created")) {
 				dto.setGroupNum(seq);
 				dto.setOrderNum(0);
-				dto.setDept(0);
+				dto.setDepth(0);
 				dto.setParent(0);
 			} else if(mode.equalsIgnoreCase("reply")) {
 				updateOrderNo(dto.getGroupNum(), dto.getOrderNum());
 				
-				dto.setDept(dto.getDept() + 1);
+				dto.setDepth(dto.getDepth() + 1);
 				dto.setOrderNum(dto.getOrderNum() + 1);
 			}
 			
@@ -61,7 +61,7 @@ public class BoardDAO {
 			pstmt.setString(3, dto.getSubject());
 			pstmt.setString(4, dto.getContent());
 			pstmt.setInt(5, dto.getGroupNum());
-			pstmt.setInt(6, dto.getDept());
+			pstmt.setInt(6, dto.getDepth());
 			pstmt.setInt(7, dto.getOrderNum());
 			pstmt.setInt(8, dto.getParent());
 			
@@ -92,7 +92,7 @@ public class BoardDAO {
 		String sql = null;
 		
 		try {
-			sql = "UPDATE board SET order = orderNo + 1 WHERE groupNum ? AND orderNo > ?";
+			sql = "UPDATE feedback SET orderNo = orderNo + 1 WHERE groupNum = ? AND orderNo > ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -142,7 +142,7 @@ public class BoardDAO {
 				dto.setSubject(rs.getString("subject"));
 				dto.setContent(rs.getString("content"));
 				dto.setGroupNum(rs.getInt("groupNum"));
-				dto.setDept(rs.getInt("depth"));
+				dto.setDepth(rs.getInt("depth"));
 				dto.setOrderNum(rs.getInt("orderNo"));
 				dto.setParent(rs.getInt("parent"));
 				dto.setCreated(rs.getDate("created").toString());
@@ -178,7 +178,7 @@ public class BoardDAO {
 		String sql = null;
 				
 		try {
-			sql = "SELECT NVL(COUNT(*), 0) FROM feedback";
+			sql = "SELECT NVL(COUNT(*), 0) FROM feedback WHERE orderNo = 0";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -219,11 +219,11 @@ public class BoardDAO {
 		try {
 			if(searchKey.equals("created")) {
         		searchValue = searchValue.replaceAll("-", "");
-        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE TO_CHAR(created, 'YYYYMMDD') = ? ";
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE TO_CHAR(created, 'YYYYMMDD') = ? AND orderNo = 0 ";
         	} else if(searchKey.equals("userName")) {
-        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(userName, ?) = 1 ";
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(userName, ?) = 1 AND orderNo = 0 ";
         	} else {
-        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(" + searchKey + ", ?) >= 1 ";
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(" + searchKey + ", ?) >= 1 AND orderNo = 0 ";
         	}
 			
 			pstmt = conn.prepareStatement(sql);
@@ -271,6 +271,7 @@ public class BoardDAO {
 			sb.append("        FROM feedback b");
 			sb.append("        JOIN member_user mu"); 
 			sb.append("        ON b.userEmail = mu.userEmail");
+			sb.append("        WHERE orderNo = 0");
 			sb.append("        ORDER BY groupNum DESC, orderNo ASC");
 			sb.append("    ) tb WHERE ROWNUM <= ?");
 			sb.append(") WHERE rnum >= ?");
@@ -289,7 +290,7 @@ public class BoardDAO {
 				dto.setUserName(rs.getString("userName"));
 				dto.setSubject(rs.getString("subject"));
 				dto.setGroupNum(rs.getInt("groupNum"));
-				dto.setDept(rs.getInt("depth"));
+				dto.setDepth(rs.getInt("depth"));
 				dto.setOrderNum(rs.getInt("orderNo"));
 				dto.setHitCount(rs.getInt("hitCount"));
 				dto.setCreated(rs.getDate("created").toString());
@@ -360,7 +361,7 @@ public class BoardDAO {
 				dto.setUserName(rs.getString("userName"));
 				dto.setSubject(rs.getString("subject"));
 				dto.setGroupNum(rs.getInt("groupNum"));
-				dto.setDept(rs.getInt("depth"));
+				dto.setDepth(rs.getInt("depth"));
 				dto.setOrderNum(rs.getInt("orderNo"));
 				dto.setHitCount(rs.getInt("hitCount"));
 				dto.setCreated(rs.getDate("created").toString());

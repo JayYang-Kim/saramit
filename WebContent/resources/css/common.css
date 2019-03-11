@@ -412,7 +412,7 @@ input[type="text"], input[type="password"],input[type="search"],select, option{c
 /* .tb_kakao tbody th, .tb_kakao tbody td{border-top:1px solid #e6e6e6;} */
 .tb_kakao tbody th:first-child, .tb_kakao tbody td:first-child{border-left:none;}
 /* .tb_kakao thead th{border-left:1px solid #c3b9b9;} */
-.tb_kakao tbody td.txt_overflow{display:block;width:500px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
+.tb_kakao tbody td.txt_overflow{display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
 .tb_kakao.big th, .tb_kakao.big td{padding:20px 15px;}
 
 /* Table_row_style */
