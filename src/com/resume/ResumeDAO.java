@@ -15,7 +15,7 @@ public class ResumeDAO {
 		conn = DBConn.getConnection();
 	}
 	
-	//������������ �̷¼� �о����
+	//마이페이지용 이력서 읽어오기
 	public List<ResumeDTO> readResume(String userEmail) {
 		List<ResumeDTO> list=new ArrayList<ResumeDTO>();
 		PreparedStatement pstmt=null;
@@ -87,16 +87,24 @@ public class ResumeDAO {
 		return list;
 	}
 	
-	public List<ResumeDTO> listResume() {
+	
+	
+	
+	
+	public List<ResumeDTO> listResume(int start,int end) {
 		List<ResumeDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = null;
+		StringBuffer sb=new StringBuffer();
 		
 		try {
-			sql = "SELECT userEmail, resumeCode, title, created FROM resume";
-			
-			pstmt = conn.prepareStatement(sql);
+			sb.append("select * from(");
+			sb.append("select tb.*,rownum rnum from(");
+			sb.append("SELECT userEmail, resumeCode, title, created FROM resume ORDER BY created DESC");
+			sb.append(")tb where rownum<="+end);
+			sb.append(") where rnum>="+start);
+
+			pstmt = conn.prepareStatement(sb.toString());
 			
 			rs = pstmt.executeQuery();
 			
@@ -109,7 +117,7 @@ public class ResumeDAO {
 				list.add(dto);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		} finally {
 			if(rs != null) {
 				try {
@@ -143,7 +151,8 @@ public class ResumeDAO {
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				resumeNum = rs.getInt(1);
-			}
+			} 
+			pstmt.close();
 			sql = "INSERT INTO resume(resumeCode,name,addr,gender,birth,title,userEmail) VALUES(?,?,?,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, resumeNum);
@@ -157,6 +166,22 @@ public class ResumeDAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
 		}
 		
 		return resumeNum;
@@ -177,13 +202,21 @@ public class ResumeDAO {
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
 		}
 	}
 
 	public void insertAwards(AwardsDTO dto,int num) {
 		PreparedStatement pstmt = null;
 		String sql;
-
 		try {
 			sql = "INSERT INTO awards(awardsCode,resumeCode,awardsName,awards_date,awards_publisher) VALUES(awards_seq.nextval,?,?,?,?)";
 
@@ -238,6 +271,177 @@ public class ResumeDAO {
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
 		}
+	}
+
+	public int totData() {
+		int result=0;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql;
+		
+		try {
+			sql="select nvl(count(*),0) from resume ";
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result=rs.getInt(1); //여기서 1은 nvl(count(*),0) 뜻함. 데이터중 맨 처음거임.
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		return result;
+	}
+	
+	public ResumeDTO readResume(int resumeCode) {//이력서 코드로 이력서 하나 읽어오기
+		ResumeDTO dto=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql;
+		
+		try {
+			sql="SELECT userEmail, resumeCode, title, created FROM resume";
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new ResumeDTO();
+				dto.setUserEmail(rs.getString(1));
+				dto.setResumeCode(rs.getInt(2));
+				dto.setTitle(rs.getString(3));
+				dto.setCreated(rs.getString(4));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		return dto;
+	}
+	public EducationDTO readEducation(int resumeCode) {//이력서 코드로 이력서 하나 읽어오기
+		EducationDTO dto=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql;
+		
+		try {
+			sql="SELECT EducationCode, SchoolName, Region, Major, Entrance, Graduate, Graduate_Status, Gubun FROM Education WHERE ResumeCode=?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new EducationDTO();
+				dto.setEducationCode(rs.getInt(1));
+				dto.setSchoolName(rs.getString(2));
+				dto.setRegion(rs.getString(3));
+				dto.setMajor(rs.getString(4));
+				dto.setEntrance(rs.getString(5));
+				dto.setGraduate(rs.getString(6));
+				dto.setGraduate_status(rs.getString(7));
+				dto.setGubun(rs.getString(8));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		return dto;
+	}
+	
+	public List<AwardsDTO> readAwards(int resumeCode) {//이력서 코드로 이력서 하나 읽어오기
+		List<AwardsDTO> list = new ArrayList<AwardsDTO>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql;
+		
+		try {
+			sql="SELECT awardscode, awardsname, awards_date, awards_publisher from awards WHERE ResumeCode=?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				AwardsDTO dto = new AwardsDTO();
+				dto.setAwardsCode(rs.getInt(1));
+				dto.setAwardsName(rs.getString(2));
+				dto.setAwards_date(rs.getString(3));
+				dto.setAwards_publisher(rs.getString(4));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		return list;
 	}
 }

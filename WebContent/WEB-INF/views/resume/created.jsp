@@ -94,7 +94,7 @@
           <br><br>
            <h2>&nbsp;이력서 작성</h2>  
            
-           <input type="text" name="title" style="width: 80%; margin:10px 5px 10px; " placeholder="이력서 제목 작성">
+           <input type="text" name="title" style="width: 50%; margin:10px 5px 10px; " placeholder="이력서 제목 작성">
            <br> 
            <h3>&nbsp;| 개인 정보</h3>
            <br>

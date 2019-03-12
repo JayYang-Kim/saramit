@@ -15,6 +15,8 @@
 	}
 	form{
 		background-color: #FFFFFF;
+		min-height: 700px;
+		margin-top: 40px;
 	}
 	
 	</style>
@@ -30,42 +32,38 @@
         <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
-                <div align="center" style="width:30%; margin:0 auto;">
-          <div>
-          <form> 
-           <h2>&nbsp; 이력서 관리</h2>   
-           <br><br>  
-           <table  style="width: 700px; margin: 0px auto; border-spacing: 0px; border-collapse: collapse;">
-           	<tr align="center" bgcolor="#eeeeee" height="35" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc">
-      		<th width="60" style="color: #787878;">글 번호</th>
-      		<th style="color: #787878;">제목</th>
-		      <th width="80" style="color: #787878;">작성일자</th>
-		  	</tr>           		
-           	<c:forEach var="dto" items="${list}">
-           	<tr align="center" bgcolor="#ffffff" height="35" style="border-bottom: 1px solid #ffffff;">
-          		<td>${dto.userEmail}</td>        	
- 				<td align="left" style="padding-left: 10px;">         	        
-            </td>
-            <tr>             
-	 			<td>글번호</td>
-	 			<td>제목</td>
-	 			<td>작성일자</td>
- 			</tr>
-  			<tr>
-         		<td>${dto.resumeCode}</td>
-         		<td>${dto.title}</td>
-         		<td>${dto.created}</td>
-         	</tr>
-        	
- 	
-         </c:forEach>	
-       </table>
-         <br><br>
-             
-          </form>  
-          </div>
-         <br><br> 
-        </div>      
+	          <div align="center" style="min-height:750px; width:40%; margin:0 auto;">
+	          <div>
+	          <form> 
+	          <br><br>
+	           <h2 style="margin-top: 40px">&nbsp; 이력서 관리</h2>   
+	           <br><br>  
+	           <table  style="width: 750px; margin: 0px auto; border-spacing: 0px; border-collapse: collapse; text-align: center;">
+	           	<tr align="center" bgcolor="#eeeeee" height="35px" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc">
+	      		<th width="100px" style="color: #787878;">글 번호</th>
+	      		<th style="color: #787878;">제목</th>
+			      <th width="150px" style="color: #787878;">작성일자</th>
+			      <th width="200px" style="color: #787878;">기능</th>
+			  	</tr>        		  		
+	  		<c:forEach var="dto" items="${list}">
+	  			<tr height="35px" style="border-bottom: 1px solid #e4e4e4;">
+	       		<td >${dto.listNum}</td>
+	         		<td><a href="<%=cp%>/resume/view.do?resumeCode=${dto.resumeCode}">${dto.title}</a></td>
+	         		<td>${dto.created}</td>
+	         		<td>
+	         			<button class="btn btn-white" type="button" style="width: 95px; height: 35px;" onclick="location.href=delete.jsp">삭제</button>
+	         		</td>
+	         	</tr>
+	         </c:forEach>
+	         	
+	       </table>
+	         <div align="center" style="margin-top: 15px;"><p>${paging}</p></div>
+	         <br>
+	             <a href="<%=cp%>/resume/created.do" class="btn_classic btn-black mt20">이력서 작성</a>
+	          </form>  
+	          </div>
+	         <br><br> 
+	        </div>      
             </div>             
                        
                 
