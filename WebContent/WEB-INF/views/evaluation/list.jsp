@@ -35,7 +35,7 @@
             	</div>
                 <div class="inner">
                 	<div class="pageTitle mt30 pb10">
-                  		<h3>이거 회사평가 게시글이다</h3>
+                  		<h3>회사평가 </h3>
                   	</div>
                   	<%-- <div style="height:50px; margin: 30px auto;">
                   		<form name="searchForm" action="<%=cp%>/companies/listReview.do" method="post">
@@ -86,8 +86,7 @@
 	                  		<tbody>
 	                  			<c:forEach var="dto" items="${list}">
 		                  			<tr align="center" height="35" style="border-bottom: 1px solid #cccccc;" onclick="location.href='${articleUrl}&boardNum=${dto.boardNum}'">
-			                  			<td>${dto.boardNum}</td>
-			                  			<!--<td><a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.cop_name}</a></td>-->
+			                  			<td>${dto.listNum}</td>
 			                  			<td>${dto.cop_name}</td>
 			                  			<td>${dto.created}</td>
 			                  			<!-- <td>조회수</td> -->

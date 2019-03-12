@@ -127,28 +127,28 @@ div {
 
     	var str = f.content1.value;
         if(!str) {
-            alert("content1을 입력하세요. ");
+            alert("기업한줄평을 입력하세요. ");
             f.content1.focus();
             return;
         }
         
         var str = f.content2.value;
         if(!str) {
-            alert("content2을 입력하세요. ");
+            alert("기업의 장점을 입력하세요. ");
             f.content2.focus();
             return;
         }
         
         var str = f.content3.value;
         if(!str) {
-            alert("content3을 입력하세요. ");
+            alert("기업의 단점을 입력하세요. ");
             f.content3.focus();
             return;
         }
         
         var str = f.content4.value;
         if(!str) {
-            alert("content4을 입력하세요. ");
+            alert("경영진에 바라는 점을 입력하세요. ");
             f.content4.focus();
             return;
         }
@@ -172,8 +172,8 @@ div {
 
 			var s = $(".star .on").length;
 			$("#score").val(s);
-
 		});
+		
 	});
 </script>
 </head>
@@ -206,13 +206,26 @@ div {
 					<div class="t_center mt30">
 						<span style="display: inline-block; width: 20%;">기업 총 평점</span>
 						<div class="p30" style="display: inline-block; width: 70%;">
-							<p class="star">
+						<c:if test="${dto.star==null}">
+							<p class="star">					  
 								<a href="#">★</a> 
 								<a href="#">★</a> 
 								<a href="#">★</a> 
 								<a href="#">★</a> 
 								<a href="#">★</a>
 							</p>
+						</c:if>
+						<c:if test="${dto.star!=null}">
+						<p class="star">
+							<c:forEach var="dto" begin="1" end="${dto.star}">
+								<a class="on" href="#">★</a> 
+							</c:forEach>
+							<c:forEach var="dto" begin="1" end="${5-dto.star}">
+							
+								<a href="#">★</a> 
+							</c:forEach>
+						</p>
+						</c:if>
 						</div>
 
 
@@ -249,10 +262,27 @@ div {
 
 
 					<div class="t_center mt20 pb20">
+						<c:if test="${mode=='created'}">
 						<input type="hidden" name="email" value="${email}">
-						<button type="button" class="btn_classic btn-black">작성취소</button>
-						<button type="button" class="btn_classic btn-black ml20"
-							onclick="sendReview();">${mode=='update'?'수정완료':'등록완료'}</button>
+						</c:if>
+						<c:if test="${mode=='update'}">
+						<input type="hidden" name="email" value="${dto.companyEmail}">
+						</c:if>
+						<c:if test="${mode=='created'}">
+						<button type="button" class="btn_classic btn-black" onclick="javascript:location.href='<%=cp%>/companies/info.do?email=${email}';">작성취소</button>
+							
+						</c:if>
+						<c:if test="${mode=='update'}">
+						<button type="button" class="btn_classic btn-black" onclick="javascript:location.href='<%=cp%>/companies/articleReview.do?boardNum=${dto.boardNum}&page=${page}';">작성취소</button>
+						</c:if>
+						
+						<c:if test="${mode=='update'}">
+			         	   <input type="hidden" name="boardNum" value="${dto.boardNum}">
+			        	   <input type="hidden" name="page" value="${page}">
+			        	</c:if>
+			        	
+						<button type="button" class="btn_classic btn-black ml20" onclick="sendReview();">${mode=='update'?'수정완료':'등록완료'}</button>
+						
 					</div>
 
 				</form>
