@@ -16,11 +16,7 @@
     			location.href = url;
     		}
     	}
-    	
-    	function listPage(page) {
-    		
-    	}
-    	
+
     	function reply_send() {
     		var content = $("#reply_content").val().trim();
     		
@@ -32,7 +28,7 @@
     			$("#reply_content").next(".message").hide();
     		}
     		
-    		var url = "<%=cp%>/board/reply_insert.do";
+    		var url = "<%=cp%>/board/replyInsert.do";
     		var query = $("form[name=guestForm]").serialize();
     		
     		$.ajax({
@@ -60,7 +56,7 @@
     	}
     	
     	function listPage(page) {
-    		var url = "<%=cp%>/board/reply_list.do";
+    		var url = "<%=cp%>/board/replyList.do";
     		var query = "boardNum=${dto.boardNum}&page=" + page;
     		
     		$.ajax({
@@ -187,67 +183,6 @@
                 			<div id="listReply"></div>
                 		</div>
                 	</div>
-                	<%-- <form name="feedback_form" method="post">
-                		<div class="mt15 mb15">
-	                		<table class="tb_kakao_row big">
-	                			<colgroup>
-	                				<col style="width:20%">
-	                				<col style="width:30%">
-	                				<col style="width:20%">
-	                				<col style="width:30%">
-	                			</colgroup>
-	                			<tr>
-	                				<th>제목</th>
-	                				<td colspan="3">${dto.subject}</td>
-	                			</tr>
-	                			<tr>
-	                				<th>작성자</th>
-	                				<td>${dto.userName}</td>
-	                				<th>이메일</th>
-	                				<td>${dto.userEmail}</td>
-	                			</tr>
-	                			<tr>
-	                				<th>작성일</th>
-	                				<td>${dto.created}</td>
-	                				<th>조회수</th>
-	                				<td>${dto.hitCount}</td>
-	                			</tr>
-	                			<tr>
-	                				<th>내용</th>
-	                				<td colspan="3" style="height:480px;vertical-align:top;">
-	                					${dto.content}
-	                				</td>
-	                			</tr>
-	                		</table>
-	                	</div>
-	                	<!-- 답변 -->
-	                	<div class="">
-	                		
-	                	</div>
-	                	<div class="mt20 mb20">
-	                		<c:if test="${empty preReadDto}">
-	                			<button type="button" class="btn_classic btn-lightGray" style="color:#d6d6d6;" disabled="disabled">이전</button>
-	                		</c:if>
-	                		<c:if test="${not empty preReadDto}">
-	                			<button type="button" class="btn_classic btn-lightGray" onclick="location.href='<%=cp%>/board/article.do?boardNum=${preReadDto.boardNum}&${query}'">이전</button>
-	                		</c:if>
-	                		<c:if test="${empty nextReadDto}">
-	                			<button type="button" class="btn_classic btn-lightGray" style="color:#d6d6d6;" disabled="disabled">다음</button>
-	                		</c:if>
-	                		<c:if test="${not empty nextReadDto}">
-	                			<button type="button" class="btn_classic btn-lightGray" onclick="location.href='<%=cp%>/board/article.do?boardNum=${nextReadDto.boardNum}&${query}'">다음</button>
-	                		</c:if>
-	                		<c:if test="${sessionScope.member.email == dto.userEmail || sessionScope.member.email == 'admin'}">
-								<button type="button" class="btn_classic btn-red" style="float:right;" onclick="deleteBoard('${dto.boardNum}');">삭제하기</button>
-							</c:if>
-	                		<c:if test="${sessionScope.member.email == dto.userEmail}">
-								<button type="button" class="btn_classic btn-white mr5" style="float:right;" onclick="javascript:location.href='<%=cp%>/board/update.do?boardNum=${dto.boardNum}&${query}';">수정하기</button>
-							</c:if>
-							<c:if test="${sessionScope.member.email != dto.userEmail}">
-	                		<button type="button" class="btn_classic btn-black" style="float:right;" onclick="location.href='<%=cp%>/board/list.do?${query}'">목록보기</button>
-	                		</c:if>
-	                	</div>
-                	</form> --%>
                 </div>
             </div>
             <!-- //contents -->

@@ -25,12 +25,19 @@ public class BoardServlet extends MyServlet{
 	@Override
 	protected void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
+		
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
-		String cp = req.getContextPath();
+		// AJAX에서 로그인이 안된 경우 403이라는 에러 코드를 던진다.
+		String header = req.getHeader("AJAX");
+		if(header != null && header.equals("true") && info == null) {
+			resp.sendError(403);
+			return;
+		}
+		
 		if(info == null) {
-			resp.sendRedirect(cp + "/member/login.do");
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 			return;
 		}
 		
@@ -48,9 +55,9 @@ public class BoardServlet extends MyServlet{
 			updateForm(req, resp);
 		}else if(uri.indexOf("update_ok.do") != -1) {
 			updateSubmit(req, resp);
-		}else if(uri.indexOf("reply_list.do") != -1){
+		}else if(uri.indexOf("replyList.do") != -1){
 			replyList(req, resp);
-		}else if(uri.indexOf("reply_insert.do") != -1){
+		}else if(uri.indexOf("replyInsert.do") != -1){
 			replySubmit(req, resp);
 		}else if(uri.indexOf("delete.do") != -1){
 			delete(req, resp);
@@ -325,7 +332,7 @@ public class BoardServlet extends MyServlet{
 			dto.setContent(util.htmlSymbols(dto.getContent()));
 		}
 		
-		String paging = util.paging(current_page, total_page, "listPage");
+		String paging = util.pagingMethod(current_page, total_page, "listPage");
 		
 		req.setAttribute("list", list);
 		req.setAttribute("pageNo", current_page);
