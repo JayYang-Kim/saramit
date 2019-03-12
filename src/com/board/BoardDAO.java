@@ -3,6 +3,7 @@ package com.board;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +82,35 @@ public class BoardDAO {
 					pstmt.close();
 				} catch (Exception e2) {
 					
+				}
+			}
+		}
+	}
+	
+	public void insertReply(FeedBack_ReplyDTO dto) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "INSERT INTO feedback_reply(replyNum, boardNum, email, content, answer) "
+					+ "VALUES(feedback_reply_seq.NEXTVAL, ?, ?, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, dto.getBoardNum());
+			pstmt.setString(2, dto.getEmail());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setInt(4, dto.getAnswer());
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+
 				}
 			}
 		}
@@ -178,7 +208,7 @@ public class BoardDAO {
 		String sql = null;
 				
 		try {
-			sql = "SELECT NVL(COUNT(*), 0) FROM feedback WHERE orderNo = 0";
+			sql = "SELECT NVL(COUNT(*), 0) FROM feedback";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -210,6 +240,47 @@ public class BoardDAO {
 		return result;
 	}
 	
+	public int dataCountReply(int boardNum) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		
+		try {
+			sql = "SELECT NVL(COUNT(*), 0) FROM feedback_reply WHERE boardNum = ? AND answer = 0";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 	public int dataCount(String searchKey, String searchValue) {
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -219,11 +290,11 @@ public class BoardDAO {
 		try {
 			if(searchKey.equals("created")) {
         		searchValue = searchValue.replaceAll("-", "");
-        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE TO_CHAR(created, 'YYYYMMDD') = ? AND orderNo = 0 ";
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE TO_CHAR(created, 'YYYYMMDD') = ? ";
         	} else if(searchKey.equals("userName")) {
-        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(userName, ?) = 1 AND orderNo = 0 ";
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(userName, ?) = 1 ";
         	} else {
-        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(" + searchKey + ", ?) >= 1 AND orderNo = 0 ";
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(" + searchKey + ", ?) >= 1 ";
         	}
 			
 			pstmt = conn.prepareStatement(sql);
@@ -271,7 +342,6 @@ public class BoardDAO {
 			sb.append("        FROM feedback b");
 			sb.append("        JOIN member_user mu"); 
 			sb.append("        ON b.userEmail = mu.userEmail");
-			sb.append("        WHERE orderNo = 0");
 			sb.append("        ORDER BY groupNum DESC, orderNo ASC");
 			sb.append("    ) tb WHERE ROWNUM <= ?");
 			sb.append(") WHERE rnum >= ?");
@@ -389,6 +459,62 @@ public class BoardDAO {
 			}
 		}
 		
+		return list;
+	}
+	
+	public List<FeedBack_ReplyDTO> listReply(int boardNum, int start, int end) {
+		List<FeedBack_ReplyDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {	
+			sb.append("SELECT * FROM (");
+			sb.append("		SELECT ROWNUM rnum, tb.* FROM (");
+			sb.append("				SELECT replyNum, boardNum, email, mu.userName, content, created");
+			sb.append("				FROM feedback_reply fr");
+			sb.append("				JOIN member_user mu");
+			sb.append("				ON fr.email = mu.userEmail");
+			sb.append("				WHERE fr.boardNum = ?  AND fr.answer = 0");
+			sb.append("				ORDER BY fr.replyNum DESC");
+			sb.append("		) tb WHERE ROWNUM <= ?");
+			sb.append(") WHERE rnum >= ?");
+
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, boardNum);
+			pstmt.setInt(2, end);
+			pstmt.setInt(3, start);
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				FeedBack_ReplyDTO dto = new FeedBack_ReplyDTO();
+				
+				dto.setReplyNum(rs.getInt("replyNum"));
+				dto.setBoardNum(rs.getInt("boardNum"));
+				dto.setEmail(rs.getString("email"));
+				dto.setContent(rs.getString("content"));
+				dto.setCreated(rs.getDate("created").toString());
+				
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+				
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
 		return list;
 	}
 	

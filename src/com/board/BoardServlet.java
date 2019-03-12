@@ -1,6 +1,7 @@
 package com.board;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import com.main.SessionInfo;
 import com.util.MyServlet;
 import com.util.MyUtil;
+
+import net.sf.json.JSONObject;
 @WebServlet("/board/*")
 public class BoardServlet extends MyServlet{
 	private static final long serialVersionUID = 1L;
@@ -45,9 +48,9 @@ public class BoardServlet extends MyServlet{
 			updateForm(req, resp);
 		}else if(uri.indexOf("update_ok.do") != -1) {
 			updateSubmit(req, resp);
-		}else if(uri.indexOf("reply.do") != -1){
-			replyForm(req, resp);
-		}else if(uri.indexOf("reply_ok.do") != -1){
+		}else if(uri.indexOf("reply_list.do") != -1){
+			replyList(req, resp);
+		}else if(uri.indexOf("reply_insert.do") != -1){
 			replySubmit(req, resp);
 		}else if(uri.indexOf("delete.do") != -1){
 			delete(req, resp);
@@ -289,59 +292,77 @@ public class BoardServlet extends MyServlet{
 		
 		resp.sendRedirect(cp + "/board/article.do?boardNum=" + boardNum +"&" + query);
 	}
-	protected void replyForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//답글 폼
-		forward(req, resp, "/WEB-INF/views/board/created.jsp");
-	}
-	protected void replySubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 답글 완료
-		String cp = req.getContextPath();
+	protected void replyList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//답글 리스트 (AJAX)
+		BoardDAO dao = new BoardDAO();
+		MyUtil util = new MyUtil();
 		
-		if(req.getMethod().equalsIgnoreCase("GET")) {
-			resp.sendRedirect(cp + "/board/list.do");
-			return;
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+		int current_page = 1;
+		String pageNo = req.getParameter("page");
+		
+		if(pageNo != null) {
+			current_page = Integer.parseInt(pageNo);
 		}
 		
+		int rows = 5;
+		int total_page = 0;
+		int replyCount = 0;
+		
+		replyCount = dao.dataCountReply(boardNum);
+		total_page = util.pageCount(rows, replyCount);
+		
+		if(current_page > total_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		
+		List<FeedBack_ReplyDTO> list = dao.listReply(boardNum, start, end);
+		
+		for(FeedBack_ReplyDTO dto : list) {
+			dto.setContent(util.htmlSymbols(dto.getContent()));
+		}
+		
+		String paging = util.paging(current_page, total_page, "listPage");
+		
+		req.setAttribute("list", list);
+		req.setAttribute("pageNo", current_page);
+		req.setAttribute("replyCount", replyCount);
+		req.setAttribute("total_page", total_page);
+		req.setAttribute("paging", paging);
+		
+		forward(req, resp, "/WEB-INF/views/board/listReply.jsp");
+	}
+	protected void replySubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 답글 등록(AJAX)
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
-		BoardDAO dao = new BoardDAO();
-		BoardDTO dto = new BoardDTO();
+		String state = "true";
 		
-		String subject = "[" + req.getParameter("parent") + "] 답변";
-		
-		int boardNum = Integer.parseInt(req.getParameter("parent"));
-		String page = req.getParameter("page");
-		
-		dto.setSubject(subject);
-		
-		MyUtil util = new MyUtil();
-		dto.setContent(util.htmlSymbols(req.getParameter("content")));
-		
-		dto.setGroupNum(Integer.parseInt(req.getParameter("groupNum")));
-		dto.setOrderNum(Integer.parseInt(req.getParameter("orderNo")));
-		dto.setDepth(Integer.parseInt(req.getParameter("depth")));
-		dto.setParent(Integer.parseInt(req.getParameter("parent")));
-		
-		String searchKey = req.getParameter("searchKey");
-		String searchValue = req.getParameter("searchValue");
-		if(searchKey == null) {
-			searchKey = "subject";
-			searchValue = "";
+		if(info == null) {
+			state = "loginFail";
+		} else {
+			BoardDAO dao = new BoardDAO();
+			FeedBack_ReplyDTO dto = new FeedBack_ReplyDTO();
+			
+			dto.setEmail(info.getEmail());
+			dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
+			dto.setAnswer(Integer.parseInt(req.getParameter("answer")));
+			dto.setContent(req.getParameter("reply_content"));
+			
+			dao.insertReply(dto);
 		}
 		
-		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		JSONObject job = new JSONObject();
+		job.put("state", state);
 		
-		String query = "page=" + page;
-		if(searchValue.length() != 0) {
-			query = "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
-		}
-		
-		dto.setUserEmail(info.getEmail());
-		
-		dao.insertBoard(dto, "reply");
-		
-		resp.sendRedirect(cp + "/board/article.do?" + query + "&boardNum=" + boardNum);
+		// json으로 결과 전송
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
 	}
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 삭제

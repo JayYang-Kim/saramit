@@ -17,28 +17,23 @@
     		}
     	}
     	
-    	<%-- function guest_send() {
-    		var f = document.guestForm;
+    	function listPage(page) {
     		
-    		f.action = "<%=cp%>/board/reply_ok.do";
-    		f.submit();
-    	} --%>
+    	}
     	
-    	function guest_send() {
-    		var uEmail = "${sessionmScope.member.userEmail}";
+    	function reply_send() {
+    		var content = $("#reply_content").val().trim();
     		
-    		if(!uEmail) {
-    			location.href = "<%=cp%>/member/login.do";
-    			return;
+    		if(!content) {
+    			$("#reply_content").focus().css("outline-color","#df4442");
+				$("#reply_content").next(".message").html("* 내용를 입력해주세요.").show();
+				return;
+    		} else {
+    			$("#reply_content").next(".message").hide();
     		}
     		
-    		if(!$("#content").val().trim()) {
-    			$("#content").focus();
-    			return;
-    		}
-    		
-    		var query= $("form[name=guestForm]").serialize();
-    		var url = "<%=cp%>/board/reply_ok.do";
+    		var url = "<%=cp%>/board/reply_insert.do";
+    		var query = $("form[name=guestForm]").serialize();
     		
     		$.ajax({
     			type : "post",
@@ -46,23 +41,53 @@
     			data : query,
     			dataType : "json",
     			success : function(data) {
-    				var state = data.state;
+    				listPage(1);
     				
-    				if(state == "loginFail") {
+    				$("#reply_content").val("");
+    			},
+    			beforeSend : function(jqXHR) {
+    				jqXHR.setRequestHeader("AJAX", true);
+    			},
+    			error : function(e) {
+    				if(e.status == 403) {
     					location.href = "<%=cp%>/member/login.do";
     					return;
     				}
     				
-    				$("#content").val("");
-    				
-    				listPage(1);
-    			},
-    			error : function(e) {
     				console.log(e.responseText);
     			}
     		});
-    		
     	}
+    	
+    	function listPage(page) {
+    		var url = "<%=cp%>/board/reply_list.do";
+    		var query = "boardNum=${dto.boardNum}&page=" + page;
+    		
+    		$.ajax({
+    			type : "get",
+    			url : url,
+    			data : query,
+    			success : function(data) {
+    				$("#listReply").html(data);
+    			},
+    			beforeSend : function(jqXHR) {
+    				jqXHR.setRequestHeader("AJAX", true);
+    			},
+    			error : function(e) {
+    				if(e.status == 403) {
+    					location.href = "<%=cp%>/member/login.do";
+    					return;
+    				}
+    				
+    				console.log(e.responseText);
+    			}
+    		});
+    	}
+    	
+    	jQuery(function(){
+    		$(".message").hide();
+    		listPage(1);
+    	});
     </script>
 </head>
 
@@ -147,24 +172,19 @@
                 		</div>
                 		<div>
                 			<form name="guestForm" method="post">
-	               				<c:if test="${mode=='reply'}">
-						      		<input type="hidden" name="groupNum" value="${dto.groupNum}">
-						      	    <input type="hidden" name="orderNo" value="${dto.orderNum}">
-						      	    <input type="hidden" name="depth" value="${dto.depth}">
-						      	    <input type="hidden" name="parent" value="${dto.boardNum}">
-						      		<input type="hidden" name="page" value="${page}">
-						      	</c:if>
                 				<div>
-                					<textarea placeholder="내용을 입력해주세요." id="content" name="content" title="내용" style="min-height:120px;"></textarea>
+                					<input type="hidden" name="boardNum" value="${dto.boardNum}"/>
+                					<input type="hidden" name="answer" value="0"/>
+                					<textarea placeholder="내용을 입력해주세요." id="reply_content" name="reply_content" title="내용" style="min-height:120px;"></textarea>
+                					<div class="message"></div>
                 					<span class="txt">타인을 비방하거나 개인정보를 유출하는 글의 댓글은 삭제 처리가 될 수 있습니다.</span>
                 					<div>
                 						<button type="reset" class="btn_classic btn-white">다시입력</button>
-	                					<button type="button" class="btn_classic btn-black" onclick="guest_send()">댓글 등록</button>
+	                					<button type="button" class="btn_classic btn-black" onclick="reply_send()">댓글 등록</button>
                 					</div>
                 				</div>
                 			</form>
-                			<div id="listGuest">
-                			</div>
+                			<div id="listReply"></div>
                 		</div>
                 	</div>
                 	<%-- <form name="feedback_form" method="post">
