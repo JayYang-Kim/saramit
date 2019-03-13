@@ -108,7 +108,6 @@
                    		</div>
                    		<div class="cp_info_title">
                    			${company.companyName}<br>
-                   			<p style="font-size: 14px; padding-left: 3px;">게임/서버 개발 전문 기업</p>
                    		</div>
                    		<div class="cp_info_apply">
                    			<button class="btn btn-black" onclick="location.href='${company.homepage}'">홈페이지</button>
@@ -242,6 +241,9 @@
 						    </script>
 		                </div>
 		                <!-- //map -->
+		                <div align="center" style="margin-top:15px;">
+		                <button type="button" class="btn btn-black" onclick="javascript:location.href='${url}'">돌아가기</button>
+		                </div>
 			    	</div>
 			    	<!-- //body_info -->
 			    	</div>

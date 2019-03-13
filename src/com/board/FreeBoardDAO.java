@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.util.DBConn;
 
@@ -424,4 +425,163 @@ public class FreeBoardDAO {
 			}
 		}
 	}
+	
+	public void insertReply(FreeBoardReplyDTO dto) {
+		PreparedStatement pstmt = null;
+		String sql = "";
+		try{
+			sql = "insert into boardreply(replynum,boardnum,email,content) values(board_reply_seq.nextval,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getBoardNum());
+			pstmt.setString(2, dto.getEmail());
+			pstmt.setString(3, dto.getContent());
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
+	public int replyCount(int boardNum) {
+		int result=0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		try{
+			sql = "select nvl(count(*),0) from boardreply where boardNum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNum);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(rs != null) {
+				try {
+					if(!rs.isClosed()) {
+						rs.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}else if(pstmt != null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
+	}
+	
+	public List<FreeBoardReplyDTO> listReply(int boardNum, int start, int end){
+		List<FreeBoardReplyDTO> list = new ArrayList<FreeBoardReplyDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		try{
+			sql += "select * from (";
+			sql += "select tb.*, rownum rnum from (";
+			sql += "select replyNum, boardNum, email, content, created from boardreply where boardNum=? order by created DESC";
+			sql += ")tb where rownum<="+end;
+			sql += ") where rnum >="+start;
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNum);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				FreeBoardReplyDTO dto = new FreeBoardReplyDTO();
+				dto.setReplyNum(rs.getInt(1));
+				dto.setBoardNum(rs.getInt(2));
+				dto.setEmail(rs.getString(3));
+				dto.setContent(rs.getString(4));
+				dto.setCreated(rs.getString(5));
+				list.add(dto);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(rs != null) {
+				try {
+					if(!rs.isClosed()) {
+						rs.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}else if(pstmt != null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return list;
+	}
+	
+	public void deleteReply(int boardNum, int replyNum) {
+		PreparedStatement pstmt = null;
+		String sql = "";
+		try{
+			sql = "delete from boardreply where boardNum=? and replyNum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNum);
+			pstmt.setInt(2, replyNum);
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
+	public void updateReply(int boardNum, int replyNum, String content) {
+		PreparedStatement pstmt = null;
+		String sql = "";
+		try{
+			sql = "update boardreply set content=? where boardNum=? and replyNum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, content);
+			pstmt.setInt(2, boardNum);
+			pstmt.setInt(3, replyNum);
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
 }
