@@ -6,44 +6,35 @@ public class LicenseDTO {
 	private String license_name;
 	private String license_date;
 	private String license_publisher;
-
-	int getLicenseCode() {
+	
+	public int getLicenseCode() {
 		return licenseCode;
 	}
-
-	void setLicenseCode(int licenseCode) {
+	public void setLicenseCode(int licenseCode) {
 		this.licenseCode = licenseCode;
 	}
-
-	int getResumeCode() {
+	public int getResumeCode() {
 		return resumeCode;
 	}
-
-	void setResumeCode(int resumeCode) {
+	public void setResumeCode(int resumeCode) {
 		this.resumeCode = resumeCode;
 	}
-
-	String getLicense_name() {
+	public String getLicense_name() {
 		return license_name;
 	}
-
-	void setLicense_name(String license_name) {
+	public void setLicense_name(String license_name) {
 		this.license_name = license_name;
 	}
-
-	String getLicense_Date() {
+	public String getLicense_date() {
 		return license_date;
 	}
-
-	void setLicense_Date(String license_date) {
+	public void setLicense_date(String license_date) {
 		this.license_date = license_date;
 	}
-
-	String getLicense_publisher() {
+	public String getLicense_publisher() {
 		return license_publisher;
 	}
-
-	void setLicense_publisher(String license_publisher) {
+	public void setLicense_publisher(String license_publisher) {
 		this.license_publisher = license_publisher;
 	}
 }

@@ -57,16 +57,78 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
-            <div style="height:61px"></div>
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
-                <div class="freeList">
+            	<div class="contents_header_bg freeBoard_list bottom">
+            		<div class="bg_black"></div>
+            	</div>
+            	<div class="inner">
+            		<div class="pageTitle mt30 pb10">
+                		<h3>자유 게시판</h3>
+                	</div>
+                	<div class="searchBox">
+               			<form name="searchForm" method="post" onsubmit="return search();">
+                    		<select name="searchKey">
+                    			<option value="subject">제목</option>
+                    			<option value="content">내용</option>
+                    			<option value="all">제목+내용</option>
+                    			<option value="name">작성자</option>
+                    		</select>
+                    		<input type="text" name="searchValue">
+                    		<button type="submit" class="btn btn-black">검 색</button>
+                    	</form>	 
+                	</div>
+                	<div>
+						<table class="tb_kakao tb_hover big">
+							<colgroup>
+								<col style="width:80px;">
+								<col>
+								<col style="width:170px;">
+								<col style="width:70px;">
+								<col style="width:150px;">
+							</colgroup>
+							<thead>
+								<tr>
+									<th>글번호</th>
+									<th>제목</th>
+									<th>글쓴이</th>
+									<th>조회수</th>
+									<th>작성일</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${dataCount!=0}">
+									<c:forEach var="n" items="${list}">
+										<tr>
+											<td>${n.listNum}</td>
+											<td style="cursor: pointer;"
+												onclick="javascript:location.href='${article_url}&boardNum=${n.boardNum}'">${n.subject}</td>
+											<td>${n.name}</td>
+											<td>${n.hitCount}</td>
+											<td>${n.created}</td>
+										</tr>
+									</c:forEach>
+								</c:if>
+								<c:if test="${dataCount==0}">
+									<tr>
+										<td colspan="4"><b>등록된 게시물이 없습니다.</b></td>
+									</tr>
+								</c:if>
+							</tbody>
+						</table>
+						<div class="t_center mt20 mb20">${paging}</div>
+						<div class="t_right mb20">
+		                	<button type="button" class="btn_classic btn-black" onclick="javacript:location.href='<%=cp%>/board/free/created.do';">글쓰기</button>
+		                </div>
+					</div>
+            	</div>
+                <%-- <div class="freeList">
                     <div class="freeContainer">
                     	<h1>자유게시판</h1>
                     	<div class="board">
@@ -113,7 +175,7 @@
                     	<!-- board -->
                     </div>
                     <!--freeContainer-->
-                </div>
+                </div> --%>
                 <!--freeContainer-->
             </div>
             <!-- //contents -->

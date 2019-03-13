@@ -22,12 +22,12 @@
 <body>
 <!-- Wrap -->
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
+        <div id="container" class="tb_container">
             <div style="height:61px"></div>
             <!-- contents -->
             <div class="contents">

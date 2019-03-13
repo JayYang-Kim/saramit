@@ -96,7 +96,8 @@ function layerCtrl(){
 function layerShow(tar){
 	$('body').addClass('hidden');
 	$(tar).fadeIn(300,function(){
-		$(this).children().slideDown(300)
+		$(this).children().show();
+		/*$(this).children().slideDown(300);*/
 	});	
 }
 function layerHide(tar){

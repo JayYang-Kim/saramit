@@ -21,24 +21,26 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
-            <div style="height:61px"></div>
+        <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
+            	<div class="contents_header_bg board_list bottom">
+            		<div class="bg_black"></div>
+            	</div>
                 <div class="inner">
                 	<!-- pageTitle -->
-                	<div class="pageTitle mt20 mb20">
-                		<h3>자소서 피드백 게시판 - 상세</h3>
+                	<div class="pageTitle mt30 pb10">
+                		<h3>자소서 피드백 - 상세</h3>
                 	</div>
                 	<!-- //pageTitle -->
                 	<form name="feedback_form" method="post">
-                		<div>
-	                		<table class="tb_basic_row big">
+                		<div class="mt15 mb15">
+	                		<table class="tb_kakao_row big">
 	                			<colgroup>
 	                				<col style="width:20%">
 	                				<col style="width:30%">
@@ -71,16 +73,16 @@
 	                	</div>
 	                	<div class="mt20 mb20">
 	                		<c:if test="${empty preReadDto}">
-	                			<button type="button" class="btn_classic btn-white" disabled="disabled">이전</button>
+	                			<button type="button" class="btn_classic btn-lightGray" style="color:#d6d6d6;" disabled="disabled">이전</button>
 	                		</c:if>
 	                		<c:if test="${not empty preReadDto}">
-	                			<button type="button" class="btn_classic btn-white" onclick="location.href='<%=cp%>/board/article.do?boardNum=${preReadDto.boardNum}&${query}'">이전</button>
+	                			<button type="button" class="btn_classic btn-lightGray" onclick="location.href='<%=cp%>/board/article.do?boardNum=${preReadDto.boardNum}&${query}'">이전</button>
 	                		</c:if>
 	                		<c:if test="${empty nextReadDto}">
-	                			<button type="button" class="btn_classic btn-white" disabled="disabled">다음</button>
+	                			<button type="button" class="btn_classic btn-lightGray" style="color:#d6d6d6;" disabled="disabled">다음</button>
 	                		</c:if>
 	                		<c:if test="${not empty nextReadDto}">
-	                			<button type="button" class="btn_classic btn-white" onclick="location.href='<%=cp%>/board/article.do?boardNum=${nextReadDto.boardNum}&${query}'">다음</button>
+	                			<button type="button" class="btn_classic btn-lightGray" onclick="location.href='<%=cp%>/board/article.do?boardNum=${nextReadDto.boardNum}&${query}'">다음</button>
 	                		</c:if>
 	                		<c:if test="${sessionScope.member.email == dto.userEmail || sessionScope.member.email == 'admin'}">
 								<button type="button" class="btn_classic btn-red" style="float:right;" onclick="deleteBoard('${dto.boardNum}');">삭제하기</button>

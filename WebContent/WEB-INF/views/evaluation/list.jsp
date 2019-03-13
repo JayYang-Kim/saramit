@@ -10,17 +10,6 @@
 <head>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
 <style type="text/css"> 
-.container {
-    clear:both;
-    width:100%;
-    text-align:left;
-}
-
-.body-container {
-    clear:both;
-    margin: 0px auto 15px;
-    min-height: 450px;
-}
 </style>
 <script type="text/javascript">
 	function searchList() {
@@ -33,20 +22,22 @@
 
 <body>
     <!-- Wrap -->
-    <div id="wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         <!-- container -->
-        <div id="container">
-            <div style="height:61px"></div>
+        <div id="container" class="tb_container">
             <!-- contents -->
-            <div class="contents" style=" height:700px; margin: 30px auto 30px;">
+            <div class="contents">
+            	<div class="contents_header_bg evaluation_list center">
+            		<div class="bg_black"></div>
+            	</div>
                 <div class="inner">
-                	<div>
+                	<div class="pageTitle mt30 pb10">
                   		<h3>이거 회사평가 게시글이다</h3>
                   	</div>
-                  	<div style="height:50px; margin: 30px auto;">
+                  	<%-- <div style="height:50px; margin: 30px auto;">
                   		<form name="searchForm" action="<%=cp%>/companies/listReview.do" method="post">
                   			<select name="searchKey" class="selectField" style="width:120px; height:45px;">
                   				<option value="cop" selected="selected">기업명</option>
@@ -56,47 +47,77 @@
                   			<input type="text" name="searchValue" style="width:474px; height:45px;">
 			            	<button type="button" class=" btn btn-black" style="width:100px; height:45px;" onclick="searchList()">검색</button>
                   		</form>
-                  	</div>
+                  	</div> --%>
             		<div>
-                  	<table style="width:100%; margin: 20px auto 0px; border-spacing: 0px;">
-                  		<tr height="10">
-                  			<td align="left" width="50%">${dataCount}개(${page}/${total_page} 페이지)</td>
-                  			<td align="right">&nbsp;</td>
-                  		</tr>		
-                  	</table>
-                  	<table style="width:100%; margin: 0px auto; border-spacing: 0px; border-collapse: collapse;" class="tb_basic tb_hover">
-                  		<tr align="center" height="35" style="border-top: 1px solid; #cccccc; border-bottom: 1px solid #cccccc;">
-                  			<th width="40">번호</th>
-                  			<th width="120">기업명</th>
-                  			<th width="80">작성일</th>
-                  		<!-- 	<th width="60">조회수</th> -->
-                  		</tr>
-                  		
-                  <c:forEach var="dto" items="${list}"> 
-                  		<tr align="center" height="35" style="border-bottom: 1px solid #cccccc;" onclick="location.href='${articleUrl}&boardNum=${dto.boardNum}'">
-                  			<td>${dto.boardNum}</td>
-                  			<!--<td><a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.cop_name}</a></td>-->
-                  			<td>${dto.cop_name}</td>
-                  			<td>${dto.created}</td>
-                  		<!-- 	<td>조회수</td> -->
-                  		</tr>
-                  </c:forEach> 
-                  	</table>
+	                  	<%-- <table style="width:100%; margin: 20px auto 0px; border-spacing: 0px;">
+	                  		<tr height="10">
+	                  			<td align="left" width="50%">${dataCount}개(${page}/${total_page} 페이지)</td>
+	                  			<td align="right">&nbsp;</td>
+	                  		</tr>		
+	                  	</table> --%>
+	                  	<div class="f_left mt20 mb20">
+	                  		<span>${dataCount}개 (${page}/${total_page} 페이지)</span>
+	                  	</div>
+	                  	<div class="searchBox">
+	               			<form name="searchForm" action="<%=cp%>/companies/listReview.do" method="post">
+	               				<select name="searchKey">
+	                  				<option value="cop" selected="selected">기업명</option>
+	                  				<option value="content1">내용</option>
+	                  				<option value="created">등록일</option>
+	                  			</select>
+	               				<input type="text" name="searchValue" title="검색내용"/>
+	               				<button type="button" class="btn btn-black" onclick="searchList()">검색</button>
+	               			</form>
+	                	</div>
+	                  	<table class="tb_kakao tb_hover big">
+	                  		<colgroup>
+                				<col style="width:40px">
+                				<col style="width:120px">
+                				<col style="width:80px">
+                			</colgroup>
+	                  		<thead>
+	                  			<tr>
+		                  			<th>번호</th>
+		                  			<th>기업명</th>
+		                  			<th>작성일</th>
+		                  			<!-- <th width="60">조회수</th> -->
+		                  		</tr>
+	                  		</thead>
+	                  		<tbody>
+	                  			<c:forEach var="dto" items="${list}">
+		                  			<tr align="center" height="35" style="border-bottom: 1px solid #cccccc;" onclick="location.href='${articleUrl}&boardNum=${dto.boardNum}'">
+			                  			<td>${dto.boardNum}</td>
+			                  			<!--<td><a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.cop_name}</a></td>-->
+			                  			<td>${dto.cop_name}</td>
+			                  			<td>${dto.created}</td>
+			                  			<!-- <td>조회수</td> -->
+			                  		</tr>
+		                  		</c:forEach>
+		                  		<c:if test="${dataCount==0}">
+                  					<td colspan="3">등록된 게시물이 없습니다.</td>
+                  				</c:if> 
+							</tbody>
+	                  	</table>
                   	
-                  	<table style="width:100%; margin:10px auto; border-spacing: 0px;'">
-                  		<tr height="35">
-                  			<td align="center">
-                  				<c:if test="${dataCount==0}">
-                  					등록된 게시물이 없습니다.
-                  				</c:if>
-                  				<c:if test="${dataCount!=0}">
-                  					${paging}
-                  				</c:if>
-                  			</td>
-                  		</tr>
-                  	</table>
-                  </div>
-           
+                  		<%-- <table style="width:100%; margin:10px auto; border-spacing: 0px;'">
+	                  		<tr height="35">
+	                  			<td align="center">
+	                  				<c:if test="${dataCount==0}">
+	                  					등록된 게시물이 없습니다.
+	                  				</c:if>
+	                  				<c:if test="${dataCount!=0}">
+	                  					${paging}
+	                  				</c:if>
+	                  			</td>
+	                  		</tr>
+                  		</table> --%>
+                  		
+                  		<div class="t_center m20 mb20">
+		                    <c:if test="${dataCount != 0}">
+		                    	${paging}
+		                    </c:if>
+		                </div>
+                  	</div>
                 </div>
             </div>
             <!-- //contents -->

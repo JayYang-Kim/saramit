@@ -7,34 +7,34 @@ public class AwardsDTO {
 	private String awards_date;
 	private String awards_publisher;
 	
-	int getAwardsCode() {
+	public int getAwardsCode() {
 		return awardsCode;
 	}
-	void setAwardsCode(int awardsCode) {
+	public void setAwardsCode(int awardsCode) {
 		this.awardsCode = awardsCode;
 	}
-	int getResumeCode() {
+	public int getResumeCode() {
 		return resumeCode;
 	}
-	void setResumeCode(int resumeCode) {
+	public void setResumeCode(int resumeCode) {
 		this.resumeCode = resumeCode;
 	}
-	String getAwardsName() {
+	public String getAwardsName() {
 		return awardsName;
 	}
-	void setAwardsName(String awardsName) {
+	public void setAwardsName(String awardsName) {
 		this.awardsName = awardsName;
 	}
-	String getAwards_date() {
+	public String getAwards_date() {
 		return awards_date;
 	}
-	void setAwards_date(String awards_date) {
+	public void setAwards_date(String awards_date) {
 		this.awards_date = awards_date;
 	}
-	String getAwards_publisher() {
+	public String getAwards_publisher() {
 		return awards_publisher;
 	}
-	void setAwards_publisher(String awards_publisher) {
+	public void setAwards_publisher(String awards_publisher) {
 		this.awards_publisher = awards_publisher;
 	}
 }

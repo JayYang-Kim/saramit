@@ -20,20 +20,26 @@
     		
     		f.submit();
     	}
+    	
+    	jQuery(function(){
+    		if(${msg eq null}) {
+    			$(".message").hide();
+    		}
+    	});
     </script>
 </head>
 
 <body>
     <!-- Wrap -->
-    <div id="wrap" class="login_wrap">
+    <div id="wrap" class="tb_wrap">
         <!-- Header -->
         <jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
         <!-- //Header -->
         
         <!-- container -->
-        <div id="container" class="login_container">
+        <div id="container" class="tb_container">
             <!-- contents -->
-            <div class="register">
+            <div class="login">
                 <form name="login_form" action="<%=cp%>/member/login_ok.do" method="post">
                     <fieldset>
                         <div class="box_login">
@@ -50,6 +56,11 @@
                                     <input type="password" name="pwd" id="txt_pwd" class="boxTf" autocomplete="off" autofocus/>
                                 </div>
                             </div>
+                            <c:if test="${msg ne null}">
+                            	<div class="message mt30 f15 t_red">
+                            		<div>* ${msg}</div>
+                            	</div>
+                            </c:if>
                             <div class="mt30">
                                 <label class="radio">
                                     <input name="radioLevel" type="radio" value="user"/>
