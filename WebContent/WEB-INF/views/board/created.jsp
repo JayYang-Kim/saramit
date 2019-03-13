@@ -69,9 +69,23 @@
 	                			</tr>
 	                			<tr>
 	                				<th>작성자</th>
-	                				<td>${dto.userName}</td>
+	                				<td>
+	                					<c:if test="${mode == 'created'}">
+	                						${name}
+	                					</c:if>
+	                					<c:if test="${mode == 'update'}">
+	                						${dto.userName}
+	                					</c:if>
+	                				</td>
 	                				<th>이메일</th>
-	                				<td>${dto.userEmail}</td>
+	                				<td>
+	                					<c:if test="${mode == 'created'}">
+	                						${email}
+	                					</c:if>
+	                					<c:if test="${mode == 'update'}">
+	                						${dto.userEmail}
+	                					</c:if>
+	                				</td>
 	                			</tr>
 	                			<tr>
 	                				<th>내용</th>
