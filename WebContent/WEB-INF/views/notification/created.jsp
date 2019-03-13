@@ -13,14 +13,14 @@
 	<style>
 		.freeBody {
     		background-color: #F5F6F7;
-    		min-height: 828px;
+    		min-height: 730px;
     	}
     	
     	.freeBody .freeContainer{
     		width:650px;
   			padding-top:30px;
   			margin : 0 auto;
-  			min-height: 828px;
+  			min-height: 730px;
     	}
     	
     	.freeBody .freeContainer .board{
@@ -49,10 +49,16 @@
     			return;
     		}
     		if(${mode != null && mode=='update'}){
-    			f.action="<%=cp%>/board/free/update_ok.do?boardNum=${num}&page=${page}";
+    			f.action="<%=cp%>/notification/update_ok.do?boardNum=${num}&page=${page}";
     		}
     		f.submit();
     	}
+    	<c:if test="${mode=='update'}">
+        function deleteFile(num) {
+      	  var url="<%=cp%>/notice/deleteFile.do?num="+num+"&page=${page}";
+      	  location.href=url;
+        }
+   		</c:if>
     </script>
 <body>
     <!-- Wrap -->
@@ -66,10 +72,10 @@
             <div class="contents">
 				<div class="freeBody">
 					<div class="freeContainer">
-						<h1 style="text-align: left; padding: 5px 8px">자유게시판</h1>
+						<h1 style="text-align: left; padding: 5px 8px">공지사항</h1>
 						<div class="board" align="center" style="text-align: center">
 							<h2 style="text-align: center; padding: 5px 8px;background-color: #4c4c4c; color: #fff">글쓰기</h2>
-							<form name="sendForm" action="<%=cp%>/board/free/created_ok.do" method="post">
+							<form name="sendForm" action="<%=cp%>/notification/created_ok.do" method="post" enctype="multipart/form-data">
 								<div class="innerDiv" style="padding-top: 15px;">
 									<b>제 목 :&nbsp;</b> &nbsp;&nbsp;<input type="text" name="subject" style="width: 73%; font-size: 16px; height: 30px;" value="${mode=='update'?dto.subject:''}">
 								</div>
@@ -79,15 +85,13 @@
 								<div class="innerDiv">
 									<textarea style="width:80%; height: 350px;" placeholder="내 용" maxlength="1000" name="content">${mode=='update'?dto.content:''}</textarea>
 								</div>
-								<div style="margin-top: 10px;">
+								<div class="innerDiv">
+									<input name="upload" type="file" style="width: 80%; border: 0; outline: none;">
+								</div>
+								<div style="margin: 10px 0 10px;">
 									<button type="button" class="btn btn-black" onclick="sendOk();">${mode=='update'?'수정하기':'작성하기'}</button>&nbsp;
 									<button type="reset" class="btn btn-black">초기화</button>&nbsp;
-									<c:if test="${mode=='update'}">
-									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/article.do?page=${page}&boardNum=${dto.boardNum}';">취소하기</button>
-									</c:if>
-									<c:if test="${mode=='created'}">
-									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/list.do';">취소하기</button>
-									</c:if>
+									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/notification/article.do?boardNum=${num}&page=${page}';">취소하기</button>
 								</div>
 							</form>
 						</div>

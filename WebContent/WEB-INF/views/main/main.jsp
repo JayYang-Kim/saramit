@@ -291,7 +291,7 @@
                                 </ul>
                             </div>
                             <div>
-                                <h3>공지사항</h3>
+                                <h3>공지사항</h3><p style="position: relative; top: 0; right: 0; z-index: 20"><a href="<%=cp%>/notification/list.do" class="add">공지사항 더보기</a></p>
                                 <ul>
                                     <li>
                                         <a href="#">SARAMIT 사이트 오픈</a>

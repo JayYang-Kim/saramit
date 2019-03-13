@@ -224,13 +224,7 @@ public class FreeBoardServlet extends MyServlet{
 		
 		 if(prevDto != null) { 
 			 prev_url +="&boardNum="+prevDto.getBoardNum(); 
-		}
-		 
-		/*
-		 * if(dto == null) { PrintWriter out = resp.getWriter();
-		 * out.println("<script>alert('이미 삭제된 게시물입니다.');</script>"); out.flush();
-		 * resp.sendRedirect(list_url); return; }
-		 */
+		 }
 		
 		req.setAttribute("page", page);
 		req.setAttribute("dto",dto);
