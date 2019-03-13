@@ -82,12 +82,7 @@
 								<div style="margin-top: 10px;">
 									<button type="button" class="btn btn-black" onclick="sendOk();">${mode=='update'?'수정하기':'작성하기'}</button>&nbsp;
 									<button type="reset" class="btn btn-black">초기화</button>&nbsp;
-									<c:if test="${mode=='update'}">
-									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/article.do?page=${page}&boardNum=${dto.boardNum}';">취소하기</button>
-									</c:if>
-									<c:if test="${mode=='created'}">
-									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/list.do';">취소하기</button>
-									</c:if>
+									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/board/free/article.do?boardNum=${num}&page=${page}';">취소하기</button>
 								</div>
 							</form>
 						</div>

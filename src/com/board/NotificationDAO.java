@@ -4,28 +4,40 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.util.DBConn;
 
-public class FreeBoardDAO {
+public class NotificationDAO {
 	private Connection conn;
 	
-	public FreeBoardDAO() {
+	public NotificationDAO() {
 		conn = DBConn.getConnection();
 	}
 	
-	public void insertBoard(FreeBoardDTO dto, String name) {
+	public void insertNotification(NotificationDTO dto) {
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
-			sql = "insert into board(boardnum,useremail,subject,content,name) values(board_seq.nextval,?,?,?,?)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, dto.getUserEmail());
-			pstmt.setString(2, dto.getSubject());
-			pstmt.setString(3, dto.getContent());
-			pstmt.setString(4, name);
-			pstmt.executeUpdate();
+			if(dto.getOriginalFileName()==null) {
+				sql = "insert into notification(boardnum,subject,content,email,name) values(notification_seq.nextval,?,?,?,?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, dto.getSubject());
+				pstmt.setString(2, dto.getContent());
+				pstmt.setString(3, dto.getEmail());
+				pstmt.setString(4, dto.getName());
+				pstmt.executeUpdate();
+			}else {
+				sql = "insert into notification(boardnum,subject,content,email,originalfilename,savefilename,filesize,name) values(notification_seq.nextval,?,?,?,?,?,?,?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, dto.getSubject());
+				pstmt.setString(2, dto.getContent());
+				pstmt.setString(3, dto.getEmail());
+				pstmt.setString(4, dto.getOriginalFileName());
+				pstmt.setString(5, dto.getSaveFileName());
+				pstmt.setLong(6, dto.getFileSize());
+				pstmt.setString(7, dto.getName());
+				pstmt.executeUpdate();
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -48,20 +60,20 @@ public class FreeBoardDAO {
 		ResultSet rs = null;
 		try{
 			if(searchKey.equals("") && searchKey.equals("")) {
-				sql = "select nvl(count(*),0) from board";
+				sql = "select nvl(count(*),0) from notification";
 				pstmt = conn.prepareStatement(sql);
 			}else {
 				if(searchKey.equals("name")) {
-					sql="select nvl(count(*),0) from board where name=?";
+					sql="select nvl(count(*),0) from notification where name=?";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, searchValue);
 				}else if(searchKey.equals("all")) {
-					sql="select nvl(count(*),0) from board where instr(subject,?)>=1 or instr(content,?)>=1";
+					sql="select nvl(count(*),0) from notification where instr(subject,?)>=1 or instr(content,?)>=1";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, searchValue);
 					pstmt.setString(2, searchValue);
 				}else {
-					sql="select nvl(count(*),0) from board where instr("+searchKey+",?)>=1";
+					sql="select nvl(count(*),0) from notification where instr("+searchKey+",?)>=1";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, searchValue);
 				}
@@ -95,9 +107,9 @@ public class FreeBoardDAO {
 		return result;
 	}
 
-	public ArrayList<FreeBoardDTO> listBoard(int start, int end, String searchKey, String searchValue) {
+	public ArrayList<NotificationDTO> listBoard(int start, int end, String searchKey, String searchValue) {
 		// TODO Auto-generated method stub
-		ArrayList<FreeBoardDTO> list = new ArrayList<FreeBoardDTO>();
+		ArrayList<NotificationDTO> list = new ArrayList<NotificationDTO>();
 		PreparedStatement pstmt = null;
 		StringBuffer sb = new StringBuffer();
 		ResultSet rs = null;
@@ -105,12 +117,13 @@ public class FreeBoardDAO {
 			sb.append("select * from ( ");
 			sb.append("select tb.*, rownum rnum from( ");
 			if(searchKey.equals("") && searchValue.equals("")) { //검색값이 없는 경우
-				sb.append("select useremail,subject,content,name,hitCount,boardNum, created from board order by created desc ");
+				sb.append("select boardnum,subject,content,email,hitCount,created,savefilename,name from notification order by created desc ");
 				sb.append(")tb where rownum<="+end);
 				sb.append(") where rnum >="+start);
 				pstmt = conn.prepareStatement(sb.toString());
+				
 			}else { //검색 값이 있는 경우
-				sb.append("select useremail,subject,content,name,hitCount,boardNum, created from board ");
+				sb.append("select boardnum,subject,content,email,hitCount,created,savefilename,name from notification ");
 				if(searchKey.equalsIgnoreCase("name")) {
 					sb.append("where name=? order by created DESC");
 					sb.append(")tb where rownum<="+end);
@@ -134,14 +147,15 @@ public class FreeBoardDAO {
 			}
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				FreeBoardDTO dto = new FreeBoardDTO();
-				dto.setUserEmail(rs.getString(1));
+				NotificationDTO dto = new NotificationDTO();
+				dto.setBoardNum(rs.getInt(1));
 				dto.setSubject(rs.getString(2));
 				dto.setContent(rs.getString(3));
-				dto.setName(rs.getString(4));
+				dto.setEmail(rs.getString(4));
 				dto.setHitCount(rs.getInt(5));
-				dto.setBoardNum(rs.getInt(6));
-				dto.setCreated(rs.getDate(7).toString());
+				dto.setCreated(rs.getString(6));
+				dto.setSaveFileName(rs.getString(7));
+				dto.setName(rs.getString(8));
 				list.add(dto);
 			}
 		}catch (Exception e) {
@@ -169,28 +183,30 @@ public class FreeBoardDAO {
 		return list;
 	}
 
-	public FreeBoardDTO readBoard(int num) {
+	public NotificationDTO readNotification(int boardNum) {
 		// TODO Auto-generated method stub
-		FreeBoardDTO dto = null;
+		NotificationDTO dto = null;
 		PreparedStatement pstmt = null;
 		String sql = "";
 		ResultSet rs = null;
 		try{
-			plusHitCount(num);
-			sql = "select useremail,subject,content,name,hitCount,boardNum,created from board where boardNum=?";
+			plusHitCount(boardNum);
+			sql = "select boardnum,subject,content,email,hitCount,created,savefilename,name,originalfilename,filesize from notification where boardNum=? order by created desc";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,num);
+			pstmt.setInt(1,boardNum);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				
-				dto = new FreeBoardDTO();
-				dto.setUserEmail(rs.getString(1));
+				dto = new NotificationDTO();
+				dto.setBoardNum(rs.getInt(1));
 				dto.setSubject(rs.getString(2));
 				dto.setContent(rs.getString(3));
-				dto.setName(rs.getString(4));
+				dto.setEmail(rs.getString(4));
 				dto.setHitCount(rs.getInt(5));
-				dto.setBoardNum(rs.getInt(6));
-				dto.setCreated(rs.getString(7));
+				dto.setCreated(rs.getString(6));
+				dto.setSaveFileName(rs.getString(7));
+				dto.setName(rs.getString(8));
+				dto.setOriginalFileName(rs.getString(9));
+				dto.setFileSize(rs.getLong(10));
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -221,7 +237,7 @@ public class FreeBoardDAO {
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
-			sql = "update board set hitCount=hitCount+1 where boardNum=?";
+			sql = "update notification set hitCount=hitCount+1 where boardNum=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,num);
 			pstmt.executeUpdate();
@@ -425,165 +441,4 @@ public class FreeBoardDAO {
 			}
 		}
 	}
-	
-	public boolean insertReply(FreeBoardReplyDTO dto) {
-		boolean flag = true;
-		PreparedStatement pstmt = null;
-		String sql = "";
-		try{
-			sql = "insert into boardreply(replynum,boardnum,email,content) values(board_reply_seq.nextval,?,?,?)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getBoardNum());
-			pstmt.setString(2, dto.getEmail());
-			pstmt.setString(3, dto.getContent());
-			pstmt.executeUpdate();
-		}catch (Exception e) {
-			flag = false;
-		}finally {
-			if(pstmt != null) {
-				try {
-					if(!pstmt.isClosed()) {
-						pstmt.close();
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-		}
-		return flag;
-	}
-	
-	public int replyCount(int boardNum) {
-		int result=0;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = "";
-		try{
-			sql = "select nvl(count(*),0) from boardreply where boardNum=?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, boardNum);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				result = rs.getInt(1);
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			if(rs != null) {
-				try {
-					if(!rs.isClosed()) {
-						rs.close();
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-				}
-			}else if(pstmt != null) {
-				try {
-					if(!pstmt.isClosed()) {
-						pstmt.close();
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-		}
-		return result;
-	}
-	
-	public List<FreeBoardReplyDTO> listReply(int boardNum, int start, int end){
-		List<FreeBoardReplyDTO> list = new ArrayList<FreeBoardReplyDTO>();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = "";
-		try{
-			sql += "select * from (";
-			sql += "select tb.*, rownum rnum from (";
-			sql += "select replyNum, boardNum, email, content, created from boardreply where boardNum=? order by created DESC";
-			sql += ")tb where rownum<="+end;
-			sql += ") where rnum >="+start;
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, boardNum);
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				FreeBoardReplyDTO dto = new FreeBoardReplyDTO();
-				dto.setReplyNum(rs.getInt(1));
-				dto.setBoardNum(rs.getInt(2));
-				dto.setEmail(rs.getString(3));
-				dto.setContent(rs.getString(4));
-				dto.setCreated(rs.getString(5));
-				list.add(dto);
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			if(rs != null) {
-				try {
-					if(!rs.isClosed()) {
-						rs.close();
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-				}
-			}else if(pstmt != null) {
-				try {
-					if(!pstmt.isClosed()) {
-						pstmt.close();
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-		}
-		return list;
-	}
-	
-	public void deleteReply(int boardNum, int replyNum) {
-		PreparedStatement pstmt = null;
-		String sql = "";
-		try{
-			sql = "delete from boardreply where boardNum=? and replyNum=?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, boardNum);
-			pstmt.setInt(2, replyNum);
-			pstmt.executeUpdate();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			if(pstmt != null) {
-				try {
-					if(!pstmt.isClosed()) {
-						pstmt.close();
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-		}
-	}
-	
-	public void updateReply(int boardNum, int replyNum, String content) {
-		PreparedStatement pstmt = null;
-		String sql = "";
-		try{
-			sql = "update boardreply set content=? where boardNum=? and replyNum=?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, content);
-			pstmt.setInt(2, boardNum);
-			pstmt.setInt(3, replyNum);
-			pstmt.executeUpdate();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			if(pstmt != null) {
-				try {
-					if(!pstmt.isClosed()) {
-						pstmt.close();
-					}
-				}catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-		}
-	}
-	
 }

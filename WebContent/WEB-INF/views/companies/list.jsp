@@ -81,7 +81,7 @@
     									<div class="site">
     										<span>${n.homepage}</span>
     									</div>
-    									<a style="cursor: pointer;" onclick="javascript:location.href='<%=cp%>/companies/info.do?email=${n.companyEmail}';">더보기</a>
+    									<a style="cursor: pointer;" onclick="javascript:location.href='${info_url}&email=${n.companyEmail}';">더보기</a>
     								</div>
     							</li> 					
        						</c:forEach>

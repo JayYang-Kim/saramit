@@ -74,7 +74,8 @@ public class CompanyServlet extends MyServlet{
 			current_page = Integer.parseInt(page);
 		}
 		//앞으로 가져갈 uri
-		String url = cp+"/companies/list.do"; //다시 리스트로 가는 경우의 주소
+		String url = cp+"/companies/list.do?page="+current_page; //다시 리스트로 가는 경우의 주소
+		String info_url = cp+"/companies/info.do?page="+current_page;
 		String searchKey = req.getParameter("searchKey");
 		String searchValue = req.getParameter("searchValue");
 		
@@ -83,6 +84,7 @@ public class CompanyServlet extends MyServlet{
 		if(searchKey != null && searchValue != null) {
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
 			url += "&searchKey="+searchKey+"&searchValue="+searchValue;
+			info_url += "&searchKey="+searchKey+"&searchValue="+searchValue;
 		}
 		
 		//페이징 작업 
@@ -102,6 +104,8 @@ public class CompanyServlet extends MyServlet{
 		String paging = util.paging(current_page, total_page, url);
 		
 		req.setAttribute("page", current_page);
+		req.setAttribute("url", url);
+		req.setAttribute("info_url", info_url);
 		req.setAttribute("companies", list);
 		req.setAttribute("paging", paging);
 		req.setAttribute("dataCount", dataCount);
@@ -257,10 +261,21 @@ public class CompanyServlet extends MyServlet{
 	
 	protected void info(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//회사 소개
+		String cp = req.getContextPath();
+		String page = req.getParameter("page");
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		
+		String url = cp+"/companies/list.do?page="+page;
+		if(searchKey != null && searchValue != null) {
+			searchValue = URLDecoder.decode(searchValue, "utf-8");
+			url += "&searchKey="+searchKey+"&searchValue="+searchValue;
+		}
 		String email = req.getParameter("email");
 		email = URLDecoder.decode(email, "utf-8");
 		CompaniesDAO dao = new CompaniesDAO();
 		CompaniesDTO dto = dao.readCompany(email);
+		req.setAttribute("url", url);
 		req.setAttribute("company", dto);
 		forward(req,resp,"/WEB-INF/views/companies/info.jsp");
 	}

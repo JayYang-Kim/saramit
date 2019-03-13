@@ -1,9 +1,11 @@
 package com.board;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import com.main.SessionInfo;
 import com.util.MyServlet;
 import com.util.MyUtil;
+
+import net.sf.json.JSONObject;
 @WebServlet("/board/free/*")
 public class FreeBoardServlet extends MyServlet{
 	private static final long serialVersionUID = 1L;
@@ -24,7 +28,15 @@ public class FreeBoardServlet extends MyServlet{
 		req.setCharacterEncoding("utf-8");
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
-		if(info == null) {
+		// AJAX에서 로그인이 안된 경우 403이라는 에러 코드를 던진다.
+		String header=req.getHeader("AJAX");
+		if(header!=null && header.equals("true")  && info==null) {
+				resp.sendError(403);
+				return;
+		}
+			
+		// AJAX가 아닌 경우에 로그인이 안된 경우
+		if(info==null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 			return;
 		}
@@ -41,16 +53,19 @@ public class FreeBoardServlet extends MyServlet{
 			updateForm(req, resp);
 		}else if(uri.indexOf("update_ok.do") != -1) {
 			updateSubmit(req, resp);
-		}else if(uri.indexOf("reply.do") != -1){
-			replyForm(req, resp);
-		}else if(uri.indexOf("reply_ok.do") != -1){
-			replySubmit(req, resp);
 		}else if(uri.indexOf("delete.do") != -1){
 			delete(req, resp);
 		}else if(uri.indexOf("article.do") != -1) {
 			article(req, resp);
+		}else if(uri.indexOf("reply.do") != -1){
+			replyList(req, resp);
+		}else if(uri.indexOf("replyInsert.do") != -1){ //
+			replyInsert(req, resp);
+		}else if(uri.indexOf("replyUpdate.do") != -1) {
+			replyUpdate(req,resp);
+		}else if(uri.indexOf("replyDelete.do") != -1) {
+			replyDelete(req,resp);
 		}
-	
 	}
 	
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -164,15 +179,6 @@ public class FreeBoardServlet extends MyServlet{
 		dao.updateBoard(dto);
 		resp.sendRedirect(cp+"/board/free/article.do?page="+page+"&boardNum="+num);
 	}
-	protected void replyForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//답글 폼
-		forward(req, resp, "/WEB-INF/views/board/free/created.jsp");
-	}
-	protected void replySubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 답글 완료
-		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
-	}
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 삭제
 		String cp = req.getContextPath();
@@ -218,13 +224,7 @@ public class FreeBoardServlet extends MyServlet{
 		
 		 if(prevDto != null) { 
 			 prev_url +="&boardNum="+prevDto.getBoardNum(); 
-		}
-		 
-		/*
-		 * if(dto == null) { PrintWriter out = resp.getWriter();
-		 * out.println("<script>alert('이미 삭제된 게시물입니다.');</script>"); out.flush();
-		 * resp.sendRedirect(list_url); return; }
-		 */
+		 }
 		
 		req.setAttribute("page", page);
 		req.setAttribute("dto",dto);
@@ -236,5 +236,86 @@ public class FreeBoardServlet extends MyServlet{
 		forward(req, resp, "/WEB-INF/views/board/free/article.jsp");
 	}
 
+	protected void replyList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//댓글 리스트
+		MyUtil util = new MyUtil();
+		
+		String pageNo = req.getParameter("pageNo");
+		int current_page = 1;
+		if(pageNo != null) {
+			current_page = Integer.parseInt(pageNo);	
+		}
 
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+		
+		FreeBoardDAO dao = new FreeBoardDAO();
+		int dataCount = dao.replyCount(boardNum);
+		int rows = 5;
+		int total_page = util.pageCount(rows, dataCount);
+		if(current_page> total_page) {
+			current_page = total_page;
+		}
+		int start = (current_page-1)*rows+1;
+		int end = current_page*rows;
+		
+		List<FreeBoardReplyDTO> list = dao.listReply(boardNum, start, end);
+		String paging = util.pagingMethod(current_page, total_page, "listPage");
+		JSONObject job = new JSONObject();
+		job.put("dataCount",dataCount);
+		job.put("total_page",total_page);
+		job.put("current_page",current_page);
+		job.put("list",list);
+		job.put("paging",paging);
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter pw = resp.getWriter();
+		pw.print(job.toString());
+	}
+	protected void replyInsert(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 답글 완료
+		req.setCharacterEncoding("utf-8");
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		MyUtil util = new MyUtil();
+		FreeBoardReplyDTO dto = new FreeBoardReplyDTO();
+		FreeBoardDAO dao = new FreeBoardDAO();
+		dto.setEmail(info.getEmail());
+		dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
+		dto.setContent(util.htmlSymbols(URLDecoder.decode(req.getParameter("content"), "utf-8")));
+		
+		boolean flag = dao.insertReply(dto);
+		
+		JSONObject job = new JSONObject();
+		job.put("isUser", flag);
+		//JSON으로 결과 전송
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
+	}
+	
+	protected void replyDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		// TODO Auto-generated method stub
+		int replyNum = Integer.parseInt(req.getParameter("replyNum"));
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+		FreeBoardDAO dao = new FreeBoardDAO();
+		dao.deleteReply(boardNum, replyNum);
+		JSONObject job = new JSONObject();
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter pw = resp.getWriter();
+		pw.print(job.toString());
+	}
+
+	protected void replyUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		// TODO Auto-generated method stub
+		int replyNum = Integer.parseInt(req.getParameter("replyNum"));
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+		String content = URLDecoder.decode(req.getParameter("content"), "utf-8");
+		FreeBoardDAO dao = new FreeBoardDAO();
+		dao.updateReply(boardNum, replyNum, content);
+		JSONObject job = new JSONObject();
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter pw = resp.getWriter();
+		pw.print(job.toString());
+	}
 }
