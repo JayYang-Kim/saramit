@@ -80,6 +80,34 @@
     		});
     	}
     	
+    	function deleteReply(boardNum, replyNum) {
+    		
+    		
+    		var url = "<%=cp%>/board/replyDelete.do";
+    		var query = "boardNum=" + boardNum + "&replyNum=" + replyNum;
+    		
+    		$.ajax({
+    			type : "post",
+    			url : url,
+    			data : query,
+    			dataType : "json",
+    			success : function(data) {
+    				listPage(1);
+    			},
+    			beforeSend : function(jqXHR) {
+    				jqXHR.setRequestHeader("AJAX", true);
+    			},
+    			error : function(e) {
+    				if(e.status == 403) {
+    					location.href = "<%=cp%>/member/login.do";
+    					return;
+    				}
+    				
+    				console.log(e.responseText);
+    			}
+    		});
+    	}
+    	
     	jQuery(function(){
     		$(".message").hide();
     		listPage(1);
@@ -166,21 +194,21 @@
                 		<div class="title">
                 			<h3>댓글</h3>
                 		</div>
-                		<div>
+                		<div class="mt10">
                 			<form name="guestForm" method="post">
                 				<div>
                 					<input type="hidden" name="boardNum" value="${dto.boardNum}"/>
                 					<input type="hidden" name="answer" value="0"/>
                 					<textarea placeholder="내용을 입력해주세요." id="reply_content" name="reply_content" title="내용" style="min-height:120px;"></textarea>
-                					<div class="message"></div>
-                					<span class="txt">타인을 비방하거나 개인정보를 유출하는 글의 댓글은 삭제 처리가 될 수 있습니다.</span>
-                					<div>
-                						<button type="reset" class="btn_classic btn-white">다시입력</button>
+                					<div class="message t_red mt10"></div>
+                					<div class="txt mt10 mb10">* 타인을 비방하거나 개인정보를 유출하는 글의 댓글은 삭제 처리가 될 수 있습니다.</div>
+                					<div class="f_right">
+                						<button type="reset" class="btn_classic btn-white mr5">다시입력</button>
 	                					<button type="button" class="btn_classic btn-black" onclick="reply_send()">댓글 등록</button>
                 					</div>
                 				</div>
                 			</form>
-                			<div id="listReply"></div>
+                			<div id="listReply" class="clear pt15"></div>
                 		</div>
                 	</div>
                 </div>

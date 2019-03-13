@@ -741,4 +741,55 @@ public class BoardDAO {
 			}
 		}
 	}
+	
+	public void deleteBoardReply(int boardNum) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND answer = 0";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
+	
+	public void deleteReply(int boardNum, int replyNum) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND replyNum = ? AND answer = 0";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			pstmt.setInt(2, replyNum);
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
 }

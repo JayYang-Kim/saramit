@@ -5,63 +5,34 @@
 	String cp=request.getContextPath();
 %>
 
-
-<table style='width: 100%; margin: 10px auto 30px; border-spacing: 0px;'>
-<tr height="35">
-    <td>
-       <div style="clear: both;">
-           <div style="float: left;"><span style="color: #3EA9CD; font-weight: bold;">댓글 ${replyCount}개</span> <span>[댓글 목록, ${pageNo}/${total_page} 페이지]</span></div>
-           <div style="float: right; text-align: right;"></div>
-       </div>
-    </td>
-</tr>
-	<c:forEach var="dto" items="${list}">
-		<tr height='35' style='background: #eee;'>
-	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-right:none;'>
-	           <span><b>${dto.email}</b></span>
-	        </td>
-	       <td width='50%' style='padding:5px 5px; border:1px solid #cccccc; border-left:none;' align='right'>
-	           <span>${dto.created}</span> |
-			   
-	          <a onclick='deleteReply("1", "1");'>삭제</a>
-	
-	        </td>
-	    </tr>
-	    <tr>
-	        <td colspan='2' valign='top' style='padding:5px 5px;'>
-	        	${dto.content}
-	        </td>
-	    </tr>
-	    <tr>
-	        <td style='padding:7px 5px;'>
-	            <button type='button' class='btn btnReplyAnswerLayout' data-replyNum='1'>답글 <span id="answerCount1">1</span></button>
-	        </td>
-	        <td style='padding:7px 5px;' align='right'>
-	            <button type='button' class='btn' onclick="">좋아요 </button>
-	            <button type='button' class='btn' onclick="">싫어요 </button>
-	        </td>
-	    </tr>
-	
-	    <tr class='replyAnswer' style='display: none;'>
-	        <td colspan='2'>
-	            <div id='listReplyAnswer1' class='answerList' style='border-top: 1px solid #ccc;'></div>
-	            <div style='clear: both; padding: 10px 10px;'>
-	                <div style='float: left; width: 5%;'>└</div>
-	                <div style='float: left; width:95%'>
-	                    <textarea id='answerContent1' cols='72' rows='12' class='boxTA' style='width:98%; height: 70px;'></textarea>
-	                 </div>
-	            </div>
-	             <div style='padding: 0px 13px 10px 10px; text-align: right;'>
-	                <button type='button' class='btn' onclick='sendReplyAnswer(1);'>답글 등록</button>
-	            </div>
-	        
-	        </td>
-	    </tr>
-	</c:forEach>
-   
-     <tr height="40">
-         <td colspan='2' align="center">
-              ${paging}
-         </td>
-     </tr>
-</table>
+<c:if test="${replyCount != 0}">
+	<div class="reply">
+		<div class="replyCount" style="padding:10px;background-color:#4c4c4c;color:#ffffff;"> 
+			<span class="bold">댓글 ${replyCount}개</span>
+			<span>[댓글 목록, ${pageNo}/${total_page} 페이지]</span>
+		</div>
+		<div class="boxReply">
+			<ul>
+				<c:forEach var="dto" items="${list}">
+					<li>
+						<div class="box">
+							<div class="email mb10">${dto.email}</div>
+							<div class="content mb10">${dto.content}</div>
+							<div class="etc mb10"><span>${dto.created}</span> | <a onclick='deleteReply(${dto.boardNum}, ${dto.replyNum});'>삭제</a></div>
+							<div class="btn_reply">
+								<button type='button' class='btn btn-white btnReplyAnswerLayout' data-replyNum='1'>답글 <span id="answerCount1">1</span></button>
+		            			<button type='button' class='btn btn-white f_right' onclick="">싫어요 </button>
+		            			<button type='button' class='btn btn-white f_right mr5' onclick="">좋아요 </button>
+							</div>
+						</div>
+					</li>
+				</c:forEach>
+			</ul>
+		</div>
+		<div class="t_center m20 mb20 clear">
+			<c:if test="${dataCount != 0}">
+				${paging}
+			</c:if>
+		</div>
+	</div>
+</c:if>

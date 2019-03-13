@@ -61,6 +61,8 @@ public class BoardServlet extends MyServlet{
 			replySubmit(req, resp);
 		}else if(uri.indexOf("delete.do") != -1){
 			delete(req, resp);
+		}else if(uri.indexOf("replyDelete.do") != -1){
+			replyDelete(req, resp);
 		}
 	}
 	
@@ -408,10 +410,41 @@ public class BoardServlet extends MyServlet{
 			return;
 		}
 		
+		int countReply = dao.dataCountReply(boardNum);
+		
+		if(countReply > 0) {
+			dao.deleteBoardReply(boardNum);
+		}
+		
 		dao.deleteBoard(boardNum);
 		
 		resp.sendRedirect(cp + "/board/list.do?" + query);
 	}
-
-
+	
+	protected void replyDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//댓글 삭제
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		String state = "true";
+		
+		if(info == null) {
+			state = "loginFail";
+		} else {
+			BoardDAO dao = new BoardDAO();
+			
+			int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+			int replyNum = Integer.parseInt(req.getParameter("replyNum"));
+			
+			dao.deleteReply(boardNum, replyNum);
+		}
+		
+		JSONObject job = new JSONObject();
+		job.put("state", state);
+		
+		// json으로 결과 전송
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
+	}
 }
