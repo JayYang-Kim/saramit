@@ -91,7 +91,7 @@
 								<div style="margin: 10px 0 10px;">
 									<button type="button" class="btn btn-black" onclick="sendOk();">${mode=='update'?'수정하기':'작성하기'}</button>&nbsp;
 									<button type="reset" class="btn btn-black">초기화</button>&nbsp;
-									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/notification/article.do?boardNum=${num}&page=${page}';">취소하기</button>
+									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/notification/list.do';">취소하기</button>
 								</div>
 							</form>
 						</div>

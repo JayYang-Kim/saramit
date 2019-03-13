@@ -291,28 +291,14 @@
                                 </ul>
                             </div>
                             <div>
-                                <h3>공지사항</h3><p style="position: relative; top: 0; right: 0; z-index: 20"><a href="<%=cp%>/notification/list.do" class="add">공지사항 더보기</a></p>
+                                <h3>공지사항</h3><p style="position: relative; top: -33px; left:250px; z-index: 20"><a href="<%=cp%>/notification/list.do" class="add">공지사항 더보기</a></p>
                                 <ul>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
+                                	<c:forEach var="ndto" items="${recentNotifications}">
+	                                    <li>
+	                                        <a href="<%=cp%>/notification/article.do?boardNum=${ndto.boardNum}">${ndto.subject}</a>
+	                                        <span>${ndto.created}</span>
+	                                    </li>
+                                    </c:forEach>
                                 </ul>
                             </div>
                             <div>

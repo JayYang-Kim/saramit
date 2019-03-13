@@ -141,9 +141,14 @@ public class NotificationServlet extends MyServlet{
 		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		
 		// 이전글/다음글
-		NotificationDTO preReadDto = dao.readPrevNotification(dto.getBoardNum(), searchKey, searchValue);
-		NotificationDTO nextReadDto = dao.readNextNotification(dto.getBoardNum(), searchKey, searchValue);
-		
+		NotificationDTO preReadDto = dao.readPrevNotification(num, searchKey, searchValue);
+		NotificationDTO nextReadDto = dao.readNextNotification(num, searchKey, searchValue);
+		if(preReadDto != null) {
+			System.out.println(preReadDto.getSubject());
+		}
+		if(nextReadDto != null) {
+			System.out.println(nextReadDto.getSubject());
+		}
 		String query="page="+page;
 		if(searchValue.length()!=0) {
 			query+="&searchKey="+searchKey;
@@ -213,24 +218,23 @@ public class NotificationServlet extends MyServlet{
 				if(searchKey != null && searchValue != null) {
 					list_url += "?searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
 					article_url += "&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
-					list = dao.listBoard(start,end,searchKey,searchValue);
+					list = dao.listNotification(start,end,searchKey,searchValue);
 				}else {
-					list = dao.listBoard(start, end,"","");
+					list = dao.listNotification(start, end,"","");
 				}
 				//리스트 번호 만들기
 				int n = 0;
 				Date endDate = new Date();
 				long gap;
 				for(NotificationDTO dto : list) {
-					System.out.println(dto.getBoardNum());
 					dto.setListNum(dataCount-((current_page-1)*rows)-n);
 					try {
-						SimpleDateFormat format = new SimpleDateFormat();
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 						Date beginDate = format.parse(dto.getCreated());
 						gap=(endDate.getTime() - beginDate.getTime()) / (60*60* 1000);
 						dto.setGap(gap);
 					}catch (Exception e) {
-						// TODO: handle exception
+						System.out.println(e.toString());
 					}
 					dto.setCreated(dto.getCreated().substring(0,10));
 					n++;

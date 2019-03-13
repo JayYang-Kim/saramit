@@ -107,7 +107,7 @@ public class NotificationDAO {
 		return result;
 	}
 
-	public ArrayList<NotificationDTO> listBoard(int start, int end, String searchKey, String searchValue) {
+	public ArrayList<NotificationDTO> listNotification(int start, int end, String searchKey, String searchValue) {
 		// TODO Auto-generated method stub
 		ArrayList<NotificationDTO> list = new ArrayList<NotificationDTO>();
 		PreparedStatement pstmt = null;
@@ -289,8 +289,8 @@ public class NotificationDAO {
 					sb.append("and instr("+searchKey+",?)>=1 order by boardNum DESC ");
 					sb.append(")tb where rownum = 1");
 					pstmt = conn.prepareStatement(sb.toString());
-					pstmt.setInt(2, num);
-					pstmt.setString(3, searchValue);
+					pstmt.setInt(1, num);
+					pstmt.setString(2, searchValue);
 				}	
 				
 			}

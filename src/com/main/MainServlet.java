@@ -8,6 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.board.NotificationDAO;
+import com.board.NotificationDTO;
 import com.companies.CompaniesDAO;
 import com.companies.CompaniesDTO;
 import com.util.MyServlet;
@@ -30,7 +32,13 @@ public class MainServlet extends MyServlet{
 		// TODO Auto-generated method stub
 		CompaniesDAO dao = new CompaniesDAO();
 		List<CompaniesDTO> recentList = dao.recentCompanies();
+		NotificationDAO ndao = new NotificationDAO();
+		List<NotificationDTO> recentNoti = ndao.listNotification(1, 5, "", "");
+		for(NotificationDTO dto : recentNoti) {
+			dto.setCreated(dto.getCreated().substring(0,10));
+		}
 		req.setAttribute("recentCompanies", recentList);
+		req.setAttribute("recentNotifications", recentNoti);
 		forward(req, resp, "/WEB-INF/views/main/main.jsp");
 	}
 	

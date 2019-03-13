@@ -78,7 +78,7 @@
                     			<option value="subject">제목</option>
                     			<option value="content">내용</option>
                     			<option value="all">제목+내용</option>
-                    			<option value="email">작성자</option>
+                    			<option value="name">작성자</option>
                     		</select>
                     		<input type="text" name="searchValue">
                     		<button type="submit" class="btn btn-black">검 색</button>
