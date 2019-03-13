@@ -63,8 +63,12 @@ function resumeList(){
 			jqXHR.setRequestHeader("AJAX", true);
 		}
 		,error:function(e){
-		}
+			if(e.status==403){
+		 		location.href="<%=cp%>/member/login.do";
+		 		return;
+		 	}
 			console.log(e.responseText);
+		}
 	})
 }
 	

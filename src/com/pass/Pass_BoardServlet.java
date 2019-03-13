@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.board.BoardDTO;
 import com.main.SessionInfo;
 import com.util.MyServlet;
 import com.util.MyUtil;
@@ -26,21 +25,21 @@ public class Pass_BoardServlet extends MyServlet {
 		req.setCharacterEncoding("utf-8");
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
-			return;
-		}
-		
+
 		String uri = req.getRequestURI();
 		
-		//AJAX에서 로그인이 안된경우 403이라는 에러코드를 던진다.
+		// AJAX에서 로그인이 안된 경우 403이라는 에러 코드를 던진다.
 		String header=req.getHeader("AJAX");
-		if(header!=null && header.contentEquals("true") && info==null) {
+		if(header!=null && header.equals("true")  && info==null) {
 			resp.sendError(403);
 			return;
 		}
-
-		
+	
+		// AJAX가 아닌 경우에 로그인이 안된 경우
+		if(info==null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 		
 		if(uri.indexOf("created.do") != -1) {
 			createdForm(req, resp);
