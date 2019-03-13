@@ -319,5 +319,121 @@ public class Pass_boardDAO {
 		return dto;
 	}
 	
+	//게시물 수정
+	public int updateBoard(Pass_BoardDTO dto, String userEmail) {
+		int result=0;
+		PreparedStatement pstmt=null;
+		String sql;
+		
+		sql="UPDATE pass_resume SET title=?, companyName=?, field=?, content=?, gubun=? WHERE num=? AND userEmail=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getCompanyName());
+			pstmt.setString(3, dto.getField());
+			pstmt.setString(4, dto.getContent());
+			pstmt.setString(5, dto.getGubun());
+			pstmt.setInt(6, dto.getNum());
+			pstmt.setString(7, userEmail);
+			
+			result=pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}		
+		return result;
+		
+		
+	}
 	
+	public int deleteBoard(int num, String userEmail) {
+		int result=0;
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			if(userEmail.equals("admin")) {
+				sql="DELETE FROM pass_resume WHERE num=?";
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setInt(1, num);
+				result=pstmt.executeUpdate();
+			}else {
+				sql="DELETE FROM pass_resume WHERE num=? AND userEmail=?";
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setInt(1, num);
+				pstmt.setString(2, userEmail);
+				result=pstmt.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}		
+		return result;
+	}
+	
+	//관련자소서 리스트
+	public List<Pass_BoardDTO> resumeList (String companyName, int num){
+		List<Pass_BoardDTO> list=new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		StringBuffer sb=new StringBuffer();
+		
+		try {
+			sb.append("SELECT * FROM (");
+			sb.append("    SELECT ROWNUM rnum, tb.* FROM (");
+			sb.append("        SELECT num, title, companyName, field, content, gubun, created, hitCount");
+			sb.append("        FROM pass_resume");
+			sb.append("        WHERE INSTR(companyName, ? ) >= 1 AND num != ?");
+			sb.append("        ORDER BY created DESC");
+			sb.append("    )tb WHERE ROWNUM <=5");
+			sb.append(") WHERE rnum >=1");
+			
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setString(1, companyName);
+			pstmt.setInt(2, num);
+			
+			rs=pstmt.executeQuery();
+			
+			while (rs.next()) {
+				Pass_BoardDTO dto = new Pass_BoardDTO();
+				dto.setNum(rs.getInt("num"));
+				dto.setTitle(rs.getString("title"));
+				dto.setCompanyName(rs.getString("companyName"));
+				dto.setField(rs.getString("field"));
+				dto.setContent(rs.getString("content"));
+				dto.setGubun(rs.getString("gubun"));
+				dto.setCreated(rs.getDate("created").toString());
+				dto.setHitCount(rs.getInt("hitCount"));
+				
+				list.add(dto);
+			}
+				
+			} catch (Exception e) {
+				System.out.println(e.toString());
+			}finally {
+				if(rs!=null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						
+					}
+				}
+			}
+	
+		return list;
+	}
+
 }
