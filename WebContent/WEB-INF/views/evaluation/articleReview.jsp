@@ -36,10 +36,13 @@
 <c:if test="${sessionScope.member.email == dto.userEmail || sessionScope.member.email == 'admin'}">
 <script type="text/javascript">
 function deleteReview() {
-	if(confirm("평가 게시물을 삭제 하시겠습니까 ?")) {
+	
 		var url="<%=cp%>/companies/reviewDelete.do?boardNum=${dto.boardNum}&page=${page}";
 		location.href=url;
-	}
+	
+}
+
+
 }
 </script>
 </c:if>
@@ -72,7 +75,7 @@ function deleteReview() {
 							</colgroup>
 							<tr>
 								<th>기업 총 평점</th>
-								<td style="height:100px;vertical-align:top;">
+								<td style="height:70px;vertical-align:top;">
 								<p class="star">
 									<c:forEach var="dto" begin="1" end="${dto.star}">
 										<a class="on" href="#">★</a> 
@@ -111,7 +114,10 @@ function deleteReview() {
 	                   			<button class="btn_classic btn-white mr5">수정하기</button>
 			       			</c:if>
 			       			<c:if test="${sessionScope.member.email == dto.userEmail || sessionScope.member.email == 'admin'}">	
-	                   			<button type="button" class="btn_classic btn-red" onclick="deleteReview();">삭제하기</button>
+			       				
+			       				<a href="#" class="btn_classic btn-red" onclick="layerShow('#popup')">삭제하기</a>
+			       				
+	                   			<!--<button type="button" class="btn_classic btn-red" onclick="deleteReview();">삭제하기</button> -->
 			       			</c:if>
 			       			
 								
@@ -132,5 +138,20 @@ function deleteReview() {
         <!-- //Footer -->
   </div>
   <!-- //Wrap -->
+  <!-- pop_layer -->
+    <div id="popup" class="pop_bg">
+        <article class="pop_wrap">
+            <h1>기업평가 게시글 삭제</h1>
+            <div class="pop_cont">
+                <p>게시글을 삭제하시겠습니까?</p>
+                <p class="t_center mt20">
+                    <a href="#" class="button w72 btn_gray pop_close">취소</a>
+                    <a href="#" class="button w72 btn_red" onclick="deleteReview();">삭제</a>
+                </p>
+            </div>
+            <!-- 팝업을 닫을때는 .pop_close 클래스를 활용 하거나, popupHide 함수 활용 -->
+            <a href="#" class="btn_close pop_close">닫기</a>
+        </article>
+    </div>
 </body>
 </html>

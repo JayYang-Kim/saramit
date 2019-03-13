@@ -114,9 +114,10 @@ public class CompanyServlet extends MyServlet{
 		MyUtil util = new MyUtil();
 		EvaluationDAO dao = new EvaluationDAO();
 	      
+		// 넘어온 페이지 번호
 		String page = req.getParameter("page");
 		int current_page=1;
-		if(page!=null) 
+		if(page != null) 
 			current_page=Integer.parseInt(page);
 		
 		String searchKey = req.getParameter("searchKey");
@@ -136,21 +137,23 @@ public class CompanyServlet extends MyServlet{
 		else
 			dataCount = dao.dataCount(searchKey, searchValue);
 		
+		// 페이지 수 
 		int rows=10;
 		int total_page = util.pageCount(rows, dataCount);
 		if(current_page > total_page)
 			current_page = total_page;
 		
+		// 게시물 가져오기~
 		int start = (current_page -1) * rows + 1;
 		int end = current_page * rows;
 		
 		List<EvaluationDTO> list;
-		if(searchValue.length() ==0)
+		if(searchValue.length() == 0)
 			list = dao.listReview(start, end);
 		else
 			list = dao.listReview(start, end, searchKey, searchValue);
 		
-		
+		// 글번호	
 		int listNum, n=0;
 		Iterator<EvaluationDTO> it=list.iterator();
 		while(it.hasNext()) {
@@ -160,22 +163,26 @@ public class CompanyServlet extends MyServlet{
 			n++;
 		}
 		
-		
 		String query="";
 		if(searchValue.length()!=0) {
 			searchValue=URLEncoder.encode(searchValue,"utf-8");
 			query="searchKey="+searchKey+"&searchValue="+searchValue;
 		}
 		
-		String listUrl=cp+"/companies/listReiew.do";
+		String listUrl=cp+"/companies/listReview.do";
 		String articleUrl=cp+"/companies/articleReview.do?page="+current_page;
 		if(query.length()!=0) {
 			listUrl+="?"+query;
 			articleUrl+="&"+query;
 		}
 		
-		String paging=util.paging(current_page,total_page,listUrl);
+		// 별점 랭킹
+		List<EvaluationDTO> listS;
+		listS = dao.star();
+
+		String paging = util.paging(current_page,total_page,listUrl);
 		
+		req.setAttribute("listS", listS);
 		req.setAttribute("list", list);
 		req.setAttribute("page", current_page);
 		req.setAttribute("total_page", total_page);

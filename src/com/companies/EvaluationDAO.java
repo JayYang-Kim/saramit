@@ -392,4 +392,52 @@ public class EvaluationDAO {
 		return result;
 	}
 	
+	// 별점 순위 출력
+	public List<EvaluationDTO> star() {
+		List<EvaluationDTO> listS = new ArrayList<EvaluationDTO>();
+		PreparedStatement pstmt=null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append("select TRUNC(a.star) star, a.companyname, rank() over(order by a.star desc, a.companyname asc) rank from ( ");
+			sb.append("    select avg(star) star, c.companyemail, c.companyname ");
+			sb.append("    from cop_evaluation e ");
+			sb.append("	   join company c on e.companyemail=c.companyemail");
+			sb.append("	   group by c.companyemail,c.companyname) a ");
+			sb.append("where rownum <=10");
+
+
+			pstmt=conn.prepareStatement(sb.toString());	
+			
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				EvaluationDTO dtoS = new EvaluationDTO();
+				dtoS.setCop_name(rs.getString("companyname"));
+				dtoS.setStar(rs.getInt("star"));
+				dtoS.setRank(rs.getInt("rank"));
+				
+				listS.add(dtoS);
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return listS;
+	}
 }
