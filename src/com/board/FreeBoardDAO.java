@@ -426,7 +426,8 @@ public class FreeBoardDAO {
 		}
 	}
 	
-	public void insertReply(FreeBoardReplyDTO dto) {
+	public boolean insertReply(FreeBoardReplyDTO dto) {
+		boolean flag = true;
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
@@ -437,7 +438,7 @@ public class FreeBoardDAO {
 			pstmt.setString(3, dto.getContent());
 			pstmt.executeUpdate();
 		}catch (Exception e) {
-			e.printStackTrace();
+			flag = false;
 		}finally {
 			if(pstmt != null) {
 				try {
@@ -449,6 +450,7 @@ public class FreeBoardDAO {
 				}
 			}
 		}
+		return flag;
 	}
 	
 	public int replyCount(int boardNum) {

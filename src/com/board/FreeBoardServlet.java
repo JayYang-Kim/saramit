@@ -287,10 +287,11 @@ public class FreeBoardServlet extends MyServlet{
 		dto.setEmail(info.getEmail());
 		dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
 		dto.setContent(util.htmlSymbols(URLDecoder.decode(req.getParameter("content"), "utf-8")));
-		dao.insertReply(dto);
+		
+		boolean flag = dao.insertReply(dto);
 		
 		JSONObject job = new JSONObject();
-		
+		job.put("isUser", flag);
 		//JSON으로 결과 전송
 		resp.setContentType("text/html;charset=utf-8");
 		PrintWriter out = resp.getWriter();

@@ -219,6 +219,11 @@
     				jqXHR.setRequestHeader("AJAX",true); //서버에서  AJAX라는 사실을 알 수 있도록 헤더에 정보를 보낸다. 내가 그냥 추가 시키는 거
     			},
     			success:function(data){
+    				if(!data.isUser){
+    					alert("기업 회원은 댓글을 작성할 수 없습니다.");
+    					$("#replyContent").val("");
+    					return;
+    				}
     				$("#replyContent").val("");
     				listPage(1);
     			},
