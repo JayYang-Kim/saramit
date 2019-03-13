@@ -184,23 +184,23 @@
                 &nbsp;
                 <label for="region">지역</label>                
                 <select size="1" name="region">
-                    <option value="seoul">서울특별시</option>
-                    <option value="busan">부산광역시</option>
-                    <option value="daegu">대구광역시</option>
-                    <option value="incheon">인천광역시</option>
-                    <option value="daejeon">대전광역시</option>
-                    <option value="gwangju">광주광역시</option>
-                    <option value="ulsan">울산광역시</option>
-                    <option value="sejong">세종특별자치시</option>
-                    <option value="gwangwon">강원도</option>
-                    <option value="gyeonggi">경기도</option>
-                    <option value="chungcheongbukdo">충청북도</option>
-                    <option value="chungcheongnamdo">충청남도</option>
-                    <option value="jeonrabukdo">전라북도</option>
-                    <option value="jeonranamdo">전라남도</option>
-                    <option value="gyeongsangbukdo">경상북도</option>
-                    <option value="gyeongsangnamdo">경상남도</option>
-                    <option value="jejudo">제주특별자치도</option>
+                    <option value="1">서울특별시</option>
+                    <option value="2">부산광역시</option>
+                    <option value="3">대구광역시</option>
+                    <option value="4">인천광역시</option>
+                    <option value="5">대전광역시</option>
+                    <option value="6">광주광역시</option>
+                    <option value="7">울산광역시</option>
+                    <option value="8">세종특별자치시</option>
+                    <option value="9">강원도</option>
+                    <option value="10">경기도</option>
+                    <option value="11">충청북도</option>
+                    <option value="12">충청남도</option>
+                    <option value="13">전라북도</option>
+                    <option value="14">전라남도</option>
+                    <option value="15">경상북도</option>
+                    <option value="16">경상남도</option>
+                    <option value="17">제주특별자치도</option>
                 </select>
                 &nbsp;
                 <input type="text" size="10" name="major" placeholder="전공/학과명">

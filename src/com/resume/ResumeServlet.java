@@ -1,7 +1,6 @@
 package com.resume;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import com.main.SessionInfo;
 import com.member.MemberDAO;
-
 import com.util.MyServlet;
 import com.util.MyUtil;
 
@@ -41,7 +39,7 @@ public class ResumeServlet extends MyServlet {
 			view(req, resp);
 		} else if (uri.indexOf("update.do") != -1) {
 			updateForm(req, resp);
-		} else if (uri.indexOf("update_ok.do") != -1) {
+		} else if (uri.indexOf("update_ok.do") != -1) { //이력서 수정완료
 			updateSubmit(req, resp);
 		} else if (uri.indexOf("view.do") != -1) {
 			view(req, resp);
@@ -169,7 +167,7 @@ public class ResumeServlet extends MyServlet {
 		EducationDTO dto_education = new EducationDTO();
 		dto_education.setEducationCode(Integer.parseInt(req.getParameter("educationCode")));
 		dto_education.setSchoolName(req.getParameter("schoolName"));
-		dto_education.setRegion(req.getParameter("region"));
+		dto_education.setRegion(Integer.parseInt(req.getParameter("region")));
 		dto_education.setMajor(req.getParameter("major"));
 		dto_education.setEntrance(req.getParameter("entrance"));
 		dto_education.setGraduate(req.getParameter("graduate"));
@@ -186,28 +184,27 @@ public class ResumeServlet extends MyServlet {
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 이력서 수정완료
-		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
 
-		forward(req, resp, "/WEB-INF/views/resume/update.jsp");
+		forward(req, resp, "/WEB-INF/views/resume/update_ok.jsp");
 	}
 
 	protected void view(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 이력서 보기
 		int resumeCode = Integer.parseInt(req.getParameter("resumeCode"));
 		ResumeDAO dao=new ResumeDAO();
-		ResumeDTO dto=dao.readResume(resumeCode);
+		ResumeDTO dto_resume=dao.readResume(resumeCode);
+		
 		EducationDTO dto_edu=dao.readEducation(resumeCode);
 		List<AwardsDTO> awardList = dao.readAwards(resumeCode);
+		List<LicenseDTO> licenseList= dao.readLicense(resumeCode);
+		List<CareerDTO> CareerList=dao.readCareer(resumeCode);
+
 		
-		for(AwardsDTO adto : awardList) {
-			System.out.println(adto.getAwardsName());
-		}
-	
-		 List<LicenseDTO> licenseList=new ArrayList<LicenseDTO>(); 
-		 List<CareerDTO> CareerList=new ArrayList<CareerDTO>();
-		 
-		 
+		req.setAttribute("awardList", awardList);
+		req.setAttribute("licenseList", licenseList);
+		req.setAttribute("CareerList", CareerList);
+		req.setAttribute("dto_resume", dto_resume);
+		req.setAttribute("dto_edu", dto_edu);
 		// db 해당 이력서 가져오기
 
 		forward(req, resp, "/WEB-INF/views/resume/view.jsp");

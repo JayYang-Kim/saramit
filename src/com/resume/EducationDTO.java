@@ -4,7 +4,7 @@ public class EducationDTO {
 	private int educationCode;
 	private int resumeCode;
 	private String schoolName;
-	private String region;
+	private int region;
 	private String major;
 	private String entrance;
 	private String graduate;
@@ -35,10 +35,11 @@ public class EducationDTO {
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
 	}
-	public String getRegion() {
+	
+	public int getRegion() {
 		return region;
 	}
-	public void setRegion(String region) {
+	public void setRegion(int region) {
 		this.region = region;
 	}
 	public String getMajor() {

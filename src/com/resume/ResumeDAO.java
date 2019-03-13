@@ -241,7 +241,7 @@ public class ResumeDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, num);
 			pstmt.setString(2, dto.getSchoolName());
-			pstmt.setString(3, dto.getRegion());
+			pstmt.setInt(3, dto.getRegion());
 			pstmt.setString(4, dto.getMajor());
 			pstmt.setString(5, dto.getEntrance());
 			pstmt.setString(6, dto.getGraduate());
@@ -326,16 +326,18 @@ public class ResumeDAO {
 		String sql;
 		
 		try {
-			sql="SELECT userEmail, resumeCode, title, created FROM resume";
+			sql="SELECT name, birth, gender, addr, title FROM resume WHERE resumeCode=?";
 			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
 			rs=pstmt.executeQuery();
 			
 			if(rs.next()) {
 				dto = new ResumeDTO();
-				dto.setUserEmail(rs.getString(1));
-				dto.setResumeCode(rs.getInt(2));
-				dto.setTitle(rs.getString(3));
-				dto.setCreated(rs.getString(4));
+				dto.setName(rs.getString(1));
+				dto.setBirth(rs.getDate(2).toString());
+				dto.setGender(rs.getString(3));
+				dto.setAddr(rs.getString(4));
+				dto.setTitle(rs.getString(5));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -374,7 +376,7 @@ public class ResumeDAO {
 				dto = new EducationDTO();
 				dto.setEducationCode(rs.getInt(1));
 				dto.setSchoolName(rs.getString(2));
-				dto.setRegion(rs.getString(3));
+				dto.setRegion(rs.getInt(3));
 				dto.setMajor(rs.getString(4));
 				dto.setEntrance(rs.getString(5));
 				dto.setGraduate(rs.getString(6));
@@ -421,6 +423,93 @@ public class ResumeDAO {
 				dto.setAwardsName(rs.getString(2));
 				dto.setAwards_date(rs.getString(3));
 				dto.setAwards_publisher(rs.getString(4));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		return list;
+	}
+
+	public List<LicenseDTO> readLicense(int resumeCode) {
+		List<LicenseDTO> list = new ArrayList<LicenseDTO>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql;
+		
+		try {
+			sql="SELECT licensecode, licensename,license_date,license_publisher from license where resumecode=?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				LicenseDTO dto=new LicenseDTO();
+				dto.setLicenseCode(rs.getInt(1));
+				dto.setLicense_name(rs.getString(2));
+				dto.setLicense_date(rs.getString(3));
+				dto.setLicense_publisher(rs.getString(4));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		return list;
+	}
+
+	public List<CareerDTO> readCareer(int resumeCode) {
+		List<CareerDTO> list = new ArrayList<CareerDTO>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql;
+		
+		try {
+			sql="SELECT careercode,gubun,copname,joindate,resigndate,task,position from career WHERE ResumeCode=?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				CareerDTO dto = new CareerDTO();
+				dto.setCareerCode(rs.getInt(1));
+				dto.setGubun(rs.getString(2));
+				dto.setCopName(rs.getString(3));
+				dto.setJoinDate(rs.getString(4));
+				dto.setResignDate(rs.getString(5));
+				dto.setTask(rs.getString(6));
+				dto.setPosition(rs.getString(7));
 				list.add(dto);
 			}
 		} catch (Exception e) {
