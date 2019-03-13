@@ -247,7 +247,7 @@
             	<div style="position: absolute; right: 0;top: 500px;"><img alt="사진없지롱" src="<%=cp%>/resources/movingKAKAO.gif"></div>
 				<div class="freeBody">
 					<div class="freeContainer">
-						<h1 style="text-align: left; padding: 5px 8px">자유게시판</h1>
+						<h1 style="text-align: left; padding: 5px 8px">공지사항</h1>
 						<div class="board" align="center" style="text-align: center">
 							<h2 style="text-align: center; padding: 5px 8px; background-color: #4c4c4c; color: #fff">글보기</h2> 
 								<div class="innerDiv" style="padding-top: 15px; text-align: left;">
@@ -262,15 +262,23 @@
 								<div class="innerDiv">
 									<textarea style="width:80%; height: 350px; outline: none; border: none;" maxlength="1000" name="content" readonly="readonly">${dto.content}</textarea>
 								</div>
+								<div class="innerDiv" style=" text-align: left;">
+									 <b style="margin-left: 60px;">첨&nbsp; &nbsp;부 : </b>
+									 <c:if test="${not empty dto.saveFileName}">
+					                    &nbsp;<a href="<%=cp%>/notification/download.do?num=${dto.boardNum}" style="padding-left:10px;">${dto.originalFileName}</a>
+					                    (<fmt:formatNumber value="${dto.fileSize/1024}" pattern="0.00"/> Kbyte)
+					          		 </c:if>
+					          		 
+								</div>
 									<div align="left" style="border-bottom:1px solid #e4e4e4; height:30px; padding-top:10px; line-height: 20px;"><p style="padding-left:60px;">
-									<b>이전 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='${prev_url}'">${prevDto.subject}</a></p></div>
+									<b>이전 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='${prev_url}'">${preReadDto.subject}</a></p></div>
 									<div align="left" style="border-bottom:1px solid #e4e4e4; height:30px; padding-top:10px; line-height: 20px;"><p style="padding-left:60px;">
-									<b>다음 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='${next_url}'">${nextDto.subject}</a></p></div>
+									<b>다음 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='${next_url}'">${nextReadDto.subject}</a></p></div>
 								<div style="margin-top: 10px; height: 45px; border-bottom: 1px solid #e4e4e4">
-									<c:if test="${dto.userEmail == sessionScope.member.email}">
+									<c:if test="${dto.email == sessionScope.member.email}">
 									<button type="button" class="btn btn-black" id="btn_update">수정하기</button>&nbsp;
 									</c:if>
-									<c:if test="${dto.userEmail == sessionScope.member.email or sessionScope.member.email=='admin'}">
+									<c:if test="${dto.email == sessionScope.member.email or sessionScope.member.email=='admin'}">
 									<button type="button" class="btn btn-black" id="btn_delete">삭제하기</button>&nbsp;
 									</c:if>
 									<button type="button" class="btn btn-black" onclick="javascript:location.href='${list_url}';">목록으로</button>

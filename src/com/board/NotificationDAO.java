@@ -233,7 +233,7 @@ public class NotificationDAO {
 		return dto;
 	}
 
-	private void plusHitCount(int num) {
+	public void plusHitCount(int num) {
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
@@ -256,22 +256,22 @@ public class NotificationDAO {
 		}
 	}
 	
-	public FreeBoardDTO readNextBoard(int num,String searchKey, String searchValue) {
+	public NotificationDTO readNextNotification(int num,String searchKey, String searchValue) {
 		// TODO Auto-generated method stub
-		FreeBoardDTO dto = null;
+		NotificationDTO dto = null;
 		PreparedStatement pstmt = null;
 		StringBuffer sb = new StringBuffer();
 		ResultSet rs = null;
 		try{
 			if(searchKey==null && searchValue==null) { //검색값이 없는 경우
 				sb.append("select rownum, tb.* from(");
-				sb.append("select boardNum,subject from board where boardNum<?");
+				sb.append("select boardNum,subject from notification where boardNum<?");
 				sb.append(" order by boardNum DESC)tb where rownum = 1");
 				pstmt = conn.prepareStatement(sb.toString());
 				pstmt.setInt(1, num);
 			}else {
 				sb.append("select rownum, tb.* from(");
-				sb.append("select boardNum,subject from board where boardNum<?");
+				sb.append("select boardNum,subject from notification where boardNum<?");
 				if(searchKey.equalsIgnoreCase("name")) {
 					sb.append("and name=? order by boardNum DESC ");
 					sb.append(")tb where rownum = 1");
@@ -289,16 +289,16 @@ public class NotificationDAO {
 					sb.append("and instr("+searchKey+",?)>=1 order by boardNum DESC ");
 					sb.append(")tb where rownum = 1");
 					pstmt = conn.prepareStatement(sb.toString());
-					pstmt.setInt(1, num);
-					pstmt.setString(2, searchValue);
+					pstmt.setInt(2, num);
+					pstmt.setString(3, searchValue);
 				}	
 				
 			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				dto = new FreeBoardDTO();
-				dto.setBoardNum(rs.getInt(2));
-				dto.setSubject(rs.getString(3));
+				dto = new NotificationDTO();
+				dto.setBoardNum(rs.getInt(1));
+				dto.setSubject(rs.getString(2));
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -325,22 +325,22 @@ public class NotificationDAO {
 		return dto;
 	}
 	
-	public FreeBoardDTO readPrevBoard(int num,String searchKey, String searchValue) {
+	public NotificationDTO readPrevNotification(int num,String searchKey, String searchValue) {
 		// TODO Auto-generated method stub
-		FreeBoardDTO dto = null;
+		NotificationDTO dto = null;
 		PreparedStatement pstmt = null;
 		StringBuffer sb = new StringBuffer();
 		ResultSet rs = null;
 		try{
 			if(searchKey==null && searchValue==null) { //검색값이 없는 경우
 				sb.append("select rownum, tb.* from(");
-				sb.append("select boardNum,subject from board where boardNum>?");
+				sb.append("select boardNum,subject from notification where boardNum>?");
 				sb.append(" order by boardNum ASC)tb where rownum = 1");
 				pstmt = conn.prepareStatement(sb.toString());
 				pstmt.setInt(1, num);
 			}else {
 				sb.append("select rownum, tb.* from(");
-				sb.append("select boardNum,subject from board where boardNum>?");
+				sb.append("select boardNum,subject from notification where boardNum>?");
 				if(searchKey.equalsIgnoreCase("name")) {
 					sb.append("and name=? order by boardNum ASC ");
 					sb.append(")tb where rownum = 1");
@@ -365,7 +365,7 @@ public class NotificationDAO {
 			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				dto = new FreeBoardDTO();
+				dto = new NotificationDTO();
 				dto.setBoardNum(rs.getInt(2));
 				dto.setSubject(rs.getString(3));
 			}

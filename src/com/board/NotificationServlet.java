@@ -108,7 +108,55 @@ public class NotificationServlet extends MyServlet{
 		}
 	}
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		HttpSession session=req.getSession();
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		
+		NotificationDAO dao=new NotificationDAO();
+		String cp=req.getContextPath();
+		
+		if(info==null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
+		
+		int num=Integer.parseInt(req.getParameter("boardNum"));
+		String page=req.getParameter("page");
+		
+		String searchKey=req.getParameter("searchKey");
+		String searchValue=req.getParameter("searchValue");
+		if(searchKey==null) {
+			searchKey="subject";
+			searchValue="";
+		}
+		searchValue=URLDecoder.decode(searchValue, "utf-8");
+	
+		
+		// 게시물 가져오기
+		NotificationDTO dto=dao.readNotification(num);
+		if(dto==null) {
+			resp.sendRedirect(cp+"/notification/list.do?page="+page);
+			return;
+		}
+		
+		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		
+		// 이전글/다음글
+		NotificationDTO preReadDto = dao.readPrevNotification(dto.getBoardNum(), searchKey, searchValue);
+		NotificationDTO nextReadDto = dao.readNextNotification(dto.getBoardNum(), searchKey, searchValue);
+		
+		String query="page="+page;
+		if(searchValue.length()!=0) {
+			query+="&searchKey="+searchKey;
+			query+="&searchValue="+URLEncoder.encode(searchValue, "utf-8");
+		}
+		
+		req.setAttribute("dto", dto);
+		req.setAttribute("preReadDto", preReadDto);
+		req.setAttribute("nextReadDto", nextReadDto);
+		req.setAttribute("query", query);
+		req.setAttribute("page", page);
+		
+		forward(req, resp, "/WEB-INF/views/notification/article.jsp");
 		
 	}
 
@@ -129,7 +177,6 @@ public class NotificationServlet extends MyServlet{
 
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
 		//글 리스트
-		
 				//기본 세팅
 				String cp = req.getContextPath();
 				MyUtil util = new MyUtil();
@@ -185,7 +232,7 @@ public class NotificationServlet extends MyServlet{
 					}catch (Exception e) {
 						// TODO: handle exception
 					}
-			/* dto.setCreated(dto.getCreated().substring(0,10)); */
+					dto.setCreated(dto.getCreated().substring(0,10));
 					n++;
 				}
 				
