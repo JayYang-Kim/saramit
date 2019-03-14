@@ -121,7 +121,7 @@ function resumeList(){
 
 								<tr>
 									<th>내용</th>
-									<td style="height:480px;vertical-align:top;">${dto.content}</td>
+									<td colspan="3" style="padding:30px;height:480px;vertical-align:top;">${dto.content}</td>
 								</tr>
 							</table>
 							

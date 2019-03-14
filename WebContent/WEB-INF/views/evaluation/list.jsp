@@ -61,10 +61,14 @@
                   		<h3>회사평가 </h3>
                   	</div>
                   	
-                  	<div class="mt20 mb20">&nbsp;&nbsp;기업 평점 순위</div>
-                  	<div>
-                  	<table class="tb_kakao mb10" style="width: 500px; float: left;">
-                  			
+                  	<div class="mt20 mb20" style="font-size:14px;font-weight:bold;">기업 평점 순위</div>
+                  	<div class="inblock" style="background-color:#ffffff;border-top:1px solid #c4c4c4;border-bottom:1px solid #c4c4c4;">
+                  	<table class="tb_kakao" style="width: 512px; float: left;">
+                  		<colgroup>
+                  			<col style="width:50px;">
+                  			<col>
+                  			<col style="width:150px;">
+                  		</colgroup>	
                 		<c:forEach var="dtoS" items="${listS}" end="4">
                 			<tr>
                 	  			<td>${dtoS.rank}</td>
@@ -82,7 +86,12 @@
 		              		<tr>
 		              	</c:forEach>
 		              	 </table>
-		              	<table class="tb_kakao mb10" style="width: 500px; float: left;">
+		              	<table class="tb_kakao" style="width: 512px; float: left;">
+		              	<colgroup>
+                  			<col style="width:50px;">
+                  			<col>
+                  			<col style="width:150px;">
+                  		</colgroup>	
 		              	<c:forEach var="dtoS" items="${listS}" begin="5" end="9">
                 			<tr>
                 	  			<td>${dtoS.rank}</td>

@@ -927,7 +927,7 @@ public class BoardDAO {
 		String sql = null;
 		
 		try {
-			sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND answer = 0";
+			sql = "DELETE FROM feedback_reply WHERE boardNum = ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -952,12 +952,14 @@ public class BoardDAO {
 		String sql = null;
 		
 		try {
-			sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND replyNum = ? AND answer = 0";
+			sql = "DELETE FROM feedback_reply WHERE boardNum = ?";
+			/*sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND replyNum = ?";*/
+			/*sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND replyNum = ? AND answer = 0";*/
 			
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, boardNum);
-			pstmt.setInt(2, replyNum);
+			/* pstmt.setInt(2, replyNum); */
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
