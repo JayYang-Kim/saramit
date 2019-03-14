@@ -3,6 +3,7 @@ package com.board;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,12 +43,12 @@ public class BoardDAO {
 			if(mode.equalsIgnoreCase("created")) {
 				dto.setGroupNum(seq);
 				dto.setOrderNum(0);
-				dto.setDept(0);
+				dto.setDepth(0);
 				dto.setParent(0);
 			} else if(mode.equalsIgnoreCase("reply")) {
 				updateOrderNo(dto.getGroupNum(), dto.getOrderNum());
 				
-				dto.setDept(dto.getDept() + 1);
+				dto.setDepth(dto.getDepth() + 1);
 				dto.setOrderNum(dto.getOrderNum() + 1);
 			}
 			
@@ -61,7 +62,7 @@ public class BoardDAO {
 			pstmt.setString(3, dto.getSubject());
 			pstmt.setString(4, dto.getContent());
 			pstmt.setInt(5, dto.getGroupNum());
-			pstmt.setInt(6, dto.getDept());
+			pstmt.setInt(6, dto.getDepth());
 			pstmt.setInt(7, dto.getOrderNum());
 			pstmt.setInt(8, dto.getParent());
 			
@@ -86,13 +87,42 @@ public class BoardDAO {
 		}
 	}
 	
+	public void insertReply(FeedBack_ReplyDTO dto) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "INSERT INTO feedback_reply(replyNum, boardNum, email, content, answer) "
+					+ "VALUES(feedback_reply_seq.NEXTVAL, ?, ?, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, dto.getBoardNum());
+			pstmt.setString(2, dto.getEmail());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setInt(4, dto.getAnswer());
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+
+				}
+			}
+		}
+	}
+	
 	public int updateOrderNo(int groupNum, int orderNo) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		
 		try {
-			sql = "UPDATE board SET order = orderNo + 1 WHERE groupNum ? AND orderNo > ?";
+			sql = "UPDATE feedback SET orderNo = orderNo + 1 WHERE groupNum = ? AND orderNo > ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -142,7 +172,7 @@ public class BoardDAO {
 				dto.setSubject(rs.getString("subject"));
 				dto.setContent(rs.getString("content"));
 				dto.setGroupNum(rs.getInt("groupNum"));
-				dto.setDept(rs.getInt("depth"));
+				dto.setDepth(rs.getInt("depth"));
 				dto.setOrderNum(rs.getInt("orderNo"));
 				dto.setParent(rs.getInt("parent"));
 				dto.setCreated(rs.getDate("created").toString());
@@ -207,6 +237,47 @@ public class BoardDAO {
 			}
 		}
 			
+		return result;
+	}
+	
+	public int dataCountReply(int boardNum) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		
+		try {
+			sql = "SELECT NVL(COUNT(*), 0) FROM feedback_reply WHERE boardNum = ? AND answer = 0";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+
+				}
+			}
+		}
+		
 		return result;
 	}
 	
@@ -289,7 +360,7 @@ public class BoardDAO {
 				dto.setUserName(rs.getString("userName"));
 				dto.setSubject(rs.getString("subject"));
 				dto.setGroupNum(rs.getInt("groupNum"));
-				dto.setDept(rs.getInt("depth"));
+				dto.setDepth(rs.getInt("depth"));
 				dto.setOrderNum(rs.getInt("orderNo"));
 				dto.setHitCount(rs.getInt("hitCount"));
 				dto.setCreated(rs.getDate("created").toString());
@@ -360,7 +431,7 @@ public class BoardDAO {
 				dto.setUserName(rs.getString("userName"));
 				dto.setSubject(rs.getString("subject"));
 				dto.setGroupNum(rs.getInt("groupNum"));
-				dto.setDept(rs.getInt("depth"));
+				dto.setDepth(rs.getInt("depth"));
 				dto.setOrderNum(rs.getInt("orderNo"));
 				dto.setHitCount(rs.getInt("hitCount"));
 				dto.setCreated(rs.getDate("created").toString());
@@ -388,6 +459,62 @@ public class BoardDAO {
 			}
 		}
 		
+		return list;
+	}
+	
+	public List<FeedBack_ReplyDTO> listReply(int boardNum, int start, int end) {
+		List<FeedBack_ReplyDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {	
+			sb.append("SELECT * FROM (");
+			sb.append("		SELECT ROWNUM rnum, tb.* FROM (");
+			sb.append("				SELECT replyNum, boardNum, email, mu.userName, content, created");
+			sb.append("				FROM feedback_reply fr");
+			sb.append("				JOIN member_user mu");
+			sb.append("				ON fr.email = mu.userEmail");
+			sb.append("				WHERE fr.boardNum = ?  AND fr.answer = 0");
+			sb.append("				ORDER BY fr.replyNum DESC");
+			sb.append("		) tb WHERE ROWNUM <= ?");
+			sb.append(") WHERE rnum >= ?");
+
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, boardNum);
+			pstmt.setInt(2, end);
+			pstmt.setInt(3, start);
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				FeedBack_ReplyDTO dto = new FeedBack_ReplyDTO();
+				
+				dto.setReplyNum(rs.getInt("replyNum"));
+				dto.setBoardNum(rs.getInt("boardNum"));
+				dto.setEmail(rs.getString("email"));
+				dto.setContent(rs.getString("content"));
+				dto.setCreated(rs.getDate("created").toString());
+				
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+				
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
 		return list;
 	}
 	
@@ -600,6 +727,57 @@ public class BoardDAO {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, boardNum);
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
+	
+	public void deleteBoardReply(int boardNum) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND answer = 0";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+	}
+	
+	public void deleteReply(int boardNum, int replyNum) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql = "DELETE FROM feedback_reply WHERE boardNum = ? AND replyNum = ? AND answer = 0";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			pstmt.setInt(2, replyNum);
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {

@@ -386,4 +386,31 @@ public class MemberDAO {
 			}
 		}	
 	}
+	
+	public void withdrawMember(String memberEmail, int levelCode) {
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			sql="UPDATE member SET statuscode=2 WHERE memberEmail=? AND levelCode=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, memberEmail);
+			pstmt.setInt(2, levelCode);
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		
+	}
 }

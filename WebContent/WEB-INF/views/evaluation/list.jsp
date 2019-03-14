@@ -10,6 +10,29 @@
 <head>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
 <style type="text/css"> 
+
+.star {
+	font-size: 0;
+	letter-spacing: -4px;
+}
+
+.star a {
+	font-size: 14px;
+	letter-spacing: 0;
+	display: inline-block;
+	margin-left: 3px;
+	color: #cccccc;
+	text-decoration: none;
+}
+
+.star a:first-child {
+	margin-left: 0;
+}
+
+.star a.on {
+	color: #F2CB61;
+}
+
 </style>
 <script type="text/javascript">
 	function searchList() {
@@ -35,26 +58,52 @@
             	</div>
                 <div class="inner">
                 	<div class="pageTitle mt30 pb10">
-                  		<h3>이거 회사평가 게시글이다</h3>
+                  		<h3>회사평가 </h3>
                   	</div>
-                  	<%-- <div style="height:50px; margin: 30px auto;">
-                  		<form name="searchForm" action="<%=cp%>/companies/listReview.do" method="post">
-                  			<select name="searchKey" class="selectField" style="width:120px; height:45px;">
-                  				<option value="cop" selected="selected">기업명</option>
-                  				<option value="content1">내용</option>
-                  				<option value="created">등록일</option>
-                  			</select>
-                  			<input type="text" name="searchValue" style="width:474px; height:45px;">
-			            	<button type="button" class=" btn btn-black" style="width:100px; height:45px;" onclick="searchList()">검색</button>
-                  		</form>
-                  	</div> --%>
-            		<div>
-	                  	<%-- <table style="width:100%; margin: 20px auto 0px; border-spacing: 0px;">
-	                  		<tr height="10">
-	                  			<td align="left" width="50%">${dataCount}개(${page}/${total_page} 페이지)</td>
-	                  			<td align="right">&nbsp;</td>
-	                  		</tr>		
-	                  	</table> --%>
+                  	
+                  	<div class="mt20 mb20">&nbsp;&nbsp;기업 평점 순위</div>
+                  	<div>
+                  	<table class="tb_kakao mb10" style="width: 500px; float: left;">
+                  			
+                		<c:forEach var="dtoS" items="${listS}" end="4">
+                			<tr>
+                	  			<td>${dtoS.rank}</td>
+		                 		<td>${dtoS.cop_name}</td>
+		                 		<td>
+									<p class="star">
+										<c:forEach var="dto" begin="1" end="${dtoS.star}">
+											<a class="on" href="#">★</a> 
+										</c:forEach>
+										<c:forEach var="dto" begin="1" end="${5-dtoS.star}">
+											<a href="#">★</a> 
+										</c:forEach>
+									</p>
+						  		</td>
+		              		<tr>
+		              	</c:forEach>
+		              	 </table>
+		              	<table class="tb_kakao mb10" style="width: 500px; float: left;">
+		              	<c:forEach var="dtoS" items="${listS}" begin="5" end="9">
+                			<tr>
+                	  			<td>${dtoS.rank}</td>
+		                 		<td>${dtoS.cop_name}</td>
+		                 		<td>
+									<p class="star">
+										<c:forEach var="dto" begin="1" end="${dtoS.star}">
+											<a class="on" href="#">★</a> 
+										</c:forEach>
+										<c:forEach var="dto" begin="1" end="${5-dtoS.star}">
+											<a href="#">★</a> 
+										</c:forEach>
+									</p>
+						  		</td>
+		              		<tr>
+		              	</c:forEach>
+		              
+	                </table>
+	                </div>
+            		<div class="clear">
+	                  	
 	                  	<div class="f_left mt20 mb20">
 	                  		<span>${dataCount}개 (${page}/${total_page} 페이지)</span>
 	                  	</div>
@@ -69,6 +118,7 @@
 	               				<button type="button" class="btn btn-black" onclick="searchList()">검색</button>
 	               			</form>
 	                	</div>
+	                	
 	                  	<table class="tb_kakao tb_hover big">
 	                  		<colgroup>
                 				<col style="width:40px">
@@ -86,8 +136,7 @@
 	                  		<tbody>
 	                  			<c:forEach var="dto" items="${list}">
 		                  			<tr align="center" height="35" style="border-bottom: 1px solid #cccccc;" onclick="location.href='${articleUrl}&boardNum=${dto.boardNum}'">
-			                  			<td>${dto.boardNum}</td>
-			                  			<!--<td><a href="${articleUrl}&boardNum=${dto.boardNum}">${dto.cop_name}</a></td>-->
+			                  			<td>${dto.listNum}</td>
 			                  			<td>${dto.cop_name}</td>
 			                  			<td>${dto.created}</td>
 			                  			<!-- <td>조회수</td> -->
@@ -99,19 +148,6 @@
 							</tbody>
 	                  	</table>
                   	
-                  		<%-- <table style="width:100%; margin:10px auto; border-spacing: 0px;'">
-	                  		<tr height="35">
-	                  			<td align="center">
-	                  				<c:if test="${dataCount==0}">
-	                  					등록된 게시물이 없습니다.
-	                  				</c:if>
-	                  				<c:if test="${dataCount!=0}">
-	                  					${paging}
-	                  				</c:if>
-	                  			</td>
-	                  		</tr>
-                  		</table> --%>
-                  		
                   		<div class="t_center m20 mb20">
 		                    <c:if test="${dataCount != 0}">
 		                    	${paging}

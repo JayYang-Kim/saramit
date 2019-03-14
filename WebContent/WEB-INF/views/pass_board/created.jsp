@@ -70,9 +70,6 @@
 					<div class="pageTitle mt30 pb10">
 						<h3>합격자소서 - 등록</h3>
 					</div>
-					<!-- <div class="body_title" style="width: 100%; margin: 20px auto; font-size: 20px;">
-					<h3>합격자소서 등록</h3>
-					</div> -->
 
 					<div class="mt15 mb15">
 						<form name="boardForm" method="post">
@@ -85,7 +82,7 @@
 								</colgroup>
 								<tr>
 									<th>제목</th>
-									<td colspan="3">${dto.title}</td>
+									<td colspan="3"><input type="text" name="title" maxlength="100" class="boxTF" style="width: 100%;" value="${dto.title}"></td>
 								</tr>
 									
 								<tr>
@@ -108,24 +105,6 @@
 										</select>
 									</td>
 								</tr>
-								
-								<!-- <tr>
-									<th>입력사항</th>
-									<td style="padding-left: 10px;">
-										<p>
-											회사명 : <input type="text" name="companyName"
-												class="boxTF mb20" style="width: 200px"
-												placeholder="ex) (주)사람잇">
-										</p> <span>지원분야 : <input type="text" name="field"
-											class="boxTF" style="width: 130px"
-											placeholder="ex) 웹개발, MD, 영업 등"></span> <span>구분 : <select
-											name="selectGubun" style="width: 60px">
-												<option value="new">신입</option>
-												<option value="career">경력</option>
-										</select>
-									</span>
-									</td>
-								</tr> -->
 
 								<tr>
 									<th>내용</th>
@@ -147,22 +126,6 @@
 								</c:if>
 							</div>
 							
-							<%-- <table
-								style="width: 100%; margin: 0px auto; border-spacing: 0px;">
-								<tr height="45">
-									<td align="center">
-										<button type="button" class="btn_classic btn-black"
-											onclick="sendBoard();">${mode=='update'?'수정완료':'등록하기'}</button>
-										<button type="reset" class="btn">다시입력</button>
-										<button type="button" class="btn mb20"
-											onclick="javascript:location.href='<%=cp%>/pass_board/list.do';">${mode=='update'?'수정취소':'등록취소'}</button>
-										<c:if test="${mode=='update'}">
-											<input type="hidden" name="num" value="${dto.num}">
-											<input type="hidden" name="page" value="${page}">
-										</c:if>
-									</td>
-								</tr>
-							</table> --%>
 						</form>
 					</div>
 				</div>

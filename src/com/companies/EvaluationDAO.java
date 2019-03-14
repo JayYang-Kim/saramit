@@ -17,7 +17,7 @@ public class EvaluationDAO {
 	}
 	
 	// 기업평가 등록
-	public int insertReview(EvaluationDTO dto,String mode) {
+	public int insertReview(EvaluationDTO dto) {
 		int result=0;
 		PreparedStatement pstmt = null;
 		StringBuffer sb = new StringBuffer();
@@ -49,6 +49,7 @@ public class EvaluationDAO {
 		return result;
 	}
 	
+	// 해당 기업평가(리뷰) 보기
 	public EvaluationDTO readReview(int boardNum) {
 		EvaluationDTO dto = null;
 		PreparedStatement pstmt=null;
@@ -56,7 +57,7 @@ public class EvaluationDAO {
 		StringBuffer sb = new StringBuffer();
 		
 		try {
-			sb.append("select c.companyname,e.boardNum,star,content1,content2,content3,content4 ");
+			sb.append("select c.companyname,c.companyemail,e.boardNum,star,content1,content2,content3,content4,useremail ");
 			sb.append("        from cop_evaluation e ");
 			sb.append("        join company c on e.companyemail=c.companyemail ");
 			sb.append("where boardNum=?");
@@ -70,11 +71,13 @@ public class EvaluationDAO {
 				dto=new EvaluationDTO();
 				dto.setBoardNum(rs.getInt("boardNum"));
 				dto.setCop_name(rs.getString("companyname"));
+				dto.setCompanyEmail(rs.getString("companyemail"));
 				dto.setStar(rs.getInt("star"));
 				dto.setContent1(rs.getString("content1"));
 				dto.setContent2(rs.getString("content2"));
 				dto.setContent3(rs.getString("content3"));
 				dto.setContent4(rs.getString("content4"));
+				dto.setUserEmail(rs.getString("useremail"));
 			}
 			
 		} catch (Exception e) {
@@ -98,6 +101,7 @@ public class EvaluationDAO {
 		return dto;
 	}
 	
+	// 기업평가(리뷰) 리스트
 	public List<EvaluationDTO> listReview(int start, int end) {
 		List<EvaluationDTO> list = new ArrayList<EvaluationDTO>();
 		PreparedStatement pstmt=null;
@@ -107,7 +111,7 @@ public class EvaluationDAO {
 		try {
 			sb.append("select * from ( ");
 			sb.append("    select rownum rnum, tb.* from ( ");
-			sb.append("        select c.companyname,e.boardNum,to_char(e.created,'yyyymmdd') created ");
+			sb.append("        select c.companyname,e.boardNum,e.created ");
 			sb.append("        from cop_evaluation e");
 			sb.append("		   join company c on c.companyemail=e.companyemail ");
 			sb.append("        order by boardNum desc ");
@@ -124,7 +128,7 @@ public class EvaluationDAO {
 				EvaluationDTO dto = new EvaluationDTO();
 				dto.setCop_name(rs.getString("companyname"));
 				dto.setBoardNum(rs.getInt("boardNum"));
-				dto.setCreated(rs.getString("created"));
+				dto.setCreated(rs.getDate("created").toString());
 				
 				list.add(dto);
 			}
@@ -150,7 +154,7 @@ public class EvaluationDAO {
 	}
 	
 	
-	// 검색!
+	// 기업 검색시 리스트
 	public List<EvaluationDTO> listReview(int start, int end, String searchKey, String searchValue) {
 		List<EvaluationDTO> list = new ArrayList<EvaluationDTO>();
 		
@@ -161,7 +165,7 @@ public class EvaluationDAO {
 		try {
 			sb.append("select * from ( ");
 			sb.append("    select rownum rnum, tb.* from ( ");
-			sb.append("        select c.companyname,e.boardNum,to_char(e.created,'yyyymmdd') created ");
+			sb.append("        select c.companyname,e.boardNum,e.created ");
 			sb.append("        from cop_evaluation e");
 			sb.append("        join company c on c.companyemail=e.companyemail ");
 			
@@ -191,7 +195,7 @@ public class EvaluationDAO {
 				
 				dto.setCop_name(rs.getString("companyname"));
 				dto.setBoardNum(rs.getInt("boardNum"));
-				dto.setCreated(rs.getString("created"));
+				dto.setCreated(rs.getDate("created").toString());
 				
 				list.add(dto);
 			}
@@ -215,7 +219,7 @@ public class EvaluationDAO {
 		return list;
 	}
 	
-	
+	// 데이터 개수
 	public int dataCount() {
 		int result=0;
 		PreparedStatement pstmt=null;
@@ -251,6 +255,7 @@ public class EvaluationDAO {
 		return result; 
 	}
 	
+	// 검색 시 데이터 개수
 	public int dataCount(String searchKey, String searchValue) {
 		int result=0;
 		PreparedStatement pstmt=null;
@@ -302,6 +307,7 @@ public class EvaluationDAO {
 		return result;
 	}
 	
+	// 이메일로 회사명 찾기
 	public String searchCoName(String companyEmail) {
 		PreparedStatement pstmt=null;
 		String sql;
@@ -331,4 +337,107 @@ public class EvaluationDAO {
 		return co_name;
 	}
 	
+	// 기업평가(리뷰) 수정
+	public int updateReview(EvaluationDTO dto, String userEmail) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		sql="update COP_EVALUATION set star=?, content1=?, content2=?, content3=?, content4=? where boardNum=? and userEmail=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getStar());
+			pstmt.setString(2, dto.getContent1());
+			pstmt.setString(3, dto.getContent2());
+			pstmt.setString(4, dto.getContent3());
+			pstmt.setString(5, dto.getContent4());
+			pstmt.setInt(6, dto.getBoardNum());
+			pstmt.setString(7, userEmail);
+			result = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
+	}
+	
+	public int deleteReveiw(int boardNum) {
+		int result=0;
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql="delete from COP_EVALUATION where boardNum = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNum);
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
+	}
+	
+	// 별점 순위 출력
+	public List<EvaluationDTO> star() {
+		List<EvaluationDTO> listS = new ArrayList<EvaluationDTO>();
+		PreparedStatement pstmt=null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append("select TRUNC(a.star) star, a.companyname, rank() over(order by a.star desc, a.companyname asc) rank from ( ");
+			sb.append("    select avg(star) star, c.companyemail, c.companyname ");
+			sb.append("    from cop_evaluation e ");
+			sb.append("	   join company c on e.companyemail=c.companyemail");
+			sb.append("	   group by c.companyemail,c.companyname) a ");
+			sb.append("where rownum <=10");
+
+
+			pstmt=conn.prepareStatement(sb.toString());	
+			
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()) {
+				EvaluationDTO dtoS = new EvaluationDTO();
+				dtoS.setCop_name(rs.getString("companyname"));
+				dtoS.setStar(rs.getInt("star"));
+				dtoS.setRank(rs.getInt("rank"));
+				
+				listS.add(dtoS);
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			if(rs!=null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			if(pstmt!=null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return listS;
+	}
 }

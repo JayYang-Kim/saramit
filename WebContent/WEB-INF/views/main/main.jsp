@@ -29,17 +29,29 @@
                             <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                             <li data-target="#carousel-example-generic" data-slide-to="1"></li>
                             <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="5"></li>
                         </ol>
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
                             <div class="item active">
-                                <img src="resources/images/common/web_title_img_1551145711.jpg" alt="img">
+                                <img src="resources/images/title/title01.png" alt="2019. 03.15 SARAMIT 오픈">
                             </div>
                             <div class="item">
-                                <img src="resources/images/common/main2_img.jpg" alt="img">
+                                <img src="resources/images/title/title02.png" alt="SARAMIT 추천 채용">
                             </div>
                             <div class="item">
-                                <img src="resources/images/common/banner03.png" alt="img">
+                                <img src="resources/images/title/title03.png" alt="우아한 형제들 2019 신입 / 경력 사원 채용공고">
+                            </div>
+                            <div class="item">
+                                <img src="resources/images/title/title04.png" alt="카카오(KAKAO) 2019 신입 / 경력 사원 채용공고">
+                            </div>
+                            <div class="item">
+                                <img src="resources/images/title/title05.png" alt="네이버(NAVER) 2019 신입 / 경력 사원 채용공고">
+                            </div>
+                            <div class="item">
+                                <img src="resources/images/title/title06.png" alt="CJ 올리브네트웍스 2019 신입 / 경력 사원 채용공고">
                             </div>
                         </div>
                     
@@ -53,7 +65,6 @@
                             <span class="sr-only">Next</span>
                         </a>
                     </div>
-                    
                     <!-- //carousel -->
                     <div class="newUser_info">
                         <div class="inner">

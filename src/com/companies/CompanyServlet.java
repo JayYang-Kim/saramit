@@ -42,10 +42,14 @@ public class CompanyServlet extends MyServlet{
 			info(req, resp);
 		}else if(uri.indexOf("review_ok.do")!=-1) {
 			reviewSubmit(req, resp);
+		}else if(uri.indexOf("reviewUp.do")!=-1) {
+			revewUpdateForm(req,resp);
 		}else if(uri.indexOf("reviewUp_ok.do")!=-1) {
-			reviewUpdate(req, resp);
+			reviewUpdateSubmit(req, resp);
 		}else if(uri.indexOf("articleReview.do")!=-1) {
 			articleReview(req, resp);
+		}else if(uri.indexOf("reviewDelete.do")!=-1) {
+			reviewDelete(req,resp);
 		}
 	}
 	
@@ -113,16 +117,11 @@ public class CompanyServlet extends MyServlet{
 		String cp = req.getContextPath();
 		MyUtil util = new MyUtil();
 		EvaluationDAO dao = new EvaluationDAO();
-		
-		//String email = req.getParameter("email");
-	    //email="smilegate@saramit.com";
 	      
-	    //String cop_name=dao.searchCoName("smilegate@saramit.com");
-	    
-		  
+		// 넘어온 페이지 번호
 		String page = req.getParameter("page");
 		int current_page=1;
-		if(page!=null) 
+		if(page != null) 
 			current_page=Integer.parseInt(page);
 		
 		String searchKey = req.getParameter("searchKey");
@@ -142,23 +141,25 @@ public class CompanyServlet extends MyServlet{
 		else
 			dataCount = dao.dataCount(searchKey, searchValue);
 		
+		// 페이지 수 
 		int rows=10;
 		int total_page = util.pageCount(rows, dataCount);
 		if(current_page > total_page)
 			current_page = total_page;
 		
+		// 게시물 가져오기~
 		int start = (current_page -1) * rows + 1;
 		int end = current_page * rows;
 		
 		List<EvaluationDTO> list;
-		if(searchValue.length() ==0)
+		if(searchValue.length() == 0)
 			list = dao.listReview(start, end);
 		else
 			list = dao.listReview(start, end, searchKey, searchValue);
 		
-		
+		// 글번호	
 		int listNum, n=0;
-		Iterator<EvaluationDTO>it=list.iterator();
+		Iterator<EvaluationDTO> it=list.iterator();
 		while(it.hasNext()) {
 			EvaluationDTO dto=it.next();
 			listNum=dataCount-(start+n-1);
@@ -166,22 +167,26 @@ public class CompanyServlet extends MyServlet{
 			n++;
 		}
 		
-		
 		String query="";
 		if(searchValue.length()!=0) {
 			searchValue=URLEncoder.encode(searchValue,"utf-8");
 			query="searchKey="+searchKey+"&searchValue="+searchValue;
 		}
 		
-		String listUrl=cp+"/companies/listReiew.do";
+		String listUrl=cp+"/companies/listReview.do";
 		String articleUrl=cp+"/companies/articleReview.do?page="+current_page;
 		if(query.length()!=0) {
 			listUrl+="?"+query;
 			articleUrl+="&"+query;
 		}
 		
-		String paging=util.paging(current_page,total_page,listUrl);
+		// 별점 랭킹
+		List<EvaluationDTO> listS;
+		listS = dao.star();
+
+		String paging = util.paging(current_page,total_page,listUrl);
 		
+		req.setAttribute("listS", listS);
 		req.setAttribute("list", list);
 		req.setAttribute("page", current_page);
 		req.setAttribute("total_page", total_page);
@@ -192,26 +197,28 @@ public class CompanyServlet extends MyServlet{
 		forward(req, resp, "/WEB-INF/views/evaluation/list.jsp");
 	}
 	protected void review(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	      //회사 평가
+	      //회사 평가 작성
 		EvaluationDAO dao = new EvaluationDAO();
 		CompaniesDAO c_dao = new CompaniesDAO();
 	      
 	      String email = req.getParameter("email");
 	      
 	      String cop_name=dao.searchCoName(email);
-	      
-	      CompaniesDTO dto = c_dao.readCompany(email);
-	      String savefilename=dto.getSavefilename();
-	      
-	      req.setAttribute("savefilename", savefilename);
-	      req.setAttribute("cop_name", cop_name);
-		  req.setAttribute("email", email);
+
 		  
-	      req.setAttribute("mode", "created");
-	      
-	      forward(req, resp, "/WEB-INF/views/evaluation/review.jsp");
+		  CompaniesDTO c_dto = c_dao.readCompany(email);
+		  String savefilename=c_dto.getSavefilename();
+		  
+		  req.setAttribute("savefilename", savefilename); 
+		  req.setAttribute("cop_name",cop_name); 
+		  req.setAttribute("email", email);
+		  req.setAttribute("mode", "created");
+		  
+		  forward(req, resp, "/WEB-INF/views/evaluation/review.jsp");
+		 
 	}
 	
+	// 상세보기
 	protected void articleReview(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		EvaluationDAO dao = new EvaluationDAO();
 		String cp = req.getContextPath();
@@ -282,7 +289,7 @@ public class CompanyServlet extends MyServlet{
 		
 		EvaluationDAO dao = new EvaluationDAO();
 		EvaluationDTO dto = new EvaluationDTO();
-		
+
 		dto.setUserEmail(info.getEmail());
 		dto.setCompanyEmail(req.getParameter("email"));
 		dto.setContent1(req.getParameter("content1"));
@@ -292,21 +299,121 @@ public class CompanyServlet extends MyServlet{
 		dto.setStar(Integer.parseInt(req.getParameter("score")));
 		
 		
-		dao.insertReview(dto,"created");
+		dao.insertReview(dto);
 		
 		resp.sendRedirect(cp);
 	
 	}
 	
-	protected void reviewUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//리뷰(기업평가) 수정
-	//	String cp = req.getContextPath();
+	// 기업평가(리뷰) 수정 폼
+	protected void revewUpdateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String cp = req.getContextPath();
 		
-	//	HttpSession session = req.getSession();
-	//	SessionInfo info = (SessionInfo)session.getAttribute("member");
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		EvaluationDAO dao = new EvaluationDAO();
+		CompaniesDAO c_dao = new CompaniesDAO();
+		
+		String email = req.getParameter("email");
+		String cop_name=dao.searchCoName(email);
+	      
+		String page = req.getParameter("page");
+		
+		int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+		EvaluationDTO dto = dao.readReview(boardNum);
+		
+		if(dto==null) {
+			resp.sendRedirect(cp+"/companies/list.do?page="+page);
+			return;
+		}
+		
+		if(! dto.getUserEmail().equals(info.getEmail())) {
+			resp.sendRedirect(cp+"/companies/list.do?page="+page);
+			return;
+		}
+		
+		CompaniesDTO c_dto = c_dao.readCompany(email);
+	    String savefilename=c_dto.getSavefilename();
+	    
+	    req.setAttribute("savefilename", savefilename);
+	    req.setAttribute("cop_name", cop_name);
+		req.setAttribute("dto", dto);
+		req.setAttribute("page", page);
+		req.setAttribute("mode", "update");
+		
+		forward(req, resp, "/WEB-INF/views/evaluation/review.jsp");
 		
 	}
+	protected void reviewUpdateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//기업평가(리뷰) 수정완료
+		String cp = req.getContextPath();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		EvaluationDAO dao = new EvaluationDAO();
+		
+		String page = req.getParameter("page");
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp+"/companies/articleReview.do?page="+page);
+			return;
+		}
+		
+		EvaluationDTO dto = new EvaluationDTO();
+		dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
+		dto.setUserEmail(info.getEmail());
+		dto.setCompanyEmail(req.getParameter("email"));
+		dto.setContent1(req.getParameter("content1"));
+		dto.setContent2(req.getParameter("content2"));
+		dto.setContent3(req.getParameter("content3"));
+		dto.setContent4(req.getParameter("content4"));
+		dto.setStar(Integer.parseInt(req.getParameter("score")));
+		
+		dao.updateReview(dto, info.getEmail());
+		
+		resp.sendRedirect(cp+"/companies/listReview.do?page="+page);
+
+	}
 	
+	protected void reviewDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	// 기업평가(리뷰) 삭제
+	HttpSession session = req.getSession();
+	SessionInfo info=(SessionInfo)session.getAttribute("member");
 	
+	String cp = req.getContextPath();
+	EvaluationDAO dao = new EvaluationDAO();
+	
+	String page = req.getParameter("page");
+	String searchKey = req.getParameter("searchKey");
+	String searchValue = req.getParameter("searchValue");
+	if(searchKey == null) {
+		searchKey="subject";
+		searchValue="";
+	}
+	searchValue = URLDecoder.decode(searchValue, "utf-8");
+	String query="page="+page;
+	if(searchValue.length()!=0) {
+		query +="&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
+	}
+	
+	int boardNum = Integer.parseInt(req.getParameter("boardNum"));
+	EvaluationDTO dto = dao.readReview(boardNum);
+	
+	if(dto==null) {
+		resp.sendRedirect(cp+"/companies/listReview.do?"+query);
+		return;
+	}
+	
+	if(!dto.getUserEmail().equals(info.getEmail()) && ! info.getEmail().equals("admin")) {
+		resp.sendRedirect(cp+"/companies/listReview.do?"+query);
+		return;
+	}
+	
+	dao.deleteReveiw(boardNum);
+	resp.sendRedirect(cp+"/companies/listReview.do?"+query);
+	
+	}
 	
 }

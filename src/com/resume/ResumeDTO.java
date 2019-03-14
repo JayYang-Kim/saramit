@@ -58,4 +58,6 @@ public class ResumeDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	
 }

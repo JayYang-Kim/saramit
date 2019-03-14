@@ -89,11 +89,18 @@ public class MemberServlet extends MyServlet {
 
 		if (userLevel.equals("user")) {
 			UserDTO dto = dao.readUser(email);
-			if (dto != null) {
+			if(dto == null) {
+				req.setAttribute("msg", "존재하지 않는 이메일입니다.");
+				forward(req, resp, "/WEB-INF/views/member/login.jsp");
+				return;
+			}
+			if(dto != null) {
 				if (dto.getUserPwd().equals(pwd)) {
-					/*if (dto.getStatusCode() == 2) {
-						System.out.println("탈퇴한 회원");
-					}*/
+					if (dto.getStatusCode() == 2) {
+						req.setAttribute("msg", "탈퇴한 회원입니다.");
+						forward(req, resp, "/WEB-INF/views/member/login.jsp");
+						return;
+					}
 					session.setMaxInactiveInterval(60 * 30);
 					info.setEmail(email);
 					info.setLevel(dto.getLevelCode());
@@ -101,15 +108,26 @@ public class MemberServlet extends MyServlet {
 					session.setAttribute("member", info); // 세션에 저장
 					resp.sendRedirect(cp);
 					return;
+				} else {
+					req.setAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
+					forward(req, resp, "/WEB-INF/views/member/login.jsp");
+					return;
 				}
 			}
 		} else {
 			CompaniesDTO dto = dao.readCompany(email);
+			if(dto == null) {
+				req.setAttribute("msg", "존재하지 않는 이메일입니다.");
+				forward(req, resp, "/WEB-INF/views/member/login.jsp");
+				return;
+			}
 			if (dto != null) {
 				if (dto.getCompanyPwd().equals(pwd)) {
-					/*if (dto.getStatusCode() == 2) {
-						System.out.println("탈퇴한 회원");
-					}*/
+					if (dto.getStatusCode() == 2) {
+						req.setAttribute("msg", "탈퇴한 회원입니다.");
+						forward(req, resp, "/WEB-INF/views/member/login.jsp");
+						return;
+					} 
 					session.setMaxInactiveInterval(60*30);
 					info.setEmail(email);
 					info.setLevel(dto.getLevelCode());
@@ -117,11 +135,15 @@ public class MemberServlet extends MyServlet {
 					session.setAttribute("member", info);
 					resp.sendRedirect(cp);
 					return;
+				} else {
+					req.setAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
+					forward(req, resp, "/WEB-INF/views/member/login.jsp");
+					return;
 				}
 			}
 		}
 		
-		resp.sendRedirect(cp + "/member/login.do");
+		//resp.sendRedirect(cp + "/member/login.do");
 	}
 
 	protected void joinForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -318,13 +340,6 @@ public class MemberServlet extends MyServlet {
 		String email = info.getEmail();
 		int level = info.getLevel();
 
-		// 게시물 가져오기
-		/*
-		 * if (level == 2) { UserDTO dto = dao.readUser(email); req.setAttribute("dto",
-		 * dto); } else { CompaniesDTO dto = dao.readCompany(email);
-		 * req.setAttribute("dto", dto); }
-		 */
-		
 			if (level ==2) {
 				List<ResumeDTO> dto = dao.readResume(email);
 				req.setAttribute("dto", dto);
@@ -336,6 +351,22 @@ public class MemberServlet extends MyServlet {
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		if(info==null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
+		String memberEmail=info.getEmail();
+		int levelCode=info.getLevel();
+		MemberDAO dao = new MemberDAO();
+		dao.withdrawMember(memberEmail, levelCode);
+		
+		//세션 날려버리기
+		session.invalidate();
+		
+		resp.sendRedirect(cp + "/main.do");
 	}
 }

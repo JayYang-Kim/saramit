@@ -2,6 +2,7 @@ package com.companies;
 
 public class EvaluationDTO {
 	private int BoardNum,ListNum;
+	private int rank;
 	private String cop_name;
 	private String userEmail;
 	private String companyEmail;
@@ -86,6 +87,12 @@ public class EvaluationDTO {
 	}
 	public void setSavefilename(String savefilename) {
 		this.savefilename = savefilename;
+	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 	
 }

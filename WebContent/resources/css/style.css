@@ -130,6 +130,13 @@ header{margin-bottom:61px;}
 #wrap #container .contents .searchBox input[type=text]{width:250px;}
 #wrap #container .contents .searchBox .btn{padding:2px 30px}
 
+#wrap #container .contents .box_guest .title{padding-top:10px;border-top:1px solid #c4c4c4;}
+#wrap #container .contents .box_guest #listReply .reply .replyCount{padding:10px;background-color:#4c4c4c;color:#ffffff;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.box{padding:10px;background-color:#ffffff;border-bottom:1px solid #e6e6e6}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.box .email{font-weight:bold;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.box .etc span{color:#c4c4c4;}
+
+
 /* 컨텐츠 드래그 컬러효과 */
 #container::-moz-selection{background:rgba(255,238,51,0.99)}
 #container::selection{background:rgba(255,238,51,0.99)}

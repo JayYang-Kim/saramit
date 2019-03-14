@@ -40,7 +40,7 @@
                 <div class="inner">
                 	<!-- pageTitle -->
                 	<div class="pageTitle mt30 pb10">
-                		<h3>자소서 피드백</h3>
+                		<h3>피드백 게시판</h3>
                 	</div>
                 	<!-- //pageTitle -->
                 	<div class="searchBox">

@@ -25,12 +25,21 @@ public class Pass_BoardServlet extends MyServlet {
 		req.setCharacterEncoding("utf-8");
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		if (info == null) {
+
+		String uri = req.getRequestURI();
+		
+		// AJAX에서 로그인이 안된 경우 403이라는 에러 코드를 던진다.
+		String header=req.getHeader("AJAX");
+		if(header!=null && header.equals("true")  && info==null) {
+			resp.sendError(403);
+			return;
+		}
+	
+		// AJAX가 아닌 경우에 로그인이 안된 경우
+		if(info==null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 			return;
 		}
-		
-		String uri = req.getRequestURI();
 		
 		if(uri.indexOf("created.do") != -1) {
 			createdForm(req, resp);
@@ -46,6 +55,8 @@ public class Pass_BoardServlet extends MyServlet {
 			article(req, resp);
 		} else if (uri.indexOf("delete.do") != -1) {
 			delete(req, resp);
+		} else if (uri.indexOf("resumeList.do") != -1) {
+			resumeList(req, resp);
 		}
 
 	}
@@ -172,12 +183,62 @@ public class Pass_BoardServlet extends MyServlet {
 	}
 
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//수정 폼
+		String cp = req.getContextPath();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		Pass_boardDAO dao = new Pass_boardDAO();
+		
+		String page=req.getParameter("page");
+		int num=Integer.parseInt(req.getParameter("num"));
+		Pass_BoardDTO dto=dao.readBoard(num);
+		
+		if(dto==null) {
+			resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
+			return;
+		}
+		
+		if(! dto.getUserEmail().equals(info.getEmail())) {
+			resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
+			return;
+		}
+		
+		req.setAttribute("dto", dto);
+		req.setAttribute("page", page);
+		req.setAttribute("mode", "update");
+		
 		forward(req, resp, "/WEB-INF/views/pass_board/created.jsp");
 	}
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//수정완료
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		Pass_boardDAO dao = new Pass_boardDAO();
+		
+		String page=req.getParameter("page");
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
+			return;
+		}
+		
+		Pass_BoardDTO dto=new Pass_BoardDTO();
+		dto.setNum(Integer.parseInt(req.getParameter("num")));
+		dto.setTitle(req.getParameter("title"));
+		dto.setCompanyName(req.getParameter("companyName"));
+		dto.setField(req.getParameter("field"));
+		dto.setGubun(req.getParameter("selectGubun"));
+		dto.setContent(req.getParameter("content"));
+		
+		dao.updateBoard(dto, info.getEmail());
+		
+		resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
 	}
 
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -213,6 +274,7 @@ public class Pass_BoardServlet extends MyServlet {
 		}
 		dto.setContent(myUtil.htmlSymbols(dto.getContent()));
 		
+		
 		//JSP로 포워딩할 속성
 		req.setAttribute("dto", dto);
 		req.setAttribute("page", page);
@@ -222,8 +284,49 @@ public class Pass_BoardServlet extends MyServlet {
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//삭제
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		Pass_boardDAO dao = new Pass_boardDAO();
+		
+		String page=req.getParameter("page");
+		int num=Integer.parseInt(req.getParameter("num"));
+		
+		dao.deleteBoard(num, info.getEmail());
+		
+		resp.sendRedirect(cp+"/pass_board/list.do?page="+page);
+	}
+	
+	protected void resumeList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//관련 자소서 리스트 - AJAX
+		
+		Pass_boardDAO dao = new Pass_boardDAO();
+		MyUtil util=new MyUtil();
+		
+		String companyName=req.getParameter("companyName");
+		int num=Integer.parseInt(req.getParameter("num"));
+		String page=req.getParameter("page");
+		
+		List<Pass_BoardDTO> list = dao.resumeList(companyName, num);
+		
+		for(Pass_BoardDTO dto : list) {
+			dto.setNum(dto.getNum());
+			dto.setTitle(util.htmlSymbols(dto.getTitle()));
+			dto.setCompanyName(util.htmlSymbols(dto.getCompanyName()));
+			dto.setField(util.htmlSymbols(dto.getField()));
+			dto.setGubun(util.htmlSymbols(dto.getGubun()));
+			dto.setCreated(util.htmlSymbols(dto.getCreated()));
+			dto.setHitCount(dto.getHitCount());
+			
+		}
+		req.setAttribute("list", list);
+		req.setAttribute("page", page);
+		forward(req, resp, "/WEB-INF/views/pass_board/resumeList.jsp");
+		
+
 	}
 	
 }
