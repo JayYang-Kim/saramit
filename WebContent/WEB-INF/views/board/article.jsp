@@ -124,7 +124,6 @@
     			}
     				
     			var query = "replyNum=" + replyNum + "&replyLike=" + replyLike;
-    			
     			var url="<%=cp%>/board/insertReplyLike.do";
     			$.ajax({
     				type : "post"
@@ -132,8 +131,8 @@
     				,data : query
     				,dataType : "json"
     				,success : function(data) {
-    					var state=data.state;
-    					if(state=="true") {
+    					var state = data.state;
+    					if(state == "true") {
     						countReplyLike(replyNum, $btn);
     					} else if(state == "false") {
     						alert("좋아요 / 싫어요는 한 번만 가능합니다.");

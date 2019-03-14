@@ -65,10 +65,8 @@ public class BoardServlet extends MyServlet{
 		}else if(uri.indexOf("replyDelete.do") != -1){
 			replyDelete(req, resp);
 		}else if(uri.indexOf("insertReplyLike.do")!=-1) {
-			// ´ñ±Û ÁÁ¾Æ¿ä/½È¾î¿ä Ãß°¡
 			insertReplyLike(req, resp);
 		}else if(uri.indexOf("countReplyLike.do")!=-1) {
-			// ´ñ±Û ÁÁ¾Æ¿ä/½È¾î¿ä °³¼ö
 			countReplyLike(req, resp);
 		}else if(uri.indexOf("insertReplyAnswer.do") != -1){
 			insertReplyAnswer(req, resp);
@@ -468,17 +466,14 @@ public class BoardServlet extends MyServlet{
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
 		
 		int replyNum = Integer.parseInt(req.getParameter("replyNum"));
-		System.out.println(replyNum);
 		int replyLike = Integer.parseInt(req.getParameter("replyLike"));
-		System.out.println(replyLike);
 
 		BoardDAO dao = new BoardDAO();
 		FeedBack_ReplyDTO dto = new FeedBack_ReplyDTO();
 		
 		dto.setReplyNum(replyNum);
 		dto.setEmail(info.getEmail());
-		System.out.println(dto.getEmail());
-		dto.setReplyNum(replyLike);
+		dto.setReplyLike(replyLike);
 		
 		String state = "false";
 		int result = dao.insertReplyLike(dto);
