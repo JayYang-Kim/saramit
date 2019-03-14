@@ -188,8 +188,14 @@ public class ResumeServlet extends MyServlet {
 		req.setAttribute("mode", "created_ok");
 		ResumeDAO dao = new ResumeDAO();
 		ResumeDTO dto_resume = new ResumeDTO();
+		
 		dto_resume.setTitle(req.getParameter("title"));
-		int rnum = dao.insertResume(dto_resume);
+		
+		
+		
+		
+		
+		
 		
 		forward(req, resp, "/WEB-INF/views/resume/update_ok.jsp");
 	}
@@ -219,8 +225,10 @@ public class ResumeServlet extends MyServlet {
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 이력서삭제
 		String cp = req.getContextPath();
-		resp.sendRedirect(cp);
+		int resumeCode = Integer.parseInt(req.getParameter("resumeCode"));
+		DeleteDAO dao=new DeleteDAO();
+		dao.deleteResume(resumeCode);
+		resp.sendRedirect(cp+"/resume/list.do");
 
-		forward(req, resp, "/WEB-INF/views/resume/delete.jsp");
 	}
 }

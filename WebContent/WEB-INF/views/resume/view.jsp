@@ -29,7 +29,7 @@
 			return;
 		}
 		
-		f.action="<%=cp%>/resume/${mode}_ok.do";
+		f.action="<%=cp%>/resume/update_ok.do";
 		f.submit();
 	}
 	</script>
@@ -105,17 +105,17 @@
            <br>
         <div id="personalInfo">	
         		&nbsp;
-                <input type="text" name="name" size="10" autofocus value="${dto_resume.name}">
+                <input type="text" name="name" size="10" autofocus value="${dto_resume.name}" readonly="readonly">
                 &nbsp;
-                <input type="text" name="birth" size="10" maxlength="10" value="${dto_resume.birth}">
+                <input type="text" name="birth" size="10" maxlength="10" value="${dto_resume.birth}" readonly="readonly">
                 &nbsp;
                 <label for="gender">성별</label>
-                <input type="text" name="gender" size="10" value="${dto_resume.gender}">            
+                <input type="text" name="gender" size="10" value="${dto_resume.gender}" readonly="readonly">            
                 </div>
                 <div>     
                 <br>
                 &nbsp;
-                <input type="text" name="userEmail" size="30" value="${sessionScope.member.email}">
+                <input type="text" name="userEmail" size="30" value="${sessionScope.member.email}" readonly="readonly">
                 <br><br>
                 &nbsp;
                 <input type="text" name="addr" style="width:80%;" value="${dto_resume.addr}">
@@ -311,7 +311,7 @@
 	         <hr>
          <div>
          &nbsp;
-           <a href="<%=cp%>/resume/update_ok.do" class="btn_classic btn-black mt20">수정완료</a>
+           <a href="javascript:sendok()" class="btn_classic btn-black mt20">수정완료</a>
            &nbsp;
            <a href="<%=cp%>/resume/list.do" class="btn_classic btn-black mt20">취소</a>
             <br><br>

@@ -17,7 +17,11 @@ public class DeleteDAO {
 		ResultSet rs=null;
 		String sql;
 		int count=0;
-		sql="DELETE FROM resume WHERE resumeCode=?";
+		//cascade이용해 자식과 통째로 삭제하도록 시도중..
+		//sql="ALTER TABLE resume ADD constraint resumecode FOREIGN KEY(resumeCode) REFERENCES resume(resumecode) ON DELETE CASCADE";
+		sql="alter table license add constraint FK_LICENSE_RESUMECODE"
+				+ " foreign key(licenseCode) references resume(resumeCode) on delete cascade"; 
+		//sql=" DELETE FROM resume WHERE resumeCode=?";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);

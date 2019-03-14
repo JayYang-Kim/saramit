@@ -20,6 +20,15 @@
 	}
 	
 	</style>
+	
+	<script type="text/javascript">
+	function deleteResume(resumeCode){
+		if(confirm("이력서를 삭제 하시겠습니까?")) {
+			var url = "<%=cp%>/resume/delete.do?resumeCode=" + resumeCode;
+			location.href = url;
+		}
+	}
+	</script>
 </head>
 
 <body>
@@ -51,7 +60,7 @@
 	         		<td><a href="<%=cp%>/resume/view.do?resumeCode=${dto.resumeCode}">${dto.title}</a></td>
 	         		<td>${dto.created}</td>
 	         		<td>
-	         			<button class="btn btn-white" type="button" style="width: 95px; height: 35px;" onclick="location.href=delete.jsp">삭제</button>
+	         			<button class="btn btn-white" type="button" style="width: 95px; height: 35px;" onclick="deleteResume('${dto.resumeCode}');">삭제</button>
 	         		</td>
 	         	</tr>
 	         </c:forEach>
