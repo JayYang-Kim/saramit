@@ -169,12 +169,13 @@ public class NotificationServlet extends MyServlet{
 	
 		
 		// 게시물 가져오기
+		dao.plusHitCount(num);
 		NotificationDTO dto=dao.readNotification(num);
 		if(dto==null) {
 			resp.sendRedirect(cp+"/notification/list.do?page="+page);
 			return;
 		}
-		dao.plusHitCount(num);
+		
 		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		
 		// 이전글/다음글
@@ -219,16 +220,14 @@ public class NotificationServlet extends MyServlet{
 				}
 				
 				// 글을 등록한 사람, admin 만 삭제 가능
-				if(! info.getEmail().equals(dto.getEmail()) && ! info.getEmail().equals("admin")) {
+				if(!info.getEmail().equals("admin")) {
 					resp.sendRedirect(cp+"/notification/list.do?page="+page);
 					return;
 				}
 				
 				if(dto.getSaveFileName()!=null && dto.getSaveFileName().length()!=0)
 				   FileManager.doFiledelete(pathname, dto.getSaveFileName());
-				
 				dao.removeNotification(num);
-				
 				resp.sendRedirect(cp+"/notification/list.do?page="+page);
 	}
 

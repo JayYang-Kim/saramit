@@ -6,7 +6,6 @@ public class AwardsDTO {
 	private String awardsName;
 	private String awards_date;
 	private String awards_publisher;
-	
 	public int getAwardsCode() {
 		return awardsCode;
 	}

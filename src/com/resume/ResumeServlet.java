@@ -1,6 +1,9 @@
 package com.resume;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,6 +16,8 @@ import com.main.SessionInfo;
 import com.member.MemberDAO;
 import com.util.MyServlet;
 import com.util.MyUtil;
+
+import net.sf.json.JSONObject;
 
 @WebServlet("/resume/*")
 public class ResumeServlet extends MyServlet {
@@ -45,10 +50,65 @@ public class ResumeServlet extends MyServlet {
 			view(req, resp);
 		} else if (uri.indexOf("delete.do") != -1) {
 			delete(req, resp);
+		} else if (uri.indexOf("addInfo.do") != -1) {
+			addInfo(req,resp);
+		} else if (uri.indexOf("removeInfo.do") != -1) {
+			removeInfo(req,resp);
 		}
 
 	}
 
+	protected void addInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String sort = req.getParameter("sort");
+		int resumeCode = Integer.parseInt(req.getParameter("resumeCode"));
+		ResumeDAO dao = new ResumeDAO();
+		JSONObject job = new JSONObject();
+		switch(sort) {
+		case "basic":
+			break;
+		case "license":
+			
+			String licenseName = URLDecoder.decode(req.getParameter("licenseName"), "utf-8");
+			String licensePublisher = URLDecoder.decode(req.getParameter("licensePublisher"), "utf-8");
+			String licenseDate = URLDecoder.decode(req.getParameter("licenseDate"), "utf-8");
+			LicenseDTO dto = dao.insertLicense(resumeCode,licenseName,licensePublisher,licenseDate);
+			job.put("dto", dto);
+			break;
+		case "awards":
+			String awardsName = req.getParameter("awardsName");
+			String awardsPublisher = req.getParameter("awardsPublisher");
+			String awardsDate = req.getParameter("awardsDate");
+			AwardsDTO awards_dto = dao.insertAwards(resumeCode,awardsName,awardsPublisher,awardsDate);
+			job.put("awards_dto", awards_dto);
+			break;
+		case "education":
+			break;
+		case "career":
+			break;
+		}
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter pw = resp.getWriter();
+		pw.print(job.toString());
+	}
+	protected void removeInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String sort = req.getParameter("sort");
+		ResumeDAO dao = new ResumeDAO();
+		switch(sort) {
+		case "basic":
+			break;
+		case "license":
+			
+			break;
+		case "awards":
+			break;
+		case "education":
+			break;
+		case "career":
+			break;
+		}
+	}
+	
+	
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String cp=req.getContextPath();
 		ResumeDAO dao = new ResumeDAO();
@@ -204,7 +264,7 @@ public class ResumeServlet extends MyServlet {
 		List<LicenseDTO> licenseList= dao.readLicense(resumeCode);
 		List<CareerDTO> CareerList=dao.readCareer(resumeCode);
 
-		
+		req.setAttribute("resumeCode", resumeCode);
 		req.setAttribute("awardList", awardList);
 		req.setAttribute("licenseList", licenseList);
 		req.setAttribute("CareerList", CareerList);
