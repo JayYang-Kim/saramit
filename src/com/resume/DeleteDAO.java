@@ -17,18 +17,36 @@ public class DeleteDAO {
 		ResultSet rs=null;
 		String sql;
 		int count=0;
+		
 		//cascade이용해 자식과 통째로 삭제하도록 시도중..
 		//sql="ALTER TABLE resume ADD constraint resumecode FOREIGN KEY(resumeCode) REFERENCES resume(resumecode) ON DELETE CASCADE";
-		sql="alter table license add constraint FK_LICENSE_RESUMECODE"
-				+ " foreign key(licenseCode) references resume(resumeCode) on delete cascade"; 
-		//sql=" DELETE FROM resume WHERE resumeCode=?";
-		
+		//sql="alter table license add constraint FK_LICENSE_RESUMECODE"
+				//+ " foreign key(licenseCode) references resume(resumeCode) on delete cascade"; 
 		try {
+			sql = "delete from awards where resumeCode = ?";
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1,resumeCode);
-			count=pstmt.executeUpdate();
-			
-			 
+			pstmt.setInt(1, resumeCode);
+			pstmt.executeUpdate();
+			pstmt.close();
+			sql = "delete from career where resumeCode = ?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			pstmt.executeUpdate();
+			pstmt.close();
+			sql = "delete from license where resumeCode = ?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			pstmt.executeUpdate();
+			pstmt.close();
+			sql = "delete from education where resumeCode = ?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			pstmt.executeUpdate();
+			pstmt.close();
+			sql = "delete from resume where resumeCode = ?";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, resumeCode);
+			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -48,6 +66,7 @@ public class DeleteDAO {
 			}
 		}
 		return count;
+		
 		}
 	
 }
