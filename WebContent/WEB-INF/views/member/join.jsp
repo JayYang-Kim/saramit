@@ -317,6 +317,84 @@
 	            }
 	        }).open();
 	    }
+		
+		function userEmail_check() {
+			var userEmail = $("#txt_userEmail").val().trim();
+			var message = $("#txt_userEmail").parent().find(".message");
+			
+			if(!userEmail) {
+				$("#txt_userEmail").focus().css("outline-color","#df4442");
+				$("#txt_userEmail").parent().find(".message").html("* 이메일 주소를 입력해주세요.").show();
+				return;
+			} else {
+				$("#txt_userEmail").css("outline-color","");
+				$("#txt_userEmail").parent().find(".message").hide();
+			}
+			
+			var url = "<%=cp%>/member/userEmail_check.do";
+			var query = "userEmail=" + $("#txt_userEmail").val();
+			
+			$.ajax({
+    			type : "get",
+    			url : url,
+    			data : query,
+    			dataType : "json",
+    			success : function(data) {
+    				var checkMsg = data.checkMessage;
+    				var state = data.state;
+    				
+    				if(state == "false") {
+    					$("#txt_userEmail").focus().css("outline-color","#df4442");
+    					$(message).html(checkMsg).show();	
+    				} else {
+    					$("#txt_userEmail").focus().css("outline-color","");
+    					$(message).hide();
+    				}
+    			},
+    			error : function(e) {
+    				console.log(e.responseText);
+    			}
+    		});
+		}
+		
+		function companyEmail_check() {
+			var companyEmail = $("#txt_companyEmail").val().trim();
+			var message = $("#txt_companyEmail").parent().find(".message");
+			
+			if(!companyEmail) {
+				$("#txt_companyEmail").focus().css("outline-color","#df4442");
+				$("#txt_companyEmail").parent().find(".message").html("* 이메일 주소를 입력해주세요.").show();
+				return;
+			} else {
+				$("#txt_companyEmail").css("outline-color","");
+				$("#txt_companyEmail").parent().find(".message").hide();
+			}
+			
+			var url = "<%=cp%>/member/companyEmail_check.do";
+			var query = "companyEmail=" + $("#txt_companyEmail").val();
+			
+			$.ajax({
+    			type : "get",
+    			url : url,
+    			data : query,
+    			dataType : "json",
+    			success : function(data) {
+    				var checkMsg = data.checkMessage;
+    				var state = data.state;
+    				
+    				if(state == "false") {
+    					$("#txt_companyEmail").focus().css("outline-color","#df4442");
+    					$(message).html(checkMsg).show();	
+    				} else {
+    					$("#txt_companyEmail").focus().css("outline-color","");
+    					$(message).hide();
+    				}
+    			},
+    			error : function(e) {
+    				console.log(e.responseText);
+    			}
+    		});
+		}
     </script>
 </head>
 
@@ -346,7 +424,8 @@
 								<div class="mt30">
 									<label for="txt_userEmail">이메일</label>
 									<div>
-										<input type="text" name="userEmail" id="txt_userEmail" class="boxTf" autocomplete="off" autofocus/>
+										<input type="text" name="userEmail" id="txt_userEmail" class="boxTf" style="width:79%;" autocomplete="off" autofocus/>
+										<input type="button" id="btn_userEmail_check" value="중복검사" class="btn btn-black" style="height: 45px;margin-top: 10px;margin-left: 5px;" onclick="userEmail_check()">
 										<div class="message t_red mt15"></div>
 									</div>
 								</div>
@@ -420,7 +499,8 @@
 								<div class="mt30">
 									<label for="txt_companyEmail">이메일</label>
 									<div>
-										<input type="text" name="companyEmail" id="txt_companyEmail" class="boxTf" autocomplete="off" autofocus/>
+										<input type="text" name="companyEmail" id="txt_companyEmail" class="boxTf" style="width:79%;" autocomplete="off" autofocus/>
+										<input type="button" id="btn_companyEmail_check" value="중복검사" class="btn btn-black" style="height: 45px;margin-top: 10px;margin-left: 5px;" onclick="companyEmail_check()">
 										<div class="message t_red mt15"></div>
 									</div>
 								</div>
