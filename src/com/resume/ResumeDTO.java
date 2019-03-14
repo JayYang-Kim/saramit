@@ -2,6 +2,7 @@ package com.resume;
 
 public class ResumeDTO {  
 	private int resumeCode;
+	private int listNum;
 	private String userEmail;
 	private String name;
 	private String addr;
@@ -10,6 +11,14 @@ public class ResumeDTO {
 	private String created;
 	private String title;
 	
+	
+	
+	public int getListNum() {
+		return listNum;
+	}
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
 	public int getResumeCode() {
 		return resumeCode;
 	}
