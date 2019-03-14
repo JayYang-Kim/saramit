@@ -130,9 +130,9 @@
 	                	
 	                  	<table class="tb_kakao tb_hover big">
 	                  		<colgroup>
-                				<col style="width:40px">
-                				<col style="width:120px">
-                				<col style="width:80px">
+                				<col style="width:90px">
+                				<col>
+                				<col style="width:150px">
                 			</colgroup>
 	                  		<thead>
 	                  			<tr>

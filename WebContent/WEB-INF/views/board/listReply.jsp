@@ -16,7 +16,7 @@
 				<c:forEach var="dto" items="${list}">
 					<li>
 						<div class="box">
-							<div class="email mb10">${dto.email}</div>
+							<div class="email mb10">${dto.name} (${dto.email})</div>
 							<div class="content mb10">${dto.content}</div>
 							<div class="etc mb10"><span>${dto.created}</span> 
 								<c:if test="${sessionScope.member.email == dto.email}">| <a onclick='deleteReply(${dto.boardNum}, ${dto.replyNum});' style="cursor:pointer;">삭제</a></c:if>

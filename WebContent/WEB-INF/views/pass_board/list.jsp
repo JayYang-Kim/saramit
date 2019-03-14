@@ -65,7 +65,7 @@
 								<col style="width:80px">
 								<col style="width:60px">
 								<col style="width:80px">
-								<col style="width:30px">
+								<col style="width:50px">
 							</colgroup>
 							<thead>
 								<tr>
@@ -83,8 +83,8 @@
 								<c:forEach var="dto" items="${list}">
 									<tr onclick="location.href='${articleUrl}&num=${dto.num}'">
 										<td>${dto.listNum}</td>
-										<td>${dto.title}</td>
-										<td>${dto.companyName}</td>
+										<td class="txt_overflow">${dto.title}</td>
+										<td class="txt_overflow">${dto.companyName}</td>
 										<td>${dto.field}</td>
 										<td>${dto.gubun}</td>
 										<td>${dto.created}</td>

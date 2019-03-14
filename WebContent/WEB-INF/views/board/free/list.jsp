@@ -117,7 +117,7 @@
 								</c:if>
 								<c:if test="${dataCount==0}">
 									<tr>
-										<td colspan="4"><b>등록된 게시물이 없습니다.</b></td>
+										<td colspan="5"><b>등록된 게시물이 없습니다.</b></td>
 									</tr>
 								</c:if>
 							</tbody>
