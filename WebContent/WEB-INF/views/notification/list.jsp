@@ -133,10 +133,9 @@
 						</table>
 						<div class="t_center mt20 mb20">${paging}</div>
 						<div class="t_right mb20">
-						<button type="button" class="btn_classic btn-black" onclick="javacript:location.href='<%=cp%>/notification/created.do';">글쓰기</button>
-							<!--<c:if test="${sessionScope.member.email=='admin'}">
+							<c:if test="${sessionScope.member.email=='admin'}">
 		                		<button type="button" class="btn_classic btn-black" onclick="javacript:location.href='<%=cp%>/notification/created.do';">글쓰기</button>
-		                	</c:if> -->
+		                	</c:if>
 		                </div>
 					</div>
             	</div>
