@@ -2,7 +2,9 @@ package com.member;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.board.BoardDAO;
 import com.companies.CompaniesDTO;
 import com.main.SessionInfo;
 import com.oreilly.servlet.MultipartRequest;
@@ -18,6 +21,8 @@ import com.resume.ResumeDAO;
 import com.resume.ResumeDTO;
 import com.util.FileManager;
 import com.util.MyServlet;
+
+import net.sf.json.JSONObject;
 
 @WebServlet("/member/*")
 public class MemberServlet extends MyServlet {
@@ -43,24 +48,28 @@ public class MemberServlet extends MyServlet {
 			f.mkdirs();
 		}
 		
-		if (uri.indexOf("login.do") != -1) {
+		if(uri.indexOf("login.do") != -1) {
 			loginForm(req, resp);
-		} else if (uri.indexOf("login_ok.do") != -1) {
+		}else if (uri.indexOf("login_ok.do") != -1) {
 			loginSubmit(req, resp);
 		}else if(uri.indexOf("logout.do") != -1) {
 			logout(req,resp);
 		}else if (uri.indexOf("join.do") != -1) {
 			joinForm(req, resp);
-		} else if (uri.indexOf("join_ok.do") != -1) {
+		}else if (uri.indexOf("join_ok.do") != -1) {
 			joinSubmit(req, resp);
-		} else if (uri.indexOf("update.do") != -1) {
+		}else if (uri.indexOf("update.do") != -1) {
 			updateForm(req, resp);
-		} else if (uri.indexOf("update_ok.do") != -1) {
+		}else if (uri.indexOf("update_ok.do") != -1) {
 			updateSubmit(req, resp);
-		} else if (uri.indexOf("delete.do") != -1) {
+		}else if (uri.indexOf("delete.do") != -1) {
 			delete(req, resp);
-		} else if (uri.indexOf("myPage.do") != -1) {
+		}else if (uri.indexOf("myPage.do") != -1) {
 			myPage(req, resp);
+		}else if (uri.indexOf("userEmail_check.do") != -1) {
+			userEmail_check(req, resp);
+		}else if (uri.indexOf("companyEmail_check.do") != -1) {
+			companyEmail_check(req, resp);
 		}
 	}
 
@@ -368,5 +377,55 @@ public class MemberServlet extends MyServlet {
 		session.invalidate();
 		
 		resp.sendRedirect(cp + "/main.do");
+	}
+	
+	private void userEmail_check(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 유저 - 이메일 중복검사 (AJAX:JSON)
+		String userEamil = req.getParameter("userEmail");
+		
+		String state = "false";
+		String msg = "중복된 이메일 계정이 있습니다.";
+		int result = 0;
+		
+		MemberDAO dao = new MemberDAO();
+		result = dao.checkUserEmail(userEamil);
+		
+		if(result == 0) {
+			state = "true";
+			msg = null;
+		}
+			
+		JSONObject job = new JSONObject();
+		job.put("state", state);
+		job.put("checkMessage", msg);
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		out.print(job.toString() );
+	}
+	
+	private void companyEmail_check(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 유저 - 이메일 중복검사 (AJAX:JSON)
+		String companyEmail = req.getParameter("companyEmail");
+		
+		String state = "false";
+		String msg = "중복된 이메일 계정이 있습니다.";
+		int result = 0;
+		
+		MemberDAO dao = new MemberDAO();
+		result = dao.checkUserEmail(companyEmail);
+		
+		if(result == 0) {
+			state = "true";
+			msg = null;
+		}
+			
+		JSONObject job = new JSONObject();
+		job.put("state", state);
+		job.put("checkMessage", msg);
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		out.print(job.toString() );
 	}
 }

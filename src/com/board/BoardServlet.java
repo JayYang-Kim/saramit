@@ -6,6 +6,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -63,6 +64,18 @@ public class BoardServlet extends MyServlet{
 			delete(req, resp);
 		}else if(uri.indexOf("replyDelete.do") != -1){
 			replyDelete(req, resp);
+		}else if(uri.indexOf("insertReplyLike.do")!=-1) {
+			insertReplyLike(req, resp);
+		}else if(uri.indexOf("countReplyLike.do")!=-1) {
+			countReplyLike(req, resp);
+		}else if(uri.indexOf("insertReplyAnswer.do") != -1){
+			insertReplyAnswer(req, resp);
+		}else if(uri.indexOf("listReplyAnswer.do") != -1){
+			listReplyAnswer(req, resp);
+		}else if(uri.indexOf("deleteReplyAnswer.do")!=-1) {
+			deleteReplyAnswer(req, resp);
+		}else if(uri.indexOf("countReplyAnswer.do")!=-1) {
+			countReplyAnswer(req, resp);
 		}
 	}
 	
@@ -349,20 +362,19 @@ public class BoardServlet extends MyServlet{
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
-		String state = "true";
+		BoardDAO dao = new BoardDAO();
+		FeedBack_ReplyDTO dto = new FeedBack_ReplyDTO();
 		
-		if(info == null) {
-			state = "loginFail";
-		} else {
-			BoardDAO dao = new BoardDAO();
-			FeedBack_ReplyDTO dto = new FeedBack_ReplyDTO();
-			
-			dto.setEmail(info.getEmail());
-			dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
-			dto.setAnswer(Integer.parseInt(req.getParameter("answer")));
-			dto.setContent(req.getParameter("reply_content"));
-			
-			dao.insertReply(dto);
+		dto.setEmail(info.getEmail());
+		dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
+		dto.setAnswer(Integer.parseInt(req.getParameter("answer")));
+		dto.setContent(req.getParameter("content"));
+		
+		String state = "false";
+		int result = dao.insertReply(dto);
+		
+		if(result == 1) {
+			state = "true";
 		}
 		
 		JSONObject job = new JSONObject();
@@ -445,6 +457,126 @@ public class BoardServlet extends MyServlet{
 		// json으로 결과 전송
 		resp.setContentType("text/html;charset=utf-8");
 		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
+	}
+	
+	private void insertReplyLike(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 댓글 좋아요 / 싫어요 저장 - AJAX:JSON
+		HttpSession session=req.getSession();
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		
+		int replyNum = Integer.parseInt(req.getParameter("replyNum"));
+		int replyLike = Integer.parseInt(req.getParameter("replyLike"));
+
+		BoardDAO dao = new BoardDAO();
+		FeedBack_ReplyDTO dto = new FeedBack_ReplyDTO();
+		
+		dto.setReplyNum(replyNum);
+		dto.setEmail(info.getEmail());
+		dto.setReplyLike(replyLike);
+		
+		String state = "false";
+		int result = dao.insertReplyLike(dto);
+		if(result == 1) {
+			state="true";
+		}
+
+		JSONObject job=new JSONObject();
+		job.put("state", state);
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		out.print(job.toString());
+	}
+
+	private void countReplyLike(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 댓글 좋아요 / 싫어요 개수 - AJAX:JSON
+		int replyNum = Integer.parseInt(req.getParameter("replyNum"));
+		
+		BoardDAO dao = new BoardDAO();
+		
+		Map<String, Integer> map = dao.countReplyLike(replyNum);
+		int likeCount=0;
+		int disLikeCount=0;
+		
+		if(map.containsKey("likeCount")) {
+			likeCount=map.get("likeCount");
+		}
+			
+		if(map.containsKey("disLikeCount")) {
+			disLikeCount=map.get("disLikeCount");
+		}
+			
+		JSONObject job = new JSONObject();
+		job.put("likeCount", likeCount);
+		job.put("disLikeCount", disLikeCount);
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		out.print(job.toString() );
+	}
+	
+	private void insertReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 답글 저장 - AJAX:JSON
+		replySubmit(req, resp);
+	}
+	
+	private void listReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 리플의 답글 리스트 - AJAX:TEXT
+		int answer = Integer.parseInt(req.getParameter("answer"));
+		
+		BoardDAO dao = new BoardDAO();
+		List<FeedBack_ReplyDTO> listReplyAnswer = dao.listReplyAnswer(answer);
+
+		for(FeedBack_ReplyDTO dto : listReplyAnswer) {
+			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		}
+		
+		req.setAttribute("listReplyAnswer", listReplyAnswer);
+
+		forward(req, resp, "/WEB-INF/views/board/listReplyAnswer.jsp");
+	}
+	
+	private void deleteReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 리플 답글 삭제 - AJAX:JSON
+		/*
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		*/
+		
+		BoardDAO dao = new BoardDAO();
+			
+		int replyNum = Integer.parseInt(req.getParameter("replyNum"));
+		int answer = Integer.parseInt(req.getParameter("answer"));
+		
+		String state = "false";
+		
+		int result = dao.deleteAnswer(replyNum, answer);
+		if(result > 0) {
+			state = "true";
+		}
+		
+		JSONObject job = new JSONObject();
+		job.put("state", state);
+		
+		// json으로 결과 전송
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
+	}
+	
+	private void countReplyAnswer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 리플의 답글 개수 - AJAX:JSON
+		int answer = Integer.parseInt(req.getParameter("answer"));
+		
+		BoardDAO dao = new BoardDAO();
+		int count = dao.dataCountReplyAnswer(answer);
+		
+		JSONObject job = new JSONObject();
+		job.put("count", count);
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out=resp.getWriter();
 		out.print(job.toString());
 	}
 }

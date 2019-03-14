@@ -40,7 +40,7 @@
 		                <li><a href="<%=cp%>/board/list.do">피드백 게시판</a></li>
 		                <li><a href="<%=cp%>/pass_board/list.do">합격자소서</a></li>
 		                <li><a href="<%=cp%>/board/free/list.do">자유게시판</a></li>
-		                <li><a href="#">자소서 관리</a></li>
+		                <li><a href="<%=cp%>/resume/list.do">이력서 관리</a></li>
 		            </ul>
 		        </div>
 		        <%-- //gnb --%>

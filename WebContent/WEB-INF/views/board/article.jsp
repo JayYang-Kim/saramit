@@ -81,7 +81,9 @@
     	}
     	
     	function deleteReply(boardNum, replyNum) {
-    		
+    		if(!confirm("댓글을 삭제하시겠습니까 ?")) {
+				return;
+			}
     		
     		var url = "<%=cp%>/board/replyDelete.do";
     		var query = "boardNum=" + boardNum + "&replyNum=" + replyNum;
@@ -107,6 +109,223 @@
     			}
     		});
     	}
+    	
+    	$(function(){
+    		$("body").on("click", ".btnSendReplyLike", function(){
+    			var replyNum = $(this).attr("data-replyNum");
+    			var replyLike = $(this).attr("data-replyLike");
+    			var $btn = $(this);
+    			
+    			var msg="게시물이 마음에 들지 않으십니까 ?";
+    			if(replyLike == 1)
+    				msg="게시물에 공감하십니까 ?";
+    			if(!confirm(msg)) {
+    				return;
+    			}
+    				
+    			var query = "replyNum=" + replyNum + "&replyLike=" + replyLike;
+    			var url="<%=cp%>/board/insertReplyLike.do";
+    			$.ajax({
+    				type : "post"
+    				,url : url
+    				,data : query
+    				,dataType : "json"
+    				,success : function(data) {
+    					var state = data.state;
+    					if(state == "true") {
+    						countReplyLike(replyNum, $btn);
+    					} else if(state == "false") {
+    						alert("좋아요 / 싫어요는 한 번만 가능합니다.");
+    					}
+    				}
+    			    ,beforeSend : function(jqXHR) {
+    			    	jqXHR.setRequestHeader("AJAX", true);
+    			    }
+    			    ,error : function(e) {
+    			    	if(e.status == 403) {
+    			    		location.href = "<%=cp%>/member/login.do";
+        					return;
+    			    	}
+    			    	console.log(e.responseText);
+    			    }
+    			});
+    		});
+    		
+    		function countReplyLike(replyNum, $btn) {
+    			var url = "<%=cp%>/board/countReplyLike.do";
+    			$.ajax({
+    				type : "post"
+    				,url : url
+    				,data : {replyNum:replyNum}
+    				,dataType : "json"
+    				,success : function(data) {
+    					var likeCount = data.likeCount;
+    					var disLikeCount = data.disLikeCount;
+    					
+    					$btn.parent(".btn_reply").children().eq(0).find("span").html(likeCount);
+    					$btn.parent(".btn_reply").children().eq(0).find("span").html(disLikeCount);
+    				}
+    			    ,beforeSend :function(jqXHR) {
+    			    	jqXHR.setRequestHeader("AJAX", true);
+    			    }
+    			    ,error:function(e) {
+    			    	if(e.status == 403) {
+    			    		location.href = "<%=cp%>/member/login.do";
+        					return;
+    			    	}
+    			    	console.log(e.responseText);
+    			    }
+    			});
+    		}
+    	});
+    	
+    	$(function(){
+    		$("body").on("click", ".btnReplyAnswerLayout", function(){
+    			var $divReplyAnswer = $(this).closest(".box").next(".replyAnswer");			
+    			var isVisible = $divReplyAnswer.is(':visible');
+    			var replyNum = $(this).attr("data-replyNum");
+    				
+    			if(isVisible) {
+    				$divReplyAnswer.hide();
+    			} else {
+    				$divReplyAnswer.show();
+    	            
+    				// 답글 리스트
+    				listAnswer(replyNum);
+    				// 답글 개수
+    				countAnswer(replyNum);
+    			}
+    		});
+    	});
+    	
+    	$(function(){
+    		$("body").on("click", ".btnSendReplyAnswer", function(){
+    			var boardNum = "${dto.boardNum}";
+    			var replyNum = $(this).attr("data-replyNum");
+    			var $div = $(this).closest(".wrtieAnswer");
+    			var content = $div.find("textarea").val().trim();
+    			if(!content) {
+    				$div.find("textarea").focus().css("outline-color","#df4442");
+    				return;
+    			}
+    			content = encodeURIComponent(content);
+    			
+    			var query = "boardNum=" + boardNum + "&content=" + content + "&answer=" + replyNum;
+    			var url = "<%=cp%>/board/insertReplyAnswer.do";
+    			$.ajax({
+    				type : "post",
+    				url : url,
+    				data : query,
+    				dataType : "json",
+    				success : function(data) {
+    					$div.find("textarea").val("");
+    					
+    					var state = data.state;
+    					
+    					if(state == "true") {
+    						listAnswer(replyNum);
+    						countAnswer(replyNum);
+    					} 
+    				},
+    			    beforeSend : function(jqXHR) {
+    			    	jqXHR.setRequestHeader("AJAX", true);
+    			    },
+    			    error:function(e) {
+    			    	if(e.status == 403) {
+    			    		location.href = "<%=cp%>/member/login.do";
+        					return;
+    			    	}
+    			    	console.log(e.responseText);
+    			    }
+    			});
+    		});
+    	});
+    	
+    	function listAnswer(answer) {
+    		var url="<%=cp%>/board/listReplyAnswer.do";
+    		$.ajax({
+    			type : "get",
+    			url : url,
+    			data : {answer:answer},
+    			success : function(data) {
+    				var idAnswerList = "#listReplyAnswer" + answer;
+    				$(idAnswerList).html(data);
+    			},
+    		    beforeSend : function(jqXHR) {
+    		    	jqXHR.setRequestHeader("AJAX", true);
+    		    },
+    		    error : function(e) {
+    		    	if(e.status == 403) {
+    		    		location.href = "<%=cp%>/member/login.do";
+    					return;
+    		    	}
+    		    	console.log(e.responseText);
+    		    }
+    		});
+    	}
+    	
+    	function countAnswer(answer) {
+    		var url="<%=cp%>/board/countReplyAnswer.do";
+    		$.ajax({
+    			type : "post",
+    			url : url,
+    			data : {answer:answer},
+    			dataType : "json",
+    			success : function(data) {
+    				var count = data.count;
+    				var idAnswerCount = "#answerCount" + answer;
+    				$(idAnswerCount).html(count);
+    			},
+    		    beforeSend : function(jqXHR) {
+    		    	jqXHR.setRequestHeader("AJAX", true);
+    		    },
+    		    error : function(e) {
+    		    	if(e.status == 403) {
+    		    		location.href = "<%=cp%>/member/login.do";
+    					return;
+    		    	}
+    		    	console.log(e.responseText);
+    		    }
+    		});
+    	}
+    	
+    	$(function(){
+    		$("body").on("click", ".deleteReplyAnswer", function(){
+    			if(!confirm("답글을 삭제하시겠습니까 ?")) {
+    				return;
+    			}
+    			    
+    			var url = "<%=cp%>/board/deleteReplyAnswer.do";
+    			var replyNum = $(this).attr("data-replyNum");
+    			var answer = $(this).attr("data-answer");
+    			var query = "replyNum=" + replyNum + "&answer=" + answer;
+    			
+    			$.ajax({
+    				type : "post"
+    				,url : url
+    				,data : query
+    				,dataType : "json"
+    				,success : function(data) {
+    					var state = data.state;
+    					
+    					if(state == "true") {
+    						listAnswer(answer);
+    						countAnswer(answer);
+    					} 
+    				}
+    			    ,beforeSend : function(jqXHR) {
+    			    	jqXHR.setRequestHeader("AJAX", true);
+    			    }
+    			    ,error : function(jqXHR) {
+    			    	if(jqXHR.status == 403) {
+    			    		location.href = "<%=cp%>/member/login.do";
+        					return;
+    			    	}
+    			    	console.log(jqXHR.responseText);
+    			    }
+    			});
+    		});
+    	});
     	
     	jQuery(function(){
     		$(".message").hide();
@@ -199,7 +418,7 @@
                 				<div>
                 					<input type="hidden" name="boardNum" value="${dto.boardNum}"/>
                 					<input type="hidden" name="answer" value="0"/>
-                					<textarea placeholder="내용을 입력해주세요." id="reply_content" name="reply_content" title="내용" style="min-height:120px;"></textarea>
+                					<textarea placeholder="내용을 입력해주세요." id="reply_content" name="content" title="내용" style="min-height:120px;"></textarea>
                 					<div class="message t_red mt10"></div>
                 					<div class="txt mt10 mb10">* 타인을 비방하거나 개인정보를 유출하는 글의 댓글은 삭제 처리가 될 수 있습니다.</div>
                 					<div class="f_right">

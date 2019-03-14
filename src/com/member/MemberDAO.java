@@ -410,7 +410,48 @@ public class MemberDAO {
 					
 				}
 			}
-		}
+		}	
+	}
+	
+	public int checkUserEmail(String userEmail) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
 		
+		try {
+			sql = "SELECT COUNT(*)"
+					+ " FROM member" 
+					+ " WHERE memberEmail = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userEmail);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+
+				}
+			}
+		}
+			
+		return result;
 	}
 }

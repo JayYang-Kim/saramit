@@ -133,9 +133,17 @@ header{margin-bottom:61px;}
 #wrap #container .contents .box_guest .title{padding-top:10px;border-top:1px solid #c4c4c4;}
 #wrap #container .contents .box_guest #listReply .reply .replyCount{padding:10px;background-color:#4c4c4c;color:#ffffff;}
 #wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.box{padding:10px;background-color:#ffffff;border-bottom:1px solid #e6e6e6}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.box div{word-break: break-all;word-wrap: break-word;}
 #wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.box .email{font-weight:bold;}
 #wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.box .etc span{color:#c4c4c4;}
 
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.replyAnswer .box_answerWrite{position:relative;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.replyAnswer .box_answerWrite .answer_icon{position:absolute;left:20px;top:20px;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.replyAnswer .box_answerWrite .box_answer{margin-top:-1px;padding:14px 22px 14px 52px;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.replyAnswer .answerList ul li .box_listAnswer{position:relative;margin-bottom:2px;background-color:#ffffff;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.replyAnswer .answerList ul li .box_listAnswer .answer_icon{position:absolute;left:20px;top:20px;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.replyAnswer .answerList ul li .box_listAnswer .answerContent{margin-top: -1px;padding: 14px 22px 14px 52px;}
+#wrap #container .contents .box_guest #listReply .reply .boxReply ul li div.replyAnswer .answerList ul li .box_listAnswer .answerContent div{word-break: break-all;word-wrap: break-word;}
 
 /* 컨텐츠 드래그 컬러효과 */
 #container::-moz-selection{background:rgba(255,238,51,0.99)}
