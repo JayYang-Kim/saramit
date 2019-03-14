@@ -91,7 +91,7 @@ public class ResumeDAO {
 	
 	
 	
-	public List<ResumeDTO> listResume(int start,int end) {
+	public List<ResumeDTO> listResume(int start,int end) { //이력서 리스트
 		List<ResumeDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -140,7 +140,7 @@ public class ResumeDAO {
 		return list;
 	}
 	
-	public int insertResume(ResumeDTO dto) {
+	public int insertResume(ResumeDTO dto) { //이력서 작성-개인정보
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
@@ -187,7 +187,7 @@ public class ResumeDAO {
 		return resumeNum;
 	}
 
-	public void insertLicense(LicenseDTO dto, int num) {
+	public void insertLicense(LicenseDTO dto, int num) { //이력서 작성-자격사항
 		PreparedStatement pstmt = null;
 		String sql;
 
@@ -214,7 +214,7 @@ public class ResumeDAO {
 		}
 	}
 
-	public void insertAwards(AwardsDTO dto,int num) {
+	public void insertAwards(AwardsDTO dto,int num) { //이력서 작성-수상경력
 		PreparedStatement pstmt = null;
 		String sql;
 		try {
@@ -231,7 +231,7 @@ public class ResumeDAO {
 		}
 	}
 
-	public void insertEducation(EducationDTO dto, int num) {
+	public void insertEducation(EducationDTO dto, int num) { ////이력서 작성-학력
 		PreparedStatement pstmt = null;
 		String sql;
 
@@ -253,7 +253,7 @@ public class ResumeDAO {
 		}
 	}
 
-	public void insertCareer(CareerDTO dto, int num) {
+	public void insertCareer(CareerDTO dto, int num) { //이력서 작성-경력사항.
 		PreparedStatement pstmt = null;
 		String sql;
 
@@ -283,7 +283,7 @@ public class ResumeDAO {
 		}
 	}
 
-	public int totData() {
+	public int totData() { //작성한 이력서 숫자 세기
 		int result=0;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;

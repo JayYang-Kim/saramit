@@ -184,7 +184,13 @@ public class ResumeServlet extends MyServlet {
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 이력서 수정완료
-
+		req.setCharacterEncoding("utf-8");
+		req.setAttribute("mode", "created_ok");
+		ResumeDAO dao = new ResumeDAO();
+		ResumeDTO dto_resume = new ResumeDTO();
+		dto_resume.setTitle(req.getParameter("title"));
+		int rnum = dao.insertResume(dto_resume);
+		
 		forward(req, resp, "/WEB-INF/views/resume/update_ok.jsp");
 	}
 
