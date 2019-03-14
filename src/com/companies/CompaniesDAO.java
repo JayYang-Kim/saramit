@@ -22,8 +22,14 @@ public class CompaniesDAO {
 		String sql;
 
 		try {
-			sql = "select nvl(count(*),0) from member m join company c on m.memberEmail = c.companyEmail";
-			pstmt = conn.prepareStatement(sql);
+			if(searchKey==null && searchValue==null) {
+				sql = "select nvl(count(*),0) from member m join company c on m.memberEmail = c.companyEmail";
+				pstmt = conn.prepareStatement(sql);
+			}else {
+				sql = "select nvl(count(*),0) from member m join company c on m.memberEmail = c.companyEmail where instr("+searchKey+",?)>=1";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, searchValue);
+			}
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {

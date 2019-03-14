@@ -37,7 +37,8 @@
 	<script type="text/javascript">
 		$(function(){
 			$("#addLicense").click(function(){
-				var div = $(this).closest(".inputBox").find("#licenseInfo div:first").clone(true).css("display","block").wrapAll("<div>").parent().html();
+				var div = $(this).closest(".inputBox").find("#licenseInfo div:first").clone(true).css("display","block");
+				div = div.wrapAll("<div>").parent().html();
 				$(this).closest(".inputBox").find("#licenseInfo").append(div);
 				
 			});
@@ -46,6 +47,43 @@
 					return;
 				}
 				$(this).parent().remove();
+			});
+			$("body").on("click",".addLicense", function(){
+				var sort = "license";
+				var licenseName = $(this).parent().find("input[name=licenseName]").val();
+				var licensePublisher = $(this).parent().find("input[name=licensePublisher]").val();
+				var licenseDate = $(this).parent().find("input[name=licenseDate]").val();
+				var query = "resumeCode=${resumeCode}&sort="+sort+"&licenseName="+encodeURIComponent(licenseName)+"&licensePublisher="+encodeURIComponent(licensePublisher)+"&licenseDate="+encodeURIComponent(licenseDate);
+				var url = "<%=cp%>/resume/addInfo.do";
+				var button = $(this);
+				if(!licenseName || !licensePublisher || !licenseDate){
+					alert("정보를 모두 입력하세요!");
+					return;
+				}
+				$.ajax({
+					type:"post",
+					data:query,
+					url:url,
+					dataType:"json",
+					success:function(data){
+						if(data.dto == null){
+							alert("삽입 실패하였습니다.");
+							return;
+						}
+						button.parent().find("input[name=licenseName]").prop("disabled","disabled");
+						button.parent().find("input[name=licenseName]").val(data.dto.license_name);
+						button.parent().find("input[name=licensePublisher]").prop("disabled","disabled");
+						button.parent().find("input[name=licensePublisher]").val(data.dto.license_publisher);
+						button.parent().find("input[name=licenseDate]").prop("disabled","disabled");
+						button.parent().find("input[name=licenseDate]").val(data.dto.license_date);
+						button.parent().find("input[name=licenseDate]").css("width","100px");
+						button.remove();
+					},
+					error:function(e){
+						console.log(e.responseText)
+					}
+				});
+				
 			});
 		});
 		
@@ -60,6 +98,43 @@
 					return;
 				}
 				$(this).parent().remove();
+			});
+			$("body").on("click",".addAwards", function(){
+				var sort = "awards";
+				var awardsName = $(this).parent().find("input[name=awardsName]").val();
+				var awardsPublisher = $(this).parent().find("input[name=awardsPublisher]").val();
+				var awardsDate = $(this).parent().find("input[name=awardsDate]").val();
+				var query = "resumeCode=${resumeCode}&sort="+sort+"&awardsName="+encodeURIComponent(awardsName)+"&awardsPublisher="+encodeURIComponent(awardsPublisher)+"&awardsDate="+encodeURIComponent(awardsDate);
+				var url = "<%=cp%>/resume/addInfo.do";
+				var button = $(this);
+				if(!awardsName || !awardsPublisher || !awardsDate){
+					alert("정보를 모두 입력하세요!");
+					return;
+				}
+				$.ajax({
+					type:"post",
+					data:query,
+					url:url,
+					dataType:"json",
+					success:function(data){
+						if(data.awards_dto == null){
+							alert("삽입 실패하였습니다.");
+							return;
+						}	
+						button.parent().find("input[name=awardsName]").prop("disabled","disabled");
+						button.parent().find("input[name=awardsName]").val(data.awards_dto.awardsName);
+						button.parent().find("input[name=awardsPublisher]").prop("disabled","disabled");
+						button.parent().find("input[name=awardsPublisher]").val(data.awards_dto.awards_publisher);
+						button.parent().find("input[name=awardsDate]").prop("disabled","disabled");
+						button.parent().find("input[name=awardsDate]").val(data.awards_dto.awards_date);
+						button.parent().find("input[name=awardsDate]").css("width","100px");
+						button.remove();
+					},
+					error:function(e){
+						console.log(e.responseText)
+					}
+				});
+				
 			});
 		});
 		$(function(){
@@ -93,7 +168,7 @@
         <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
-          <div align="left" style="width:30%; margin:0 auto;">
+          <div align="left" style="width:65%; margin:0 auto;">
           <div>      
           <form name="resumeForm" method="post">
           <br><br>
@@ -105,97 +180,21 @@
            <br>
         <div id="personalInfo">	
         		&nbsp;
-                <input type="text" name="name" size="10" autofocus value="${dto_resume.name}">
+                <input type="text" name="name" style="width:30%;" autofocus value="${dto_resume.name}" disabled="disabled">
                 &nbsp;
-                <input type="text" name="birth" size="10" maxlength="10" value="${dto_resume.birth}">
+                <input type="text" name="birth" style="width:30%;" maxlength="10" value="${dto_resume.birth}" disabled="disabled">
                 &nbsp;
                 <label for="gender">성별</label>
-                <input type="text" name="gender" size="10" value="${dto_resume.gender}">            
+                <input type="text" name="gender" size="10" value="${dto_resume.gender}" disabled="disabled">            
                 </div>
                 <div>     
                 <br>
                 &nbsp;
-                <input type="text" name="userEmail" size="30" value="${sessionScope.member.email}">
+                <input type="text" name="userEmail" size="30" value="${sessionScope.member.email}" disabled="disabled">
                 <br><br>
                 &nbsp;
                 <input type="text" name="addr" style="width:80%;" value="${dto_resume.addr}">
                 <br><br><hr>
-		</div>
-			
-			<h3>&nbsp;| 자격 사항</h3>
-			
-			<br> 
-		
-		<div class="inputBox">
-			<div id="licenseInfo">
-				<div style="display:none;">
-					&nbsp;
-	                <input type="text" size="10" name="licenseName" placeholder="자격증명">
-	                &nbsp;
-	                <input type="text" size="10" name="licensePublisher" placeholder="발급처">
-	                &nbsp;
-	                <span class="datepicker_wrap">
-	                <input type="text" class="datepicker"  title="calendar" name="licenseDate" placeholder="취득 날짜">       
-	            	</span>
-	            	<button class="btn btn-black removeLicense" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
-	                <br><br>
-                </div>
-				<c:forEach var="dto" items="${licenseList}">
-				<div>
-					&nbsp;
-	                <input type="text" size="10" name="licenseName" placeholder="자격증명" value="${dto.license_name}">
-	                &nbsp;
-	                <input type="text" size="10" name="licensePublisher" placeholder="발급처" value="${dto.license_publisher}">
-	                &nbsp;
-	                <span class="datepicker_wrap">
-	                <input type="text" class="datepicker"  title="calendar" name="licenseDate" placeholder="취득 날짜" value="${dto.license_date}">       
-	            	</span>
-	            	<button class="btn btn-black removeLicense" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
-	                <br><br>
-                </div>
-                </c:forEach>
-           </div>   
-            <p align="center">
-	         	<button type="button" class="btn btn-black" id="addLicense" style="height: 26px;line-height: 10px;">추가</button>
-	        </p>             
-           <hr>
-        </div>
-        	<h3>&nbsp;| 수상 경력</h3>
-        	<br> 
-	
-		<div class="inputBox">
-			<div id="awardsInfo">
-				<div style="display:none;">
-						&nbsp;
-		                <input type="text" size="10" name="awardsName" placeholder="수상명">
-		                &nbsp;
-		                <input type="text" size="10" name="awardspublisher" placeholder="발급처">
-		                &nbsp;
-		                <span class="datepicker_wrap">
-		                <input type="text" class="datepicker"  title="calendar" name="awardsDate" placeholder="수상 날짜">       
-		            	</span>
-		            	<button class="btn btn-black removeAwards"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
-		                <br><br>
-	            </div>
-				<c:forEach var="dto" items="${awardList}">
-					<div>
-						&nbsp;
-		                <input type="text" size="10" name="awardsName" placeholder="수상명" value="${dto.awardsName}">
-		                &nbsp;
-		                <input type="text" size="10" name="awardspublisher" placeholder="발급처" value="${dto.awards_publisher}">
-		                &nbsp;
-		                <span class="datepicker_wrap">
-		                <input type="text" class="datepicker"  title="calendar" name="awardsDate" placeholder="수상 날짜" value="${dto.awards_date}">       
-		            	</span>
-		            	<button class="btn btn-black removeAwards"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
-		                <br><br>
-	                </div>
-                </c:forEach>
-            </div>              
-            <p align="center">
-	         	<button type="button" class="btn btn-black" id="addAwards" style="height: 26px;line-height: 10px;">추가</button>
-	         </p>
-	         <hr>  
 		</div>
 			<h3>&nbsp;| 학력</h3>
 			<br> 
@@ -241,13 +240,83 @@
                 &emsp;
                 <label><input type="checkbox" name="graduate_status" placeholder="재학중" value=${dto_edu.graduate_status!=null?"checked='checked'":""}>재학중</label>
                 &emsp;
-                <span class="datepicker_wrap"> 
-                <input type="text" class="datepicker"  title="calendar" name="entrance" placeholder="입학일자" value="${dto_edu.entrance}">
-                <input type="text" class="datepicker"  title="calendar" name="graduate" placeholder="졸업일자" value="${dto_edu.graduate}">
-                </span>
+                <input type="text" title="calendar" name="entrance" placeholder="입학일자" value="${dto_edu.entrance}" style="width:100px;">
+                <input type="text" title="calendar" name="graduate" placeholder="졸업일자" value="${dto_edu.graduate}" style="width:100px;">
                 <br><br> 
             </div>
-	         <hr>               
+	         <hr>               	
+			<h3>&nbsp;| 자격 사항</h3>
+			
+			<br> 
+		
+		<div class="inputBox">
+			<div id="licenseInfo">
+				<div style="display:none;">
+					&nbsp;
+	                <input type="text" size="10" name="licenseName" placeholder="자격증명">
+	                &nbsp;
+	                <input type="text" size="10" name="licensePublisher" placeholder="발급처">
+	                &nbsp;
+	                <input type="text" name="licenseDate" placeholder="취득 날짜"  style="width:100px;">    
+	            	<button class="btn btn-black removeLicense" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
+	            	<button class="btn btn-black addLicense" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">추가완료</button>
+	                <br><br>
+                </div>
+				<c:forEach var="dto" items="${licenseList}">
+				<div>
+					&nbsp;
+	                <input type="text" size="10" name="licenseName" placeholder="자격증명" value="${dto.license_name}" disabled="disabled">
+	                &nbsp;
+	                <input type="text" size="10" name="licensePublisher" placeholder="발급처" value="${dto.license_publisher}" disabled="disabled">
+	                &nbsp;
+	                <span class="datepicker_wrap">
+	                <input type="text" title="calendar" name="licenseDate" placeholder="취득 날짜" value="${dto.license_date}"  style="width:100px;" disabled="disabled">
+	            	</span>
+	            	<button class="btn btn-black removeLicense" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
+	                <br><br>
+                </div>
+                </c:forEach>
+           </div>   
+            <p align="center">
+	         	<button type="button" class="btn btn-black" id="addLicense" style="height: 26px;line-height: 10px;">추가</button>
+	        </p>             
+           <hr>
+        </div>
+        	<h3>&nbsp;| 수상 경력</h3>
+        	<br> 
+	
+		<div class="inputBox">
+			<div id="awardsInfo">
+				<div style="display:none;">
+						&nbsp;
+		                <input type="text" size="10" name="awardsName" placeholder="수상명">
+		                &nbsp;
+		                <input type="text" size="10" name="awardsPublisher" placeholder="발급처">
+		                &nbsp;
+		                <input type="text" name="awardsDate" placeholder="수상 날짜" style="width:100px;">       
+		            	<button class="btn btn-black removeAwards"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
+		            	<button class="btn btn-black addAwards" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">추가완료</button>
+		                <br><br>
+	            </div>
+				<c:forEach var="dto" items="${awardList}">
+					<div>
+						&nbsp;
+		                <input type="text" size="10" name="awardsName" placeholder="수상명" value="${dto.awardsName}" disabled="disabled">
+		                &nbsp;
+		                <input type="text" size="10" name="awardsPublisher" placeholder="발급처" value="${dto.awards_publisher}" disabled="disabled">
+		                &nbsp;
+		                <input type="text" name="awardsDate" placeholder="수상 날짜" value="${dto.awards_date}" style="width:100px;" disabled="disabled">       
+		            	<button class="btn btn-black removeAwards"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
+		                <br><br>
+	                </div>
+                </c:forEach>
+            </div>              
+            <p align="center">
+	         	<button type="button" class="btn btn-black" id="addAwards" style="height: 26px;line-height: 10px;">추가</button>
+	         </p>
+	         <hr>  
+		</div>
+		
 		</div>
 			<h3>&nbsp;| 경력 사항</h3>
 			<br> 
@@ -264,14 +333,14 @@
 		                <option value="regular">정규직</option>
 		                <option value="dispatch">파견직</option>
 		            </select>
-		            <br> 
 		         	&nbsp;
 		            <input type="text" size="10" name="position" placeholder="직위">
+		            <br> 
 		            &nbsp;
 		            <input type="text" size="10" name="task" placeholder="업무내용">
 		            <span class="datepicker_wrap">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerjoinDate" placeholder="입사일자">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerresignDate" placeholder="퇴사일자">
+		                <input type="text" class="datepicker"  title="calendar" name="carrerjoinDate" placeholder="입사일자" style="width:80px;">
+		                <input type="text" class="datepicker"  title="calendar" name="carrerresignDate" placeholder="퇴사일자" style="width:80px;">
 		            </span>
 		            <button class="btn btn-black removeCareer"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
 		            <br>
@@ -280,24 +349,22 @@
 			<c:forEach var="dto" items="${CareerList}">
 				<div>
 					&nbsp;                       
-		            <input type="text" size="10" name="copName" placeholder="회사명" value="${dto.copName}">
+		            <input type="text" size="10" name="copName" placeholder="회사명" value="${dto.copName}" disabled="disabled">
 		            &nbsp;
 		            <label for="gubun">경력구분</label>
-		            <select size="1" name="gubun">
+		            <select size="1" name="gubun" disabled="disabled">
 		                <option value="intern">인턴</option>
 		                <option value="contract">계약직</option>
 		                <option value="regular">정규직</option>
 		                <option value="dispatch">파견직</option>
 		            </select>
-		            <br> 
 		         	&nbsp;
-		            <input type="text" size="10" name="position" placeholder="직위" value="${dto.position}">
+		            <input type="text" size="10" name="position" placeholder="직위" value="${dto.position}" disabled="disabled">
+		            <br> 
 		            &nbsp;
-		            <input type="text" size="10" name="task" placeholder="업무내용" value="${dto.task}">
-		            <span class="datepicker_wrap">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerjoinDate" placeholder="입사일자" value="${dto.joinDate}">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerresignDate" placeholder="퇴사일자" value="${dto.resignDate}">
-		            </span>
+		            <input type="text" size="10" name="task" placeholder="업무내용" value="${dto.task}" disabled="disabled">
+		                <input type="text" title="calendar" name="carrerjoinDate" placeholder="입사일자" value="${dto.joinDate}" style="width:100px;" disabled="disabled">
+		                <input type="text" title="calendar" name="carrerresignDate" placeholder="퇴사일자" value="${dto.resignDate}" style="width:100px;" disabled="disabled">
 		            <button class="btn btn-black removeCareer"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
 		            <br>
 		            <br>

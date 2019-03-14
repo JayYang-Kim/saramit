@@ -74,22 +74,24 @@ public class CompanyServlet extends MyServlet{
 			current_page = Integer.parseInt(page);
 		}
 		//앞으로 가져갈 uri
-		String url = cp+"/companies/list.do?page="+current_page; //다시 리스트로 가는 경우의 주소
+		String url = cp+"/companies/list.do"; //다시 리스트로 가는 경우의 주소
 		String info_url = cp+"/companies/info.do?page="+current_page;
 		String searchKey = req.getParameter("searchKey");
 		String searchValue = req.getParameter("searchValue");
 		
-		
+		int dataCount = dao.totData(null, null);
 		//검색값 디코딩 & 주소 처리
 		if(searchKey != null && searchValue != null) {
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
-			url += "&searchKey="+searchKey+"&searchValue="+searchValue;
+			url += "?searchKey="+searchKey+"&searchValue="+searchValue;
 			info_url += "&searchKey="+searchKey+"&searchValue="+searchValue;
+			dataCount = dao.totData(searchKey, searchValue);
 		}
 		
 		//페이징 작업 
 		int rows = 12;
-		int dataCount = dao.totData(searchKey, searchValue);
+		
+		System.out.println(dataCount);
 		int total_page = util.pageCount(rows, dataCount);
 		
 		if(current_page>total_page) {
