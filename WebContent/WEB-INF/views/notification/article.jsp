@@ -60,7 +60,7 @@
     			hide:"explode"
     		});
     		$("#update_ok").click(function(){
-				location.href="<%=cp%>/board/free/update.do?page=${page}&num=${dto.boardNum}";
+				location.href="<%=cp%>/notification/update.do?${query}&num=${dto.boardNum}";
 			});
 			$("#update_cancel").click(function(){
 				$("#dlg_update").dialog("close");
@@ -75,7 +75,7 @@
     			hide:"explode"
     		});
     		$("#delete_ok").click(function(){
-				location.href="<%=cp%>/board/free/delete.do?page=${page}&num=${dto.boardNum}";
+				location.href="<%=cp%>/notification/delete.do?${query}&num=${dto.boardNum}";
 			});
 			$("#delete_cancel").click(function(){
 				$("#dlg_delete").dialog("close");
@@ -93,7 +93,18 @@
         <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
-            	<div style="position: absolute; right: 0;top: 500px;"><img alt="사진없지롱" src="<%=cp%>/resources/movingKAKAO.gif"></div>
+            	<div style="position:fixed; right: 500px;top: 250px;">
+            		<img alt="사진없지롱" src="<%=cp%>/resources/images/common/movingKAKAO.gif">
+            	</div>
+            	<div style="position:fixed; left: 500px;top: 250px;">
+            		<img alt="사진없지롱" src="<%=cp%>/resources/images/common/movingKAKAO2.gif">
+            	</div>
+           		<div style="position:fixed; left: 0;top: 500px;">
+           			<img alt="사진없지롱" src="<%=cp%>/resources/images/common/movingKAKAO3.gif">
+           		</div>
+            	<div style="position:fixed; right: 0;top: 500px;">
+            		<img alt="사진없지롱" src="<%=cp%>/resources/images/common/movingKAKAO4.gif">
+            	</div>
 				<div class="freeBody">
 					<div class="freeContainer">
 						<h1 style="text-align: left; padding: 5px 8px">공지사항</h1>

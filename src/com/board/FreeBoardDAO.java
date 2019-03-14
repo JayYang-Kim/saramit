@@ -382,6 +382,11 @@ public class FreeBoardDAO {
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
+			sql =" delete from boardreply where boardNum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,num);
+			pstmt.executeUpdate();
+			pstmt.close();
 			sql = "delete from board where boardNum=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,num);

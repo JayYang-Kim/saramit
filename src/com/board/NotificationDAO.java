@@ -190,7 +190,6 @@ public class NotificationDAO {
 		String sql = "";
 		ResultSet rs = null;
 		try{
-			plusHitCount(boardNum);
 			sql = "select boardnum,subject,content,email,hitCount,created,savefilename,name,originalfilename,filesize from notification where boardNum=? order by created desc";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,boardNum);
@@ -296,8 +295,6 @@ public class NotificationDAO {
 			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				System.out.println("nextAlive");
-				
 				dto = new NotificationDTO();
 				dto.setBoardNum(rs.getInt(2));
 				dto.setSubject(rs.getString(3));
@@ -367,7 +364,6 @@ public class NotificationDAO {
 			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				System.out.println("preAlive");
 				dto = new NotificationDTO();
 				dto.setBoardNum(rs.getInt(2));
 				dto.setSubject(rs.getString(3));
@@ -397,11 +393,11 @@ public class NotificationDAO {
 		return dto;
 	}
 	
-	public void removeBoard(int num) {
+	public void removeNotification(int num) {
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
-			sql = "delete from board where boardNum=?";
+			sql = "delete from notification where boardNum=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,num);
 			pstmt.executeUpdate();
@@ -420,15 +416,18 @@ public class NotificationDAO {
 		}
 	}
 
-	public void updateBoard(FreeBoardDTO dto) {
+	public void updateNotification(NotificationDTO dto) {
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
-			sql = "update board set subject=?, content=? where boardNum=?";
+			sql = "update notification set subject=?, content=?,saveFileName=?,originalFileName=?,filesize=?  where boardNum=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1,dto.getSubject());
 			pstmt.setString(2,dto.getContent());
-			pstmt.setInt(3, dto.getBoardNum());
+			pstmt.setString(3, dto.getSaveFileName());
+			pstmt.setString(4, dto.getOriginalFileName());
+			pstmt.setLong(5, dto.getFileSize());
+			pstmt.setInt(6, dto.getBoardNum());
 			pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();

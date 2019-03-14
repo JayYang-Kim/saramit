@@ -73,6 +73,8 @@ public class NotificationServlet extends MyServlet{
 			article(req, resp);
 		}else if(uri.indexOf("download.do") != -1) {
 			download(req, resp);
+		}else if(uri.indexOf("deleteFile.do") != -1) {
+			deleteFile(req, resp);
 		}
 }
 	protected void download(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -88,7 +90,7 @@ public class NotificationServlet extends MyServlet{
 			return;
 		}
 		
-		int boardNum=Integer.parseInt(req.getParameter("boardNum"));
+		int boardNum=Integer.parseInt(req.getParameter("num"));
 		String page=req.getParameter("page");
 		
 		NotificationDTO dto=dao.readNotification(boardNum);
@@ -107,6 +109,43 @@ public class NotificationServlet extends MyServlet{
 	    	return;
 		}
 	}
+	
+	private void deleteFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 파일 삭제
+		HttpSession session=req.getSession();
+		SessionInfo info=(SessionInfo)session.getAttribute("member");
+		
+		NotificationDAO dao=new NotificationDAO();
+		String cp=req.getContextPath();
+	
+		int num=Integer.parseInt(req.getParameter("boardNum"));
+		String page=req.getParameter("page");
+		
+		NotificationDTO dto=dao.readNotification(num);
+		if(dto==null) {
+			resp.sendRedirect(cp+"/notification/list.do?page="+page);
+			return;
+		}
+		
+		if(info==null || ! info.getEmail().equals(dto.getEmail())) {
+			resp.sendRedirect(cp+"/notification/list.do?page="+page);
+			return;
+		}
+		
+		FileManager.doFiledelete(pathname, dto.getSaveFileName());
+		dto.setOriginalFileName("");
+		dto.setSaveFileName("");
+		dto.setFileSize(0);
+		
+		dao.updateNotification(dto);
+		
+		req.setAttribute("dto", dto);
+		req.setAttribute("page", page);
+		req.setAttribute("mode", "update");
+
+		forward(req, resp, "/WEB-INF/views/notification/created.jsp");			
+	}
+
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
 		SessionInfo info=(SessionInfo)session.getAttribute("member");
@@ -135,18 +174,12 @@ public class NotificationServlet extends MyServlet{
 			resp.sendRedirect(cp+"/notification/list.do?page="+page);
 			return;
 		}
-		
+		dao.plusHitCount(num);
 		dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
 		
 		// 이전글/다음글
 		NotificationDTO preReadDto = dao.readPrevNotification(num, searchKey, searchValue);
 		NotificationDTO nextReadDto = dao.readNextNotification(num, searchKey, searchValue);
-		if(preReadDto != null) {
-			System.out.println(preReadDto.getSubject());
-		}
-		if(nextReadDto != null) {
-			System.out.println(nextReadDto.getSubject());
-		}
 		String query="page="+page;
 		if(searchValue != null) {
 			query+="&searchKey="+searchKey;
@@ -164,18 +197,127 @@ public class NotificationServlet extends MyServlet{
 	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+		// 삭제
+				HttpSession session=req.getSession();
+				SessionInfo info=(SessionInfo)session.getAttribute("member");
+				
+				NotificationDAO dao=new NotificationDAO();
+				String cp=req.getContextPath();
+				
+				if(info==null) {
+					resp.sendRedirect(cp+"/member/login.do");
+					return;
+				}
+				
+				int num=Integer.parseInt(req.getParameter("num"));
+				String page=req.getParameter("page");
+				
+				NotificationDTO dto=dao.readNotification(num);
+				if(dto==null) {
+					resp.sendRedirect(cp+"/notification/list.do?page="+page);
+					return;
+				}
+				
+				// 글을 등록한 사람, admin 만 삭제 가능
+				if(! info.getEmail().equals(dto.getEmail()) && ! info.getEmail().equals("admin")) {
+					resp.sendRedirect(cp+"/notification/list.do?page="+page);
+					return;
+				}
+				
+				if(dto.getSaveFileName()!=null && dto.getSaveFileName().length()!=0)
+				   FileManager.doFiledelete(pathname, dto.getSaveFileName());
+				
+				dao.removeNotification(num);
+				
+				resp.sendRedirect(cp+"/notification/list.do?page="+page);
 	}
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
 		// TODO Auto-generated method stub
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
+		NotificationDAO dao = new NotificationDAO();
+		
+		String cp = req.getContextPath();
+		
+		if(info==null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
+		String encType="utf-8";
+		int maxFilesize=10*1024*1024;
+		
+	    MultipartRequest mreq=new MultipartRequest(req, pathname, maxFilesize, encType,new DefaultFileRenamePolicy());
+	    
+	    NotificationDTO dto = new NotificationDTO();
+	    
+	    int num = Integer.parseInt(mreq.getParameter("boardNum"));
+	    String page = mreq.getParameter("page");
+	    String searchKey = mreq.getParameter("searchKey");
+	    String searchValue = mreq.getParameter("searchValue");
+	    String query = "?page="+page;
+		if(searchValue!= null) {
+			searchValue = URLDecoder.decode(searchValue,"utf-8");
+			query += "&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
+		}
+		
+		dto.setBoardNum(num);
+		dto.setSubject(mreq.getParameter("subject"));
+		dto.setContent(mreq.getParameter("content"));
+		dto.setSaveFileName(mreq.getParameter("saveFileName"));
+		dto.setOriginalFileName(mreq.getParameter("originalFileName"));
+		dto.setFileSize(Long.parseLong(mreq.getParameter("fileSize")));
+		
+		if(mreq.getFile("upload")!= null) {
+			FileManager.doFiledelete(pathname, mreq.getParameter("saveFileName"));
+	    	dto.setSaveFileName(mreq.getFilesystemName("upload"));
+	    	dto.setOriginalFileName(mreq.getOriginalFileName("upload"));
+		    dto.setFileSize(mreq.getFile("upload").length());
+		}
+		dao.updateNotification(dto);
+		resp.sendRedirect(cp+"/notification/list.do"+query);
 	}
 
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
-		// TODO Auto-generated method stub
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
+		NotificationDAO dao = new NotificationDAO();
+		
+		String cp = req.getContextPath();
+		
+		if(info==null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
+		
+		String page = req.getParameter("page");
+		int boardNum = Integer.parseInt(req.getParameter("num"));
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		String query = "?page="+page;
+		if(searchValue!= null) {
+			searchValue = URLDecoder.decode(searchValue,"utf-8");
+			query += "&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
+		}
+		
+		
+		NotificationDTO dto = dao.readNotification(boardNum);
+		if(dto==null) {
+			resp.sendRedirect(cp+"/notification/list.do"+query);
+			return;
+		}
+		
+		if(! info.getEmail().equals(dto.getEmail())) {
+			resp.sendRedirect(cp+"/notification/list.do"+query);
+			return;
+		}
+		req.setAttribute("num", boardNum);
+		req.setAttribute("dto", dto);
+		req.setAttribute("query", query);
+		req.setAttribute("mode", "update");
+		forward(req, resp, "/WEB-INF/views/notification/created.jsp");
 	}
 
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {

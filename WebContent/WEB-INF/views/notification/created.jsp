@@ -49,13 +49,13 @@
     			return;
     		}
     		if(${mode != null && mode=='update'}){
-    			f.action="<%=cp%>/notification/update_ok.do?boardNum=${num}&page=${page}";
+    			f.action="<%=cp%>/notification/update_ok.do${query}&boardNum=${num}";
     		}
     		f.submit();
     	}
     	<c:if test="${mode=='update'}">
         function deleteFile(num) {
-      	  var url="<%=cp%>/notice/deleteFile.do?num="+num+"&page=${page}";
+      	  var url="<%=cp%>/notification/deleteFile.do${query}&boardNum=${num}";
       	  location.href=url;
         }
    		</c:if>
@@ -77,7 +77,7 @@
 							<h2 style="text-align: center; padding: 5px 8px;background-color: #4c4c4c; color: #fff">글쓰기</h2>
 							<form name="sendForm" action="<%=cp%>/notification/created_ok.do" method="post" enctype="multipart/form-data">
 								<div class="innerDiv" style="padding-top: 15px;">
-									<b>제 목 :&nbsp;</b> &nbsp;&nbsp;<input type="text" name="subject" style="width: 73%; font-size: 16px; height: 30px;" value="${mode=='update'?dto.subject:''}">
+									<b>제 목 :&nbsp;</b> &nbsp;&nbsp;<input maxlength="25" type="text" name="subject" style="width: 73%; font-size: 16px; height: 30px;" value="${mode=='update'?dto.subject:''}">
 								</div>
 								<div class="innerDiv">
 									<b style="padding-left: 45px;">작성자 : </b><input type="text" name="writer" value="${sessionScope.member.name}" readonly="readonly" style="border: none; outline: none; width: 80%; font-weight: bold;">
@@ -88,6 +88,15 @@
 								<div class="innerDiv">
 									<input name="upload" type="file" style="width: 80%; border: 0; outline: none;">
 								</div>
+								<c:if test="${not empty dto.saveFileName}">
+									<div class="innerDiv" align="left">
+					             		<b style="padding-left: 70px;">첨부된 파일 : </b>${dto.originalFileName}
+					             		| <a href="javascript:deleteFile('${dto.boardNum}');">삭제</a>
+									</div>
+								</c:if>     
+								<input type="hidden" name="fileSize" value="${dto.fileSize}">
+			        	 		<input type="hidden" name="saveFileName" value="${dto.saveFileName}">
+			        	 		<input type="hidden" name="originalFileName" value="${dto.originalFileName}">
 								<div style="margin: 10px 0 10px;">
 									<button type="button" class="btn btn-black" onclick="sendOk();">${mode=='update'?'수정하기':'작성하기'}</button>&nbsp;
 									<button type="reset" class="btn btn-black">초기화</button>&nbsp;
