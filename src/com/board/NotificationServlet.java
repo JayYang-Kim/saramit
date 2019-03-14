@@ -124,11 +124,9 @@ public class NotificationServlet extends MyServlet{
 		
 		String searchKey=req.getParameter("searchKey");
 		String searchValue=req.getParameter("searchValue");
-		if(searchKey==null) {
-			searchKey="subject";
-			searchValue="";
+		if(searchKey != null && searchValue != null) {
+			searchValue = URLDecoder.decode(searchValue, "utf-8");
 		}
-		searchValue=URLDecoder.decode(searchValue, "utf-8");
 	
 		
 		// 게시물 가져오기
@@ -150,7 +148,7 @@ public class NotificationServlet extends MyServlet{
 			System.out.println(nextReadDto.getSubject());
 		}
 		String query="page="+page;
-		if(searchValue.length()!=0) {
+		if(searchValue != null) {
 			query+="&searchKey="+searchKey;
 			query+="&searchValue="+URLEncoder.encode(searchValue, "utf-8");
 		}

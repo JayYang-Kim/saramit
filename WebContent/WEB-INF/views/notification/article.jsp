@@ -119,9 +119,9 @@
 					          		 </c:if>
 								</div>
 									<div align="left" style="border-bottom:1px solid #e4e4e4; height:30px; padding-top:10px; line-height: 20px;"><p style="padding-left:60px;">
-									<b>이전 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='<%=cp%>/notification/article.do?${query}&boardNum=${num};'">${preReadDto.subject}</a></p></div>
+									<b>이전 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='<%=cp%>/notification/article.do?${query}&boardNum=${preReadDto.boardNum}';">${preReadDto.subject}</a></p></div>
 									<div align="left" style="border-bottom:1px solid #e4e4e4; height:30px; padding-top:10px; line-height: 20px;"><p style="padding-left:60px;">
-									<b>다음 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='<%=cp%>/notification/article.do?${query}&boardNum=${num};'">${nextReadDto.subject}</a></p></div>
+									<b>다음 글 : </b><a style="cursor: pointer" onclick="javascript:location.href='<%=cp%>/notification/article.do?${query}&boardNum=${nextReadDto.boardNum}';">${nextReadDto.subject}</a></p></div>
 								<div style="margin-top: 10px; height: 45px; border-bottom: 1px solid #e4e4e4">
 									<c:if test="${dto.email == sessionScope.member.email}">
 									<button type="button" class="btn btn-black" id="btn_update">수정하기</button>&nbsp;

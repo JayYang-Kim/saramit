@@ -296,9 +296,11 @@ public class NotificationDAO {
 			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
+				System.out.println("nextAlive");
+				
 				dto = new NotificationDTO();
-				dto.setBoardNum(rs.getInt(1));
-				dto.setSubject(rs.getString(2));
+				dto.setBoardNum(rs.getInt(2));
+				dto.setSubject(rs.getString(3));
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -365,6 +367,7 @@ public class NotificationDAO {
 			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
+				System.out.println("preAlive");
 				dto = new NotificationDTO();
 				dto.setBoardNum(rs.getInt(2));
 				dto.setSubject(rs.getString(3));
