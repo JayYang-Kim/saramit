@@ -22,7 +22,7 @@
 
 /* Base */
 h1, h2, h3, h4, h5, h6, fieldset,ul, ol, dl, dt, dd, p, button{margin:0;padding:0;}
-html{font-size:0.75em;}
+html{font-size:0.9em;}
 body{font-family: NBGNormal, "돋움", Dotum, Arial, Tahoma , Geneva, Verdana, sans-serif;color:#333;}
 h1, h2, h3, h4, h5, h6, strong, b, th{font-family: NBGBold; font-weight:bold;}
 legend, caption{width:0; height:0; visibility:hidden; font-size:0;line-height:0;}
@@ -402,17 +402,15 @@ input[type="text"], input[type="password"],input[type="search"],select, option{c
 .tb_basic_striped.height tbody td{height:35px;}
 
 /* Table_kakao */
-.tb_kakao{position:relative;border-top:1px solid #e6e6e6;border-bottom:1px solid #e6e6e6;}
+.tb_kakao{table-layout:fixed;border-top:1px solid #e6e6e6;border-bottom:1px solid #e6e6e6;}
 .tb_kakao th, .tb_kakao td{padding:8px 5px;text-align:center;}
 .tb_kakao th.left, .tb_kakao td.left{text-align:left;}
 .tb_kakao thead th:first-child{border-left:none;}
 .tb_kakao thead .tb_firstL:first-child, .tb_basic tbody .tb_firstL:first-child {border-left: 1px solid #e6e6e6;}
 .tb_kakao thead th{background-color:#888888;color:#ffffff;border-bottom:1px solid #e6e6e6;}
-.tb_kakao tbody tr, .tb_kakao tbody tr{border-top:1px solid #e6e6e6;}
-/* .tb_kakao tbody th, .tb_kakao tbody td{border-top:1px solid #e6e6e6;} */
+.tb_kakao thead tr, .tb_kakao tbody tr{border-top:1px solid #e6e6e6;}
+.tb_kakao tbody tr td{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
 .tb_kakao tbody th:first-child, .tb_kakao tbody td:first-child{border-left:none;}
-/* .tb_kakao thead th{border-left:1px solid #c3b9b9;} */
-.tb_kakao tbody td.txt_overflow{display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
 .tb_kakao.big th, .tb_kakao.big td{padding:20px 15px;}
 
 /* Table_row_style */

@@ -1042,4 +1042,57 @@ public class BoardDAO {
 		
 		return result;
 	}
+	
+	public List<BoardDTO> readMain_feedbackList() {
+		List<BoardDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuffer sb = new StringBuffer();
+		
+		try {
+			sb.append(" SELECT * FROM (");
+			sb.append("	    SELECT ROWNUM rnum, tb.* FROM (");
+			sb.append("	            SELECT boardNum, userEmail, subject, content, created, hitCount");
+			sb.append("	            FROM feedback");
+			sb.append("	            ORDER BY created DESC");
+			sb.append("	        )tb WHERE ROWNUM <= 5");
+			sb.append("	    ) WHERE rnum >=1");
+			
+			pstmt = conn.prepareStatement(sb.toString());
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBoardNum(rs.getInt("boardNum"));
+				dto.setUserEmail(rs.getString("userEmail"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setCreated(rs.getDate("created").toString());
+				dto.setHitCount(rs.getInt("hitCount"));
+
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					
+				}
+			}
+		}
+		
+		return list;
+	}
 }

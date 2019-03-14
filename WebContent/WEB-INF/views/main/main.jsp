@@ -279,30 +279,17 @@
                             <div class="first">
                                 <h3>인기 피드백</h3>
                                 <ul>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">SARAMIT 사이트 오픈</a>
-                                        <span>2019.02.27</span>
-                                    </li>
+                                	<c:forEach var="bdto" items="${boardList}">
+                                		<li>
+	                                        <a href="<%=cp%>/board/article.do?boardNum=${bdto.boardNum}">${bdto.subject}</a>
+	                                        <span>${bdto.created}</span>
+	                                    </li>
+                                	</c:forEach>
                                 </ul>
+                                <a href="<%=cp%>/board/list.do" class="add" style="position: absolute;top: 32px;margin-left: 290px;font-size: 12px;">더보기</a>
                             </div>
                             <div>
-                                <h3>공지사항</h3><p style="position: relative; top: -33px; left:250px; z-index: 20"><a href="<%=cp%>/notification/list.do" class="add">공지사항 더보기</a></p>
+                                <h3>공지사항</h3>
                                 <ul>
                                 	<c:forEach var="ndto" items="${recentNotifications}">
 	                                    <li>
@@ -311,6 +298,7 @@
 	                                    </li>
                                     </c:forEach>
                                 </ul>
+                                <a href="<%=cp%>/notification/list.do" class="add" style="position: absolute;top: 32px;margin-left: 290px;font-size: 12px;">더보기</a>
                             </div>
                             <div>
                                 <h3>이벤트</h3>
