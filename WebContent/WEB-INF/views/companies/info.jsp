@@ -71,21 +71,10 @@
 		.body_info {
 			
 		}
-		
-		.body_info table{
-			margin-top : 20px;
-			background: #fff;
-			text-align: center;
-			border-collapse: collapse;
-			border-spacing: 0;
-			height: 400px;
-			width:80%;
-			margin : 0 auto;
-		}
 		#map {
 			
 	        height: 400px;
-	        width: 80%;
+	        width: 100%;
 	        margin : 0 auto 0;
         }
 		
@@ -110,8 +99,7 @@
                    			${company.companyName}<br>
                    		</div>
                    		<div class="cp_info_apply">
-                   			<button class="btn btn-black" onclick="window.open('${company.homepage}')">홈페이지</button>
-                   			<a href="${company.homepage}">test</a>
+                   			<button class="btn btn-black" onclick="window.open('http://${company.homepage}')">홈페이지</button>
 							<p></p>
 							<br>
                    			<button class="btn btn-black" onclick="javascript:alert('지원하였습니다.')">지원하기</button>
@@ -126,87 +114,86 @@
                     </div>
                     
                 </div>
-                <div class="cp_info_body">
-           			<div style="width:60%; margin:0 auto; background-color: #fff; height:1050px;">
-                			<ul class="tabmenu2 tabMotion" style="padding-left: 100px;">
-                				<li><a onclick="javascript:document.getElementById('info').style.display='';" style="cursor : pointer;">기업정보</a></li>
-                				<li><a onclick="javascript:document.getElementById('info').style.display='none';" style="cursor : pointer;">기업리뷰</a></li>
-                			</ul>
+                <div class="cp_info_body inner">
+           			<div style="background-color: #ffffff; height:1050px;">
+           			<!-- <ul class="tabmenu2 tabMotion" style="padding-left: 100px;">
+           				<li><a onclick="javascript:document.getElementById('info').style.display='';" style="cursor : pointer;">기업정보</a></li>
+           				<li><a onclick="javascript:document.getElementById('info').style.display='none';" style="cursor : pointer;">기업리뷰</a></li>
+           			</ul> -->
                 	<!-- change를 위한  div -->
-                	<div id="info">
-                		<div style="text-align: left; padding-top: 30px; padding-left:10px;">
-                			<h1>| 기업 소개</h1>
+                	<div id="info" class="p20">
+                		<div style="text-align: left; padding-top: 20px; padding-left:10px;padding-bottom:30px;">
+                			<h3>| 기업 소개</h3>
                 		</div>
                 		<div class="body_info">
-                		<table>
+                		<table class="tb_basic_row" style="table-layout:fixed;">
                 				<tr height="50px">
-                					<td width="140px">
-                						<h2>회사명</h2> 
-                					</td>
+                					<th width="140px">
+                						회사명 
+                					</th>
                 					<td align="left" width="260px">
-                						<h3>${company.companyName}</h3>
+                						${company.companyName}
                 					</td>
-                					<td width="140px">
-                						<h2>대표자</h2> 
-                					</td>
+                					<th width="140px">
+                						대표자
+                					</th>
                 					<td align="left" width="260px">
-                						<h3>${company.owner}</h3>
+                						${company.owner}
                 					</td>
                 				</tr>
                 				<tr height="50px">
-                					<td>
-                						<h2>설립일</h2> 
-                					</td>
+                					<th>
+                						설립일 
+                					</th>
                 					<td align="left">
-                						<h3>${company.establishmentDate}</h3>
+                						${company.establishmentDate}
                 					</td>
-                					<td>
-                						<h2>사이트</h2> 
-                					</td>
+                					<th>
+                						사이트
+                					</th>
                 					<td align="left">
-                						<h3>${company.homepage}</h3>
+                						${company.homepage}
                 					</td>
                 				</tr>
                 				<tr height="50px">
-                					<td>
-                						<h2>사원수</h2> 
-                					</td>
+                					<th>
+                						사원수 
+                					</th>
                 					<td align="left">
-                						<h3><fmt:formatNumber type="number" maxFractionDigits="3" value="${company.employees}"/>(명)</h3>
+                						<fmt:formatNumber type="number" maxFractionDigits="3" value="${company.employees}"/>(명)
                 					</td>
-                					<td>
-                						<h2>매출액</h2> 
-                					</td>
+                					<th>
+                						매출액 
+                					</th>
                 					<td align="left">
-                						<h3><fmt:formatNumber type="number" maxFractionDigits="3" value="${company.sale}"/>(만원)</h3>
+                						<fmt:formatNumber type="number" maxFractionDigits="3" value="${company.sale}"/>(만원)
                 					</td>
                 				</tr>
                 				<tr height="50px">
-                					<td>
-                						<h2>평균연봉</h2> 
-                					</td>
+                					<th>
+                						평균연봉 
+                					</th>
                 					<td align="left">
-                						<h3><fmt:formatNumber type="number" maxFractionDigits="3" value="${company.salary}"/>(만원)</h3>
+                						<fmt:formatNumber type="number" maxFractionDigits="3" value="${company.salary}"/>(만원)
                 					</td>
-                					<td>
-                						<h2>위치</h2> 
-                					</td>
+                					<th>
+                						위치
+                					</th>
                 					<td align="left">
-                						<h3>${company.location}</h3>
+                						${company.location}
                 					</td>
                 				</tr>
                 				<tr height="80px">
-                					<td>
-                						<h2>소 개</h2> 
-                					</td>
+                					<th>
+                						소 개
+                					</th>
                 					<td align="left" colspan="3">
-                						<h3>${company.introduction}</h3>
+                						${company.introduction}
                 					</td>
                 				</tr>
                 		</table>
                 		<div style="text-align: left; padding-top: 30px; padding-left:10px; margin-bottom:30px;">
-                			<h1>| 기업 위치</h1>
-                			
+                			<h3>| 기업 위치</h3>
                 		</div>
                 		 <div id="map">
                 		 		
@@ -243,7 +230,7 @@
 		                </div>
 		                <!-- //map -->
 		                <div align="center" style="margin-top:15px;">
-		                <button type="button" class="btn btn-black" onclick="javascript:location.href='${url}'">돌아가기</button>
+		                <button type="button" class="btn btn-black" style="width:100%;padding:15px 0;margin-top:20px" onclick="javascript:location.href='${url}'">돌아가기</button>
 		                </div>
 			    	</div>
 			    	<!-- //body_info -->

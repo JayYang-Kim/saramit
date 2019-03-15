@@ -9,17 +9,6 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/views/layout/import.jsp"></jsp:include>
-	<style>
-	body{
-		background-color: #f5f5f5;
-	}
-	form{
-		background-color: #FFFFFF;
-		min-height: 700px;
-		margin-top: 40px;
-	}
-	
-	</style>
 </head>
 
 <body>
@@ -31,43 +20,58 @@
         <!-- container -->
         <div id="container" class="tb_container">
             <!-- contents -->
-            <div class="contents">
-	          <div align="center" style="min-height:750px; width:40%; margin:0 auto;">
-	          <div>
-	          <form> 
-	          <br><br>
-	           <h2 style="margin-top: 40px">&nbsp; 이력서 관리</h2>   
-	           <br><br>  
-	           <table  style="width: 750px; margin: 0px auto; border-spacing: 0px; border-collapse: collapse; text-align: center;">
-	           	<tr align="center" bgcolor="#eeeeee" height="35px" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc">
-	      		<th width="100px" style="color: #787878;">글 번호</th>
-	      		<th style="color: #787878;">제목</th>
-			      <th width="150px" style="color: #787878;">작성일자</th>
-			      <th width="200px" style="color: #787878;">기능</th>
-			  	</tr>        		  		
-	  		<c:forEach var="dto" items="${list}">
-	  			<tr height="35px" style="border-bottom: 1px solid #e4e4e4;">
-	       		<td >${dto.listNum}</td>
-	         		<td><a href="<%=cp%>/resume/view.do?resumeCode=${dto.resumeCode}">${dto.title}</a></td>
-	         		<td>${dto.created}</td>
-	         		<td>
-	         			<button class="btn btn-white" type="button" style="width: 95px; height: 35px;" onclick="location.href=delete.jsp">삭제</button>
-	         		</td>
-	         	</tr>
-	         </c:forEach>
-	         	
-	       </table>
-	         <div align="center" style="margin-top: 15px;"><p>${paging}</p></div>
-	         <br>
-	             <a href="<%=cp%>/resume/created.do" class="btn_classic btn-black mt20">이력서 작성</a>
-	          </form>  
-	          </div>
-	         <br><br> 
-	        </div>      
-            </div>             
-                       
-                
-            <!-- //contents -->        
+			<div class="contents">
+				<div class="contents_header_bg resume_list center">
+            		<div class="bg_black"></div>
+            	</div>
+				<div class="inner">
+					<div class="pageTitle mt30 pb10">
+                		<h3>피드백 게시판</h3>
+                	</div>
+					<div class="mt20">
+						<form>
+							<table class="tb_kakao tb_hover big">
+								<colgroup>
+									<col style="width:120px;">
+									<col>
+									<col style="width:160px;">
+									<col style="width:140px;">
+								</colgroup>
+								<thead>
+									<tr>
+										<th width="100px">글 번호</th>
+										<th>제목</th>
+										<th width="150px">작성일자</th>
+										<th width="200px">기능</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="dto" items="${list}">
+									<tr height="35px" style="border-bottom: 1px solid #e4e4e4;">
+										<td>${dto.listNum}</td>
+										<td><a
+											href="<%=cp%>/resume/view.do?resumeCode=${dto.resumeCode}">${dto.title}</a></td>
+										<td>${dto.created}</td>
+										<td>
+											<button class="btn btn-white" type="button" style="width: 95px; height: 35px;" onclick="location.href=delete.jsp">삭제</button>
+										</td>
+									</tr>
+								</c:forEach>
+								</tbody>
+							</table>
+							<div align="center" style="margin-top: 15px;">
+								<p>${paging}</p>
+							</div>
+							<div class="t_right">
+								<a href="<%=cp%>/resume/created.do" class="btn_classic btn-black mt20">이력서 작성</a>
+							</div>
+						</form>
+					</div>
+					<br>
+					<br>
+				</div>
+			</div>
+			<!-- //contents -->        
         
         <!-- //container -->
         

@@ -103,8 +103,10 @@
     	});
     }
     function drawReply(data){
+    	var out;
+    	
     	if(data.list.length != 0){
-    		out+= "<div align='left' style='margin-bottom:5px; padding-left:10px;'><h3>총 "+data.dataCount+"개의 댓글</h3></div>"
+    		out = "<div align='left' style='margin-bottom:5px; padding-left:10px;'><h3>총 "+data.dataCount+"개의 댓글</h3></div>"
     		for(var i=0; i<data.list.length; i++){
     			out += '<div style="border-top: 1px solid #e4e4e4; height:150px; padding: 3px 15px; font-size: 13px; line-height: 18px;" align="left">';
     			out += "	<input type='hidden' id='replyNum' value='"+data.list[i].replyNum+"'>";
@@ -123,8 +125,7 @@
     		}
     		out+= "<div align='center'>"+data.paging+"</div>"
     	}else{
-    		var out ="";
-    		out += "<div style='border-top: 1px solid #e4e4e4; padding: 15px; font-size: 13px; line-height: 18px;' align='left'>";
+    		out = "<div style='border-top: 1px solid #e4e4e4; padding: 15px; font-size: 13px; line-height: 18px;' align='left'>";
 			out += "<div style='color: black; font-weight: bold;' align='center'><h3>등록된 댓글이 없습니다.</h3></div>";
 			out += "</div>";
     	}

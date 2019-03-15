@@ -44,8 +44,6 @@ public class MemberServlet extends MyServlet {
 		
 		File f = new File(pathname);
 		
-		System.out.println(f);
-		
 		if(!f.exists()) {
 			f.mkdirs();
 		}
