@@ -6,6 +6,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
+import javax.print.URIException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -65,9 +66,12 @@ public class ResumeServlet extends MyServlet {
 		JSONObject job = new JSONObject();
 		switch(sort) {
 		case "basic":
+			String addr = URLDecoder.decode(req.getParameter("addr"), "utf-8");
+			String title = URLDecoder.decode(req.getParameter("title"), "utf-8");
+			ResumeDTO basic_dto = dao.updateResume(resumeCode,addr,title);
+			job.put("basic_dto", basic_dto);
 			break;
 		case "license":
-			
 			String licenseName = URLDecoder.decode(req.getParameter("licenseName"), "utf-8");
 			String licensePublisher = URLDecoder.decode(req.getParameter("licensePublisher"), "utf-8");
 			String licenseDate = URLDecoder.decode(req.getParameter("licenseDate"), "utf-8");
@@ -82,8 +86,28 @@ public class ResumeServlet extends MyServlet {
 			job.put("awards_dto", awards_dto);
 			break;
 		case "education":
+			int gubun = Integer.parseInt(req.getParameter("gubun"));
+			String schoolName = URLDecoder.decode(req.getParameter("schoolName"), "utf-8");
+			int region = Integer.parseInt(req.getParameter("region"));
+			String major = URLDecoder.decode(req.getParameter("major"), "utf-8");
+			String graduate_status = req.getParameter("graduate_status");
+			if(graduate_status!=null) {
+				graduate_status = URLDecoder.decode(graduate_status, "utf-8");
+			}
+			String entrance = req.getParameter("entrance");
+			String graduate = req.getParameter("graduate");
+			EducationDTO education_dto = dao.insertEducation(resumeCode, gubun,schoolName,region,major,graduate_status,entrance,graduate);
+			job.put("education_dto", education_dto);
 			break;
 		case "career":
+		 	String copName = URLDecoder.decode(req.getParameter("copName"),"utf-8");
+		 	String gubun2 =  URLDecoder.decode(req.getParameter("gubun"),"utf-8");
+		 	String position =  URLDecoder.decode(req.getParameter("position"),"utf-8");
+		 	String task = URLDecoder.decode(req.getParameter("task"),"utf-8");
+		 	String carrerjoinDate = URLDecoder.decode(req.getParameter("carrerjoinDate"),"utf-8");
+		 	String carrerresignDate = URLDecoder.decode(req.getParameter("carrerresignDate"),"utf-8");
+		 	CareerDTO career_dto = dao.insertCareer(resumeCode, copName, gubun2,position,task,carrerjoinDate,carrerresignDate);
+		 	job.put("career_dto", career_dto);
 			break;
 		}
 		resp.setContentType("text/html;charset=utf-8");
@@ -93,19 +117,31 @@ public class ResumeServlet extends MyServlet {
 	protected void removeInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String sort = req.getParameter("sort");
 		ResumeDAO dao = new ResumeDAO();
+		JSONObject job = new JSONObject();
 		switch(sort) {
 		case "basic":
 			break;
 		case "license":
-			
+			int licenseCode = Integer.parseInt(req.getParameter("licenseCode"));
+			boolean flag = dao.removeLicenseCode(licenseCode);
+			job.put("flag", flag);
 			break;
 		case "awards":
+			int awardsCode = Integer.parseInt(req.getParameter("awardsCode"));
+			boolean flag2 = dao.removeAwards(awardsCode);
+			job.put("flag", flag2);
 			break;
 		case "education":
 			break;
 		case "career":
+			int careerCode = Integer.parseInt(req.getParameter("careerCode"));
+			boolean flag3 = dao.removeCareer(careerCode);
+			job.put("flag", flag3);
 			break;
 		}
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter pw = resp.getWriter();
+		pw.print(job.toString());
 	}
 	
 	

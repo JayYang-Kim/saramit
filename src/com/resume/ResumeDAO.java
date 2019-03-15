@@ -382,7 +382,7 @@ public class ResumeDAO {
 				dto.setEntrance(rs.getDate(5).toString());
 				dto.setGraduate(rs.getDate(6).toString());
 				dto.setGraduate_status(rs.getString(7));
-				dto.setGubun(rs.getString(8));
+				dto.setGubun(rs.getInt(8));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -633,5 +633,230 @@ public class ResumeDAO {
 			}
 		}
 		return dto;
+	}
+
+	public EducationDTO insertEducation(int resumeCode, int gubun, String schoolName, int region, String major,
+		String graduate_status, String entrance, String graduate) {
+		EducationDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		try {
+				sql = "update education set SCHOOLNAME=?,REGION=?,MAJOR=?,ENTRANCE=?,GRADUATE=?,GRADUATE_STATUS=?,GUBUN=? where resumecode=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, schoolName);
+				pstmt.setInt(2, region);
+				pstmt.setString(3, major);
+				pstmt.setString(4, entrance);
+				pstmt.setString(5, graduate);
+				pstmt.setString(6, graduate_status);
+				pstmt.setInt(7, gubun);
+				pstmt.setInt(8, resumeCode);
+				pstmt.executeUpdate();
+				pstmt.close();
+				sql = "select EDUCATIONCODE,RESUMECODE,SCHOOLNAME,REGION,MAJOR,ENTRANCE,GRADUATE,GRADUATE_STATUS,GUBUN from education where resumeCode=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, resumeCode);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					dto = new EducationDTO();
+					dto.setEducationCode(rs.getInt(1));
+					dto.setSchoolName(rs.getString(3));
+					dto.setRegion(rs.getInt(4));
+					dto.setMajor(rs.getString(5));
+					dto.setEntrance(rs.getDate(6).toString());
+					dto.setGraduate(rs.getDate(7).toString());
+					dto.setGraduate_status(rs.getString(8));
+					dto.setGubun(rs.getInt(9));
+				}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return dto;
+	}
+
+	public ResumeDTO updateResume(int resumeCode, String addr, String title) {
+		ResumeDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		try {
+				sql = "update resume set addr=?, title=? where resumeCode=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, addr);
+				pstmt.setString(2, title);
+				pstmt.setInt(3, resumeCode);
+				pstmt.executeUpdate();
+				pstmt.close();
+				sql = "select addr, title from resume where resumeCode=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, resumeCode);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					dto = new ResumeDTO();
+					dto.setAddr(rs.getString(1));
+					dto.setTitle(rs.getString(2));
+				}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return dto;
+	}
+
+	public CareerDTO insertCareer(int resumeCode, String copName, String gubun2, String position, String task,
+			String carrerjoinDate, String carrerresignDate) {
+		CareerDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		try {
+			sql = "select career_seq.nextval from dual";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				int code = rs.getInt(1);
+				pstmt.close();
+				sql = "insert into career(CAREERCODE,RESUMECODE,GUBUN,COPNAME,JOINDATE,RESIGNDATE,TASK,POSITION) values(?,?,?,?,?,?,?,?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, code);
+				pstmt.setInt(2, resumeCode);
+				pstmt.setString(3, gubun2);
+				pstmt.setString(4, copName);
+				pstmt.setString(5, carrerjoinDate);
+				pstmt.setString(6, carrerresignDate);
+				pstmt.setString(7, task);
+				pstmt.setString(8, position);
+				pstmt.executeUpdate();
+				pstmt.close();
+				sql = "select CAREERCODE,RESUMECODE,GUBUN,COPNAME,JOINDATE,RESIGNDATE,TASK,POSITION from career where careercode=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, code);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					dto = new CareerDTO();
+					dto.setCareerCode(rs.getInt(1));
+					dto.setGubun(rs.getString(3));
+					dto.setCopName(rs.getString(4));
+					dto.setJoinDate(rs.getDate(5).toString());
+					dto.setResignDate(rs.getDate(6).toString());
+					dto.setTask(rs.getString(7));
+					dto.setPosition(rs.getString(8));
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return dto;
+	}
+
+	public boolean removeLicenseCode(int licenseCode) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		boolean flag = true;
+		try {
+			sql = "delete from license where licenseCode=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, licenseCode);
+			pstmt.executeQuery();
+		}catch (Exception e) {
+			e.printStackTrace();
+			flag = false;
+		}finally {
+			if(pstmt!=null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return flag;
+	}
+
+	public boolean removeAwards(int awardsCode) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		boolean flag = true;
+		try {
+			sql = "delete from awards where awardsCode=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, awardsCode);
+			pstmt.executeQuery();
+		}catch (Exception e) {
+			e.printStackTrace();
+			flag = false;
+		}finally {
+			if(pstmt!=null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return flag;
+	}
+
+	public boolean removeCareer(int careerCode) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		boolean flag = true;
+		try {
+			sql = "delete from career where careerCode=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, careerCode);
+			pstmt.executeQuery();
+		}catch (Exception e) {
+			e.printStackTrace();
+			flag = false;
+		}finally {
+			if(pstmt!=null) {
+				try {
+					if(!pstmt.isClosed()) {
+						pstmt.close();
+					}
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return flag;
 	}
 }
