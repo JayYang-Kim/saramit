@@ -164,8 +164,12 @@
 				
 			});
 			$("body").on("click", ".removeLicense", function(){
+				
 				if($("#licenseInfo").find("div").length <= 1){
 					return;
+				}
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
 				}
 				var sort = "license";
 				var licenseCode = $(this).parent().find("input[type=hidden]").val();
@@ -243,6 +247,9 @@
 				if($("#awardsInfo").find("div").length <= 1){
 					return;
 				}
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
+				}
 				var sort = "awards";
 				var awardsCode = $(this).parent().find("input[type=hidden]").val();
 				var query = "awardsCode="+awardsCode+"&sort="+sort;
@@ -278,6 +285,7 @@
 					alert("정보를 모두 입력하세요!");
 					return;
 				}
+				
 				$.ajax({
 					type:"post",
 					data:query,
@@ -288,7 +296,7 @@
 							alert("삽입 실패하였습니다.");
 							return;
 						}
-						button.parent().find("input[type=hidden]").val(data.dto.awardsCode);
+						button.parent().find("input[type=hidden]").val(data.awards_dto.awardsCode);
 						button.parent().find("input[name=awardsName]").prop("disabled","disabled");
 						button.parent().find("input[name=awardsName]").val(data.awards_dto.awardsName);
 						button.parent().find("input[name=awardsPublisher]").prop("disabled","disabled");
@@ -313,6 +321,9 @@
 			$("body").on("click", ".removeCareer", function(){
 				if($("#careerInfo").find("div").length <= 1){
 					return;
+				}
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
 				}
 				var sort = "career";
 				var careerCode = $(this).parent().find("input[type=hidden]").val();

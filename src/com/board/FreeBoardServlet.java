@@ -281,7 +281,7 @@ public class FreeBoardServlet extends MyServlet{
 		FreeBoardDAO dao = new FreeBoardDAO();
 		dto.setEmail(info.getEmail());
 		dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
-		dto.setContent(util.htmlSymbols(URLDecoder.decode(req.getParameter("content"), "utf-8")));
+		dto.setContent(URLDecoder.decode(req.getParameter("content"), "utf-8").replaceAll("<br>", "\n"));
 		
 		boolean flag = dao.insertReply(dto);
 		

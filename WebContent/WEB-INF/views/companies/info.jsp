@@ -110,7 +110,7 @@
                    			${company.companyName}<br>
                    		</div>
                    		<div class="cp_info_apply">
-                   			<button class="btn btn-black" onclick="location.href='${company.homepage}'">홈페이지</button>
+                   			<button class="btn btn-black" onclick="window.open('http://${company.homepage}');">홈페이지</button>
 							<p></p>
 							<br>
                    			<button class="btn btn-black" onclick="javascript:alert('지원하였습니다.')">지원하기</button>
@@ -129,7 +129,6 @@
            			<div style="width:60%; margin:0 auto; background-color: #fff; height:1050px;">
                 			<ul class="tabmenu2 tabMotion" style="padding-left: 100px;">
                 				<li><a onclick="javascript:document.getElementById('info').style.display='';" style="cursor : pointer;">기업정보</a></li>
-                				<li><a onclick="javascript:document.getElementById('info').style.display='none';" style="cursor : pointer;">기업리뷰</a></li>
                 			</ul>
                 	<!-- change를 위한  div -->
                 	<div id="info">
