@@ -35,6 +35,126 @@
 	</script>
 	
 	<script type="text/javascript">
+	$(function(){
+		$(".basicChange").click(function(){
+			$(this).attr("disabled","disabled");
+			$(".updateBasic").css("display","block");
+			$("#title").attr("disabled",false);
+			$("#addr").attr("disabled",false);
+		});
+		$(".updateBasic").click(function(){
+			             
+			var sort = "basic";
+			var addr = $("#addr").val();
+			var title = $("#title").val();
+
+			var query = "sort="+sort+"&resumeCode=${resumeCode}&addr="+encodeURIComponent(addr)+"&title="+encodeURIComponent(title);
+			var url = "<%=cp%>/resume/addInfo.do";
+			var button = $(this);
+			if(!title || !addr){
+				alert("인적사항을 모두 입력하세요!");
+				return;
+			}
+			$.ajax({
+				type:"post",
+				data:query,
+				url:url,
+				dataType:"json",
+				success:function(data){
+					if(data.basic_dto == null){
+						alert("삽입 실패하였습니다.");
+						return;
+					}
+					$("#addr").val(data.basic_dto.addr);
+					$("#title").val(data.basic_dto.title);
+					alert("저장되었습니다.");
+					$("#addr").attr("disabled","disabled");
+					$("#title").attr("disabled","disabled");
+					$(".basicChange").attr("disabled",false);
+					button.css("display","none");
+				},
+				error:function(e){
+					console.log(e.responseText)
+				}
+			});
+		});
+	});
+	
+	
+		$(function(){
+			$(".educationChange").click(function(){
+				$(this).attr("disabled","disabled");
+				$(".updateEducation").css("display","block");
+				$("#schoolName").attr("disabled",false);
+				$("#graduate_status").attr("disabled",false);
+				$("#entrance").attr("disabled",false);
+				$("#graduate").attr("disabled",false);
+				$("#major").attr("disabled",false);
+				$("#educationCode").attr("disabled",false);
+				$("#region").attr("disabled",false);
+			});
+			$(".updateEducation").click(function(){       
+				var sort = "education";
+				var gubun = $(this).parent().find("#educationCode").val();
+				var schoolName = $(this).parent().find("#schoolName").val();
+				var region = $(this).parent().find("#region").val();
+				var major = $(this).parent().find("#major").val();
+				var graduate_status = null;
+				if($(this).parent().find("#graduate_status").prop("checked")){
+					graduate_status = "재학중";
+				}
+				var entrance = $(this).parent().find("#entrance").val();
+				var graduate = $(this).parent().find("#graduate").val();
+				
+				//alert(gubun+","+schoolName+","+region+","+major+","+graduate_status+","+entrance+","+graduate);
+				var query = "resumeCode=${resumeCode}&sort="+sort+"&gubun="+encodeURIComponent(gubun)+"&schoolName="+encodeURIComponent(schoolName)+"&region="+encodeURIComponent(region);
+				query += "&major="+encodeURIComponent(major)+"&graduate_status="+encodeURIComponent(graduate_status)+"&entrance="+encodeURIComponent(entrance)+"&graduate="+encodeURIComponent(graduate);
+				var url = "<%=cp%>/resume/addInfo.do";
+				var button = $(this);
+				if(!schoolName || !major || !graduate || !entrance){
+					alert("정보를 모두 입력하세요!");
+					return;
+				}
+				$.ajax({
+					type:"post",
+					data:query,
+					url:url,
+					dataType:"json",
+					success:function(data){
+						if(data.education_dto == null){
+							alert("삽입 실패하였습니다.");
+							return;
+						}
+						console.log(data.education_dto);
+						$("#schoolName").val(data.education_dto.schoolName);
+						$("#graduate_status").prop("checked",false);
+						if(data.education_dto.graduate_status!= null){
+							$("#graduate_status").prop("checked","checked");
+						}
+						alert(data.education_dto.entrance);
+						$("#entrance").val(data.education_dto.entrance);
+						$("#graduate").val(data.education_dto.graduate);
+						$("#major").val(data.education_dto.major);
+						$("#educationCode").val(data.education_dto.gubun).attr("selected","selected");
+						$("#region").val(data.education_dto.region).attr("selected","selected");
+						alert("저장되었습니다.");
+						$("#schoolName").attr("disabled","disabled");
+						$("#graduate_status").attr("disabled","disabled");
+						$("#entrance").attr("disabled","disabled");
+						$("#graduate").attr("disabled","disabled");
+						$("#major").attr("disabled","disabled");
+						$("#educationCode").attr("disabled","disabled");
+						$(".educationChange").attr("disabled",false);
+						$("#region").attr("disabled","disabled");
+						button.css("display","none");
+					},
+					error:function(e){
+						console.log(e.responseText)
+					}
+				});
+			});
+		});
+	
 		$(function(){
 			$("#addLicense").click(function(){
 				var div = $(this).closest(".inputBox").find("#licenseInfo div:first").clone(true).css("display","block");
@@ -43,10 +163,39 @@
 				
 			});
 			$("body").on("click", ".removeLicense", function(){
+				
 				if($("#licenseInfo").find("div").length <= 1){
 					return;
 				}
-				$(this).parent().remove();
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
+					return;
+				}
+				var sort = "license";
+				var licenseCode = $(this).parent().find("input[type=hidden]").val();
+				var query = "licenseCode="+licenseCode+"&sort="+sort;
+				var url = "<%=cp%>/resume/removeInfo.do";
+				var button = $(this);
+				$.ajax({
+					type:"post",
+					data:query,
+					url:url,
+					dataType:"json",
+					success:function(data){
+						if(!data.flag){
+							alert("삭제에 실패하였습니다.");
+							return;
+						}
+						alert("삭제 완료되었습니다.");
+						button.parent().remove();
+					},
+					error:function(e){
+						console.log(e.responseText)
+					}
+				});
+				
+				
+				
 			});
 			$("body").on("click",".addLicense", function(){
 				var sort = "license";
@@ -70,6 +219,7 @@
 							alert("삽입 실패하였습니다.");
 							return;
 						}
+						button.parent().find("input[type=hidden]").val(data.dto.licenseCode);
 						button.parent().find("input[name=licenseName]").prop("disabled","disabled");
 						button.parent().find("input[name=licenseName]").val(data.dto.license_name);
 						button.parent().find("input[name=licensePublisher]").prop("disabled","disabled");
@@ -97,7 +247,32 @@
 				if($("#awardsInfo").find("div").length <= 1){
 					return;
 				}
-				$(this).parent().remove();
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
+					return;
+				}
+				var sort = "awards";
+				var awardsCode = $(this).parent().find("input[type=hidden]").val();
+				var query = "awardsCode="+awardsCode+"&sort="+sort;
+				var url = "<%=cp%>/resume/removeInfo.do";
+				var button = $(this);
+				$.ajax({
+					type:"post",
+					data:query,
+					url:url,
+					dataType:"json",
+					success:function(data){
+						if(!data.flag){
+							alert("삭제에 실패하였습니다.");
+							return;
+						}
+						alert("삭제 완료되었습니다.");
+						button.parent().remove();
+					},
+					error:function(e){
+						console.log(e.responseText)
+					}
+				});
 			});
 			$("body").on("click",".addAwards", function(){
 				var sort = "awards";
@@ -111,6 +286,7 @@
 					alert("정보를 모두 입력하세요!");
 					return;
 				}
+				
 				$.ajax({
 					type:"post",
 					data:query,
@@ -120,7 +296,8 @@
 						if(data.awards_dto == null){
 							alert("삽입 실패하였습니다.");
 							return;
-						}	
+						}
+						button.parent().find("input[type=hidden]").val(data.awards_dto.awardsCode);
 						button.parent().find("input[name=awardsName]").prop("disabled","disabled");
 						button.parent().find("input[name=awardsName]").val(data.awards_dto.awardsName);
 						button.parent().find("input[name=awardsPublisher]").prop("disabled","disabled");
@@ -146,7 +323,80 @@
 				if($("#careerInfo").find("div").length <= 1){
 					return;
 				}
-				$(this).parent().remove();
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
+					return;
+				}
+				var sort = "career";
+				var careerCode = $(this).parent().find("input[type=hidden]").val();
+				var query = "careerCode="+careerCode+"&sort="+sort;
+				var url = "<%=cp%>/resume/removeInfo.do";
+				var button = $(this);
+				$.ajax({
+					type:"post",
+					data:query,
+					url:url,
+					dataType:"json",
+					success:function(data){
+						if(!data.flag){
+							alert("삭제에 실패하였습니다.");
+							return;
+						}
+						alert("삭제 완료되었습니다.");
+						button.parent().remove();
+					},
+					error:function(e){
+						console.log(e.responseText)
+					}
+				});	
+			});
+			$("body").on("click",".addCareer", function(){
+				     
+				var sort = "career";
+				var copName = $(this).parent().find("input[name=copName]").val();
+				var gubun = $(this).parent().find("select:first").val();
+				var position = $(this).parent().find("input[name=position]").val();
+				var task = $(this).parent().find("input[name=task]").val();
+				var carrerjoinDate = $(this).parent().find("input[name=carrerjoinDate]").val();
+				var carrerresignDate = $(this).parent().find("input[name=carrerresignDate]").val();
+				
+			 	var query = "resumeCode=${resumeCode}&sort="+sort+"&copName="+encodeURIComponent(copName)+"&gubun="+encodeURIComponent(gubun)+"&position="+encodeURIComponent(position);
+			 	query += "&task="+encodeURIComponent(task)+"&carrerjoinDate="+encodeURIComponent(carrerjoinDate)+"&carrerresignDate="+encodeURIComponent(carrerresignDate);
+				var url = "<%=cp%>/resume/addInfo.do";
+				var button = $(this);
+				if(!copName || !position || !task || !carrerjoinDate ||!carrerresignDate){
+					alert("정보를 모두 입력하세요!");
+					return;
+				}
+				$.ajax({
+					type:"post",
+					data:query,
+					url:url,
+					dataType:"json",
+					success:function(data){
+						if(data.career_dto == null){
+							alert("삽입 실패하였습니다.");
+							return;
+						}
+						button.parent().find("input[type=hidden]").val(data.career_dto.careerCode);
+						button.parent().find("input[name=copName]").prop("disabled","disabled");
+						button.parent().find("select:first").val(data.career_dto.gubun).prop("selected","selected");
+						button.parent().find("select:first").attr("disabled","disabled");
+						button.parent().find("input[name=position]").prop("disabled","disabled");
+						button.parent().find("input[name=position]").val(data.career_dto.position);
+						button.parent().find("input[name=task]").prop("disabled","disabled");
+						button.parent().find("input[name=task]").val(data.career_dto.task);
+						button.parent().find("input[name=carrerjoinDate]").prop("disabled","disabled");
+						button.parent().find("input[name=carrerjoinDate]").val(data.career_dto.joinDate);
+						button.parent().find("input[name=carrerresignDate]").prop("disabled","disabled");
+						button.parent().find("input[name=carrerresignDate]").val(data.career_dto.resignDate);
+						button.remove();
+					},
+					error:function(e){
+						console.log(e.responseText)
+					}
+				});
+				
 			});
 		});
 		
@@ -174,7 +424,7 @@
           <br><br>
            <h2>&nbsp;이력서 작성</h2>  
            
-           <input type="text" name="title" style="width: 50%; margin:10px 5px 10px;" value="${dto_resume.title}" >
+           <input type="text" id="title" name="title" style="width: 50%; margin:10px 5px 10px;" value="${dto_resume.title}" disabled="disabled" >
            <br> 
            <h3>&nbsp;| 개인 정보</h3>
            <br>
@@ -193,8 +443,12 @@
                 <input type="text" name="userEmail" size="30" value="${sessionScope.member.email}" disabled="disabled">
                 <br><br>
                 &nbsp;
-                <input type="text" name="addr" style="width:80%;" value="${dto_resume.addr}">
-                <br><br><hr>
+                <input type="text" id="addr" name="addr" style="width:80%;" value="${dto_resume.addr}" disabled="disabled">               
+                <br><br>
+                <button class="btn btn-black basicChange" type="button" style="float:right; margin-right:10px; height: 26px; line-height: 10px;">변경</button>
+                <button class="btn btn-black updateBasic" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px; display: none">저장</button>
+                <br><br>
+                <hr>
 		</div>
 			<h3>&nbsp;| 학력</h3>
 			<br> 
@@ -204,18 +458,18 @@
                 <label for="educationCode">&nbsp; 최종학력</label>    
                 <br>
                 &nbsp;
-                <select size="1" name="educationCode" id="educationCode">         
+                <select size="1" name="educationCode" id="educationCode" disabled="disabled">         
                     <option value="1">중졸</option>
                     <option value="2">고졸</option>
                     <option value="3">초대졸</option>
                     <option value="4">대졸</option>
                     <option value="5">대학원졸</option>
                 </select>
-                &nbsp;     		                      
-                <input type="text" size="10" id="schoolName" name="schoolName" placeholder="학교명" value="${dto_edu.schoolName}">
+                &nbsp;     		
+                <input type="text" size="10" id="schoolName" name="schoolName" placeholder="학교명" value="${dto_edu.schoolName}" disabled="disabled">
                 &nbsp;
                 <label for="region">지역</label>                
-                <select size="1" name="region" id="region">
+                <select size="1" name="region" id="region" disabled="disabled">
                     <option value="1">서울특별시</option>
                     <option value="2">부산광역시</option>
                     <option value="3">대구광역시</option>
@@ -235,13 +489,15 @@
                     <option value="17">제주특별자치도</option>
                 </select>
                 &nbsp;
-                <input type="text" size="10" name="major" placeholder="전공/학과명" value="${dto_edu.major}">
+                <input type="text" size="10" id="major" name="major" placeholder="전공/학과명" value="${dto_edu.major}" disabled="disabled">
                 <br><br>
                 &emsp;
-                <label><input type="checkbox" name="graduate_status" placeholder="재학중" value=${dto_edu.graduate_status!=null?"checked='checked'":""}>재학중</label>
+                <label><input type="checkbox" id="graduate_status" name="graduate_status" placeholder="재학중" value=${dto_edu.graduate_status!=null?"checked='checked'":""} disabled="disabled">재학중</label>
                 &emsp;
-                <input type="text" title="calendar" name="entrance" placeholder="입학일자" value="${dto_edu.entrance}" style="width:100px;">
-                <input type="text" title="calendar" name="graduate" placeholder="졸업일자" value="${dto_edu.graduate}" style="width:100px;">
+                <input type="text" title="calendar" id="entrance" name="entrance" placeholder="입학일자" value="${dto_edu.entrance}" style="width:100px;" disabled="disabled">
+                <input type="text" title="calendar" id="graduate" name="graduate" placeholder="졸업일자" value="${dto_edu.graduate}" style="width:100px;" disabled="disabled">
+                <button class="btn btn-black educationChange" type="button" style="float:right; margin-right:10px; height: 26px; line-height: 10px;">변경</button>
+                <button class="btn btn-black updateEducation" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px; display: none">저장</button>
                 <br><br> 
             </div>
 	         <hr>               	
@@ -252,6 +508,7 @@
 		<div class="inputBox">
 			<div id="licenseInfo">
 				<div style="display:none;">
+					<input type="hidden" name="licenseCode">
 					&nbsp;
 	                <input type="text" size="10" name="licenseName" placeholder="자격증명">
 	                &nbsp;
@@ -264,6 +521,7 @@
                 </div>
 				<c:forEach var="dto" items="${licenseList}">
 				<div>
+					<input type="hidden" name="licenseCode" value="${dto.licenseCode}">
 					&nbsp;
 	                <input type="text" size="10" name="licenseName" placeholder="자격증명" value="${dto.license_name}" disabled="disabled">
 	                &nbsp;
@@ -288,6 +546,7 @@
 		<div class="inputBox">
 			<div id="awardsInfo">
 				<div style="display:none;">
+					<input type="hidden" name="awardsCode">
 						&nbsp;
 		                <input type="text" size="10" name="awardsName" placeholder="수상명">
 		                &nbsp;
@@ -300,6 +559,7 @@
 	            </div>
 				<c:forEach var="dto" items="${awardList}">
 					<div>
+						<input type="hidden" name="awardsCode" value="${dto.awardsCode}">
 						&nbsp;
 		                <input type="text" size="10" name="awardsName" placeholder="수상명" value="${dto.awardsName}" disabled="disabled">
 		                &nbsp;
@@ -323,6 +583,7 @@
 		<div class="inputBox">  
 			<div id="careerInfo">
 			<div style="display:none;">
+				<input type="hidden" name="careerCode">
 					&nbsp;                       
 		            <input type="text" size="10" name="copName" placeholder="회사명">
 		            &nbsp;
@@ -338,16 +599,16 @@
 		            <br> 
 		            &nbsp;
 		            <input type="text" size="10" name="task" placeholder="업무내용">
-		            <span class="datepicker_wrap">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerjoinDate" placeholder="입사일자" style="width:80px;">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerresignDate" placeholder="퇴사일자" style="width:80px;">
-		            </span>
+		                <input type="text" title="calendar" name="carrerjoinDate" placeholder="입사일자" style="width:100px;">
+		                <input type="text" title="calendar" name="carrerresignDate" placeholder="퇴사일자" style="width:100px;">
 		            <button class="btn btn-black removeCareer"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
+		            <button class="btn btn-black addCareer" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">추가완료</button>
 		            <br>
 		            <br>
 	            </div>
 			<c:forEach var="dto" items="${CareerList}">
 				<div>
+					<input type="hidden" name="careerCode" value="${dto.careerCode}">
 					&nbsp;                       
 		            <input type="text" size="10" name="copName" placeholder="회사명" value="${dto.copName}" disabled="disabled">
 		            &nbsp;

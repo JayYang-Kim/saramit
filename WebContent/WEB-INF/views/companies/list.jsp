@@ -67,7 +67,7 @@
     							<li class="item"> <!-- 하나 하나의 박스 -->
     								<div class="bg">
     									<div class="color">
-    										<img src="<%=cp%>/resources/images/common/${n.savefilename}" width="100%" alt="로고"/>
+    										<img src="<%=cp%>/uploads/photo/${n.savefilename}" width="100%" alt="로고"/>
     									</div>
     									<span style="display:inline-block; font-size: 20px; width:90%;">${n.companyName}</span>
     								</div>
