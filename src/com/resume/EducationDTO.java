@@ -9,12 +9,12 @@ public class EducationDTO {
 	private String entrance;
 	private String graduate;
 	private String graduate_status;
-	private String gubun;
+	private int gubun;
 	
-	public String getGubun() {
+	public int getGubun() {
 		return gubun;
 	}
-	public void setGubun(String gubun) {
+	public void setGubun(int gubun) {
 		this.gubun = gubun;
 	}
 	public int getEducationCode() {

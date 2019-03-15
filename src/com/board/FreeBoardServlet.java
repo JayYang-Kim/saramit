@@ -194,6 +194,7 @@ public class FreeBoardServlet extends MyServlet{
 		String cp = req.getContextPath();
 		int num = Integer.parseInt(req.getParameter("boardNum"));
 		String page = req.getParameter("page");
+		MyUtil util = new MyUtil();
 		if(page==null) {
 			page = "1";
 		}
@@ -225,7 +226,7 @@ public class FreeBoardServlet extends MyServlet{
 		 if(prevDto != null) { 
 			 prev_url +="&boardNum="+prevDto.getBoardNum(); 
 		 }
-		
+		dto.setContent(dto.getContent().replaceAll("<br>", "\n"));
 		req.setAttribute("page", page);
 		req.setAttribute("dto",dto);
 		req.setAttribute("prevDto", prevDto);
