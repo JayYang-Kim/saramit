@@ -424,7 +424,7 @@
 								<div class="mt30">
 									<label for="txt_userEmail">이메일</label>
 									<div>
-										<input type="text" name="userEmail" id="txt_userEmail" class="boxTf" style="width:79%;" autocomplete="off" autofocus/>
+										<input type="text" name="userEmail" id="txt_userEmail" class="boxTf" style="width: 418px;" autocomplete="off" autofocus/>
 										<input type="button" id="btn_userEmail_check" value="중복검사" class="btn btn-black" style="height: 45px;margin-top: 10px;margin-left: 5px;" onclick="userEmail_check()">
 										<div class="message t_red mt15"></div>
 									</div>
@@ -474,7 +474,7 @@
 								<div class="mt30">
 									<label for="txt_address">주소</label>
 									<div class="address mt15">
-										<input type="text" id="postcode" name="postCode" class="boxTf" autocomplete="off" autofocus placeholder="우편번호" style="width:75%">
+										<input type="text" id="postcode" name="postCode" class="boxTf" autocomplete="off" autofocus placeholder="우편번호" style="width:391px">
 										<input type="button" onclick="user_Postcode()" value="우편번호 찾기" class="btn btn-black" style="height:45px;margin-top:10px;margin-left:3px;"><br>
 										<input type="text" id="address" name="address" placeholder="주소" class="boxTf" autocomplete="off" autofocus/><br>
 										<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소" class="boxTf" autocomplete="off" autofocus/>
@@ -499,7 +499,7 @@
 								<div class="mt30">
 									<label for="txt_companyEmail">이메일</label>
 									<div>
-										<input type="text" name="companyEmail" id="txt_companyEmail" class="boxTf" style="width:79%;" autocomplete="off" autofocus/>
+										<input type="text" name="companyEmail" id="txt_companyEmail" class="boxTf" style="width: 418px;" autocomplete="off" autofocus/>
 										<input type="button" id="btn_companyEmail_check" value="중복검사" class="btn btn-black" style="height: 45px;margin-top: 10px;margin-left: 5px;" onclick="companyEmail_check()">
 										<div class="message t_red mt15"></div>
 									</div>
@@ -563,7 +563,7 @@
 								<div class="mt30">
 									<label for="txt_location">위치(주소)</label>
 									<div class="location mt15">
-										<input type="text" id="company_postcode" name="postCode" class="boxTf" autocomplete="off" autofocus placeholder="우편번호" style="width:75%">
+										<input type="text" id="company_postcode" name="postCode" class="boxTf" autocomplete="off" autofocus placeholder="우편번호" style="width:391px">
 										<input type="button" onclick="company_Postcode()" value="우편번호 찾기" class="btn btn-black" style="height:45px;margin-top:10px;margin-left:3px;"><br>
 										<input type="text" id="company_address" name="location" placeholder="주소" class="boxTf" autocomplete="off" autofocus/><br>
 										<input type="text" id="company_detailAddress" name="detailLocation" placeholder="상세주소" class="boxTf" autocomplete="off" autofocus/>
