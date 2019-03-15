@@ -261,6 +261,9 @@ public class FreeBoardServlet extends MyServlet{
 		
 		List<FreeBoardReplyDTO> list = dao.listReply(boardNum, start, end);
 		String paging = util.pagingMethod(current_page, total_page, "listPage");
+		for(FreeBoardReplyDTO dto : list) {
+			dto.setContent(dto.getContent().replaceAll("<br>", "\n").replaceAll("&nbsp;", " "));
+		}
 		JSONObject job = new JSONObject();
 		job.put("dataCount",dataCount);
 		job.put("total_page",total_page);
@@ -281,7 +284,7 @@ public class FreeBoardServlet extends MyServlet{
 		FreeBoardDAO dao = new FreeBoardDAO();
 		dto.setEmail(info.getEmail());
 		dto.setBoardNum(Integer.parseInt(req.getParameter("boardNum")));
-		dto.setContent(URLDecoder.decode(req.getParameter("content"), "utf-8").replaceAll("<br>", "\n"));
+		dto.setContent(util.htmlSymbols(URLDecoder.decode(req.getParameter("content"), "utf-8")));
 		
 		boolean flag = dao.insertReply(dto);
 		

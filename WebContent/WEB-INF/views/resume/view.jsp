@@ -93,8 +93,7 @@
 				$("#educationCode").attr("disabled",false);
 				$("#region").attr("disabled",false);
 			});
-			$(".updateEducation").click(function(){
-				             
+			$(".updateEducation").click(function(){       
 				var sort = "education";
 				var gubun = $(this).parent().find("#educationCode").val();
 				var schoolName = $(this).parent().find("#schoolName").val();
@@ -170,6 +169,7 @@
 				}
 				if(!$(this).parent().find("input[type=hidden]:first").val()){
 					button.parent().remove();
+					return;
 				}
 				var sort = "license";
 				var licenseCode = $(this).parent().find("input[type=hidden]").val();
@@ -249,6 +249,7 @@
 				}
 				if(!$(this).parent().find("input[type=hidden]:first").val()){
 					button.parent().remove();
+					return;
 				}
 				var sort = "awards";
 				var awardsCode = $(this).parent().find("input[type=hidden]").val();
@@ -324,6 +325,7 @@
 				}
 				if(!$(this).parent().find("input[type=hidden]:first").val()){
 					button.parent().remove();
+					return;
 				}
 				var sort = "career";
 				var careerCode = $(this).parent().find("input[type=hidden]").val();
@@ -597,10 +599,8 @@
 		            <br> 
 		            &nbsp;
 		            <input type="text" size="10" name="task" placeholder="업무내용">
-		            <span class="datepicker_wrap">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerjoinDate" placeholder="입사일자" style="width:80px;">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerresignDate" placeholder="퇴사일자" style="width:80px;">
-		            </span>
+		                <input type="text" title="calendar" name="carrerjoinDate" placeholder="입사일자" style="width:100px;">
+		                <input type="text" title="calendar" name="carrerresignDate" placeholder="퇴사일자" style="width:100px;">
 		            <button class="btn btn-black removeCareer"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
 		            <button class="btn btn-black addCareer" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">추가완료</button>
 		            <br>
