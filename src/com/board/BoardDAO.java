@@ -297,7 +297,7 @@ public class BoardDAO {
         		searchValue = searchValue.replaceAll("-", "");
         		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE TO_CHAR(created, 'YYYYMMDD') = ? ";
         	} else if(searchKey.equals("userName")) {
-        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(userName, ?) = 1 ";
+        		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(userName, ?) >= 1 ";
         	} else {
         		sql="SELECT NVL(COUNT(*), 0) FROM feedback fb JOIN member_user mu ON fb.userEmail = mu.userEmail WHERE INSTR(" + searchKey + ", ?) >= 1 ";
         	}
@@ -413,7 +413,7 @@ public class BoardDAO {
 				searchValue = searchValue.replaceAll("-", "");
 				sb.append("           WHERE TO_CHAR(created, 'YYYYMMDD') = ? ");
 			} else if(searchKey.equals("userName")) {
-				sb.append("           WHERE INSTR(userName, ?) = 1 ");
+				sb.append("           WHERE INSTR(userName, ?) >= 1 ");
 			} else {
 				sb.append("           WHERE INSTR(" + searchKey + ", ?) >= 1 ");
 			}

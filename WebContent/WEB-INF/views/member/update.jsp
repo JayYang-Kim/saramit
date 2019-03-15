@@ -370,7 +370,7 @@
 									<div class="mt30">
 										<label for="txt_address">주소</label>
 										<div class="address">
-											<input type="text" id="postcode" name="postCode" class="boxTf" value="${dto.postCode}" autocomplete="off" autofocus placeholder="우편번호" style="width:75%">
+											<input type="text" id="postcode" name="postCode" class="boxTf" value="${dto.postCode}" autocomplete="off" autofocus placeholder="우편번호" style="width:391px">
 											<input type="button" onclick="user_Postcode()" value="우편번호 찾기" class="btn btn-black" style="height:45px;margin-top:10px;margin-left:3px;"><br>
 											<input type="text" id="address" name="address" value="${dto.address}" placeholder="주소" class="boxTf" autocomplete="off" autofocus/><br>
 											<input type="text" id="detailAddress" name="detailAddress" value="${dto.detailAddress}" placeholder="상세주소" class="boxTf" autocomplete="off" autofocus/>
@@ -455,7 +455,7 @@
 									<div class="mt30">
 										<label for="txt_location">위치(주소)</label>
 										<div class="location">
-											<input type="text" id="company_postcode" name="postCode" class="boxTf" value="${dto.postCode}" autocomplete="off" autofocus placeholder="우편번호" style="width:75%">
+											<input type="text" id="company_postcode" name="postCode" class="boxTf" value="${dto.postCode}" autocomplete="off" autofocus placeholder="우편번호" style="width:391px">
 											<input type="button" onclick="company_Postcode()" value="우편번호 찾기" class="btn btn-black" style="height:45px;margin-top:10px;margin-left:3px;"><br>
 											<input type="text" id="company_address" name="location" placeholder="주소" class="boxTf" value="${dto.location}" autocomplete="off" autofocus/><br>
 											<input type="text" id="company_detailAddress" name="detailLocation" placeholder="상세주소" class="boxTf" value="${dto.detailLocation}" autocomplete="off" autofocus/>

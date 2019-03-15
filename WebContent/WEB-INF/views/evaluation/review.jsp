@@ -182,7 +182,7 @@ div {
 	<div class="cp_info_bg">
 		<div class="cp_info_logoBox">
 			<div class="cp_info_logo">
-				<img src="<%=cp%>/resources/images/common/${savefilename}" width="100%"> 
+				<img src="<%=cp%>/uploads/photo/${savefilename}" width="100%"> 
 					
 			</div>
 			<div class="cp_info_title">

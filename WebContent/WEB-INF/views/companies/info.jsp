@@ -104,13 +104,14 @@
                 <div class="cp_info_bg">
                    	<div class="cp_info_logoBox">
                    		<div class="cp_info_logo">
-                   			<img src="<%=cp%>/resources/images/common/${company.savefilename}" width="100%">
+                   			<img src="<%=cp%>/uploads/photo/${company.savefilename}" width="100%">
                    		</div>
                    		<div class="cp_info_title">
                    			${company.companyName}<br>
                    		</div>
                    		<div class="cp_info_apply">
-                   			<button class="btn btn-black" onclick="location.href='${company.homepage}'">홈페이지</button>
+                   			<button class="btn btn-black" onclick="window.open('${company.homepage}')">홈페이지</button>
+                   			<a href="${company.homepage}">test</a>
 							<p></p>
 							<br>
                    			<button class="btn btn-black" onclick="javascript:alert('지원하였습니다.')">지원하기</button>
