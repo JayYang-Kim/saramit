@@ -93,8 +93,7 @@
 				$("#educationCode").attr("disabled",false);
 				$("#region").attr("disabled",false);
 			});
-			$(".updateEducation").click(function(){
-				             
+			$(".updateEducation").click(function(){       
 				var sort = "education";
 				var gubun = $(this).parent().find("#educationCode").val();
 				var schoolName = $(this).parent().find("#schoolName").val();
@@ -164,7 +163,12 @@
 				
 			});
 			$("body").on("click", ".removeLicense", function(){
+				
 				if($("#licenseInfo").find("div").length <= 1){
+					return;
+				}
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
 					return;
 				}
 				var sort = "license";
@@ -243,6 +247,10 @@
 				if($("#awardsInfo").find("div").length <= 1){
 					return;
 				}
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
+					return;
+				}
 				var sort = "awards";
 				var awardsCode = $(this).parent().find("input[type=hidden]").val();
 				var query = "awardsCode="+awardsCode+"&sort="+sort;
@@ -278,6 +286,7 @@
 					alert("정보를 모두 입력하세요!");
 					return;
 				}
+				
 				$.ajax({
 					type:"post",
 					data:query,
@@ -288,7 +297,7 @@
 							alert("삽입 실패하였습니다.");
 							return;
 						}
-						button.parent().find("input[type=hidden]").val(data.dto.awardsCode);
+						button.parent().find("input[type=hidden]").val(data.awards_dto.awardsCode);
 						button.parent().find("input[name=awardsName]").prop("disabled","disabled");
 						button.parent().find("input[name=awardsName]").val(data.awards_dto.awardsName);
 						button.parent().find("input[name=awardsPublisher]").prop("disabled","disabled");
@@ -312,6 +321,10 @@
 			});
 			$("body").on("click", ".removeCareer", function(){
 				if($("#careerInfo").find("div").length <= 1){
+					return;
+				}
+				if(!$(this).parent().find("input[type=hidden]:first").val()){
+					button.parent().remove();
 					return;
 				}
 				var sort = "career";
@@ -586,10 +599,8 @@
 		            <br> 
 		            &nbsp;
 		            <input type="text" size="10" name="task" placeholder="업무내용">
-		            <span class="datepicker_wrap">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerjoinDate" placeholder="입사일자" style="width:80px;">
-		                <input type="text" class="datepicker"  title="calendar" name="carrerresignDate" placeholder="퇴사일자" style="width:80px;">
-		            </span>
+		                <input type="text" title="calendar" name="carrerjoinDate" placeholder="입사일자" style="width:100px;">
+		                <input type="text" title="calendar" name="carrerresignDate" placeholder="퇴사일자" style="width:100px;">
 		            <button class="btn btn-black removeCareer"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">삭제</button>
 		            <button class="btn btn-black addCareer" type="button"  style="float:right; margin-right:10px; height: 26px; line-height: 10px;">추가완료</button>
 		            <br>

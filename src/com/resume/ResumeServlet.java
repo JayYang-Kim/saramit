@@ -118,25 +118,26 @@ public class ResumeServlet extends MyServlet {
 		String sort = req.getParameter("sort");
 		ResumeDAO dao = new ResumeDAO();
 		JSONObject job = new JSONObject();
+		boolean flag;
 		switch(sort) {
 		case "basic":
 			break;
 		case "license":
 			int licenseCode = Integer.parseInt(req.getParameter("licenseCode"));
-			boolean flag = dao.removeLicenseCode(licenseCode);
+			flag = dao.removeLicenseCode(licenseCode);
 			job.put("flag", flag);
 			break;
 		case "awards":
 			int awardsCode = Integer.parseInt(req.getParameter("awardsCode"));
-			boolean flag2 = dao.removeAwards(awardsCode);
-			job.put("flag", flag2);
+			flag = dao.removeAwards(awardsCode);
+			job.put("flag", flag);
 			break;
 		case "education":
 			break;
 		case "career":
 			int careerCode = Integer.parseInt(req.getParameter("careerCode"));
-			boolean flag3 = dao.removeCareer(careerCode);
-			job.put("flag", flag3);
+			flag = dao.removeCareer(careerCode);
+			job.put("flag", flag);
 			break;
 		}
 		resp.setContentType("text/html;charset=utf-8");

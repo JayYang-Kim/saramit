@@ -104,7 +104,6 @@
     }
     function drawReply(data){
     	var out;
-    	
     	if(data.list.length != 0){
     		out = "<div align='left' style='margin-bottom:5px; padding-left:10px;'><h3>총 "+data.dataCount+"개의 댓글</h3></div>"
     		for(var i=0; i<data.list.length; i++){
