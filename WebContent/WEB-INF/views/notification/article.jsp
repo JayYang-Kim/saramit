@@ -93,7 +93,7 @@
         <div id="container" class="tb_container">
             <!-- contents -->
             <div class="contents">
-            	<div style="position:fixed; right: 500px;top: 250px;">
+            	<%-- <div style="position:fixed; right: 500px;top: 250px;">
             		<img alt="사진없지롱" src="<%=cp%>/resources/images/common/movingKAKAO.gif">
             	</div>
             	<div style="position:fixed; left: 500px;top: 250px;">
@@ -104,7 +104,7 @@
            		</div>
             	<div style="position:fixed; right: 0;top: 500px;">
             		<img alt="사진없지롱" src="<%=cp%>/resources/images/common/movingKAKAO4.gif">
-            	</div>
+            	</div> --%>
 				<div class="freeBody">
 					<div class="freeContainer">
 						<h1 style="text-align: left; padding: 5px 8px">공지사항</h1>
@@ -140,7 +140,7 @@
 									<c:if test="${dto.email == sessionScope.member.email or sessionScope.member.email=='admin'}">
 									<button type="button" class="btn btn-black" id="btn_delete">삭제하기</button>&nbsp;
 									</c:if>
-									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/notification/list.do?${query}';">목록으로</button>
+									<button type="button" class="btn btn-black" onclick="javascript:location.href='<%=cp%>/notification/list.do';">목록으로</button>
 								</div>
 						</div>
 					</div>

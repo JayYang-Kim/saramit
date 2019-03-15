@@ -26,7 +26,7 @@
             	</div>
 				<div class="inner">
 					<div class="pageTitle mt30 pb10">
-                		<h3>피드백 게시판</h3>
+                		<h3>이력서 관리</h3>
                 	</div>
 					<div class="mt20">
 						<form>

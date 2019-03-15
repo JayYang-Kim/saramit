@@ -230,7 +230,7 @@
 		                </div>
 		                <!-- //map -->
 		                <div align="center" style="margin-top:15px;">
-		                <button type="button" class="btn btn-black" style="width:100%;padding:15px 0;margin-top:20px" onclick="javascript:location.href='${url}'">돌아가기</button>
+		                <button type="button" class="btn btn-black" style="width:100%;padding:15px 0;margin-top:20px" onclick="javascript:location.href='${url}'">목록으로</button>
 		                </div>
 			    	</div>
 			    	<!-- //body_info -->

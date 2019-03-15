@@ -63,6 +63,7 @@ public class CompanyServlet extends MyServlet{
 		//이 이외에는 처리해줄 필요 없음
 		
 		//기본 데이터
+		req.setCharacterEncoding("utf-8");
 		String cp = req.getContextPath();
 		CompaniesDAO dao = new CompaniesDAO();
 		MyUtil util = new MyUtil();
@@ -83,8 +84,8 @@ public class CompanyServlet extends MyServlet{
 		//검색값 디코딩 & 주소 처리
 		if(searchKey != null && searchValue != null) {
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
-			url += "?searchKey="+searchKey+"&searchValue="+searchValue;
-			info_url += "&searchKey="+searchKey+"&searchValue="+searchValue;
+			url += "?searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
+			info_url += "&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
 			dataCount = dao.totData(searchKey, searchValue);
 		}
 		
@@ -265,13 +266,16 @@ public class CompanyServlet extends MyServlet{
 		//회사 소개
 		String cp = req.getContextPath();
 		String page = req.getParameter("page");
+		if(page==null) {
+			page="1";
+		}
 		String searchKey = req.getParameter("searchKey");
 		String searchValue = req.getParameter("searchValue");
 		
 		String url = cp+"/companies/list.do?page="+page;
 		if(searchKey != null && searchValue != null) {
 			searchValue = URLDecoder.decode(searchValue, "utf-8");
-			url += "&searchKey="+searchKey+"&searchValue="+searchValue;
+			url += "&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "utf-8");
 		}
 		String email = req.getParameter("email");
 		email = URLDecoder.decode(email, "utf-8");

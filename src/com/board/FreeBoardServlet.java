@@ -72,6 +72,7 @@ public class FreeBoardServlet extends MyServlet{
 		//글 리스트
 		
 		//기본 세팅
+		req.setCharacterEncoding("utf-8");
 		String cp = req.getContextPath();
 		MyUtil util = new MyUtil();
 		FreeBoardDAO dao = new FreeBoardDAO();
@@ -191,6 +192,7 @@ public class FreeBoardServlet extends MyServlet{
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//글 삭제
 		//기본 세팅
+		req.setCharacterEncoding("utf-8");
 		String cp = req.getContextPath();
 		int num = Integer.parseInt(req.getParameter("boardNum"));
 		String page = req.getParameter("page");
