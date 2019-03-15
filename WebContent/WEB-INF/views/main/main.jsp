@@ -84,7 +84,8 @@
                                     <li class="item">
                                         <div class="bg">
                                             <div class="color">
-                                                <img src="<%=cp%>/resources/images/common/${n.savefilename}" alt="로고"/>
+                                                <%-- <img src="<%=cp%>/resources/images/common/${n.savefilename}" alt="로고"/> --%>
+                                                <img src="<%=cp%>/uploads/photo/${n.savefilename}" alt="로고"/>
                                             </div>
                                             <span>${n.companyName}</span>
                                         </div>
